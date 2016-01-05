@@ -10,8 +10,8 @@ function qS(x){
   return document.querySelector(x);
 }
 window.addEventListener("load",function(){
-  var GOLF_BALL_THEME = false; // disable if you don't want PPCG to have anything to do with golf
   var CR_THEME        = false; // Code Review theme
+  
   var FAVICON = "//i.stack.imgur.com/jOhpI.png";
   if((window.location+"").search("//codegolf.stackexchange.com")>=0){
     qS("link[rel$=\"icon\"]").href = FAVICON;
@@ -36,10 +36,6 @@ window.addEventListener("load",function(){
     if (CR_THEME) {
       $("body > .container").css("box-shadow", "none");
       $("body").css("background", "linear-gradient(rgba(140, 255, 149, 0.26), rgba(140, 255, 149, 0.26)), url(\"http://cdn.sstatic.net/codereview/img/pattern.png?v=8286dee84d00\")");
-    }
-    if (GOLF_BALL_THEME){
-      $("body > .container").css("box-shadow", "none");
-      $("body").css({"background-image":"url(http://i.stack.imgur.com/8qaWz.jpg)", "background-size": "130px"});
     }
   }
   if((window.location+"").search("//meta.codegolf.stackexchange.com")>=0){
