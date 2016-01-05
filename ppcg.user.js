@@ -10,13 +10,14 @@ function qS(x){
   return document.querySelector(x);
 }
 window.addEventListener("load",function(){
-  var CR_THEME        = false; // Code Review theme
+  var CR_THEME        = false; // Code Review inspired theme
   
   var FAVICON = "//i.stack.imgur.com/jOhpI.png";
   if((window.location+"").search("//codegolf.stackexchange.com")>=0){
     qS("link[rel$=\"icon\"]").href = FAVICON;
     var x = qS(".beta-title").parentElement;
     qS(".beta-title").parentElement.removeChild(qS(".beta-title"));
+    $("[class*=favicon-codegolf]").css('background', 'url('+FAVICON+')').css('background-position', 'inital').css('background-size', '100% 100%');
     $("#content").css('background', 'none');
     $(".post-tag").css('background', 'rgb(177, 235, 124)');
     $(".post-tag").css('color', '#14761a');
