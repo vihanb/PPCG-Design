@@ -24,7 +24,7 @@ window.addEventListener("load",function(){
     $("#mainbar, .user-page #content").css('background', '#FAFAFA');
     $("#mainbar").css('padding', '15px');
     $(".envelope-on, .envelope-off, .vote-up-off, .vote-up-on, .vote-down-off, .vote-down-on, .star-on, .star-off, .comment-up-off, .comment-up-on, .comment-flag, .edited-yes, .feed-icon, .vote-accepted-off, .vote-accepted-on, .vote-accepted-bounty, .badge-earned-check, .delete-tag, .grippie, .expander-arrow-hide, .expander-arrow-show, .expander-arrow-small-hide, .expander-arrow-small-show, .anonymous-gravatar, .badge1, .badge2, .badge3, .gp-share, .fb-share, .twitter-share, #notify-container span.notify-close, .migrated.to, .migrated.from")
-        .css("background-image", "url(http://imgh.us/gs_27.svg)");
+        .css("background-image", "url(https://cdn.rawgit.com/vihanb/PPCG-Design/master/sprites.svg)");
     $(".answer pre code").each(function() {
         var t=$(this).text().trim().replace(/\r\n/g, "\n");
         $(this).parent().before('<div style="font:11px \'Open Sans\'">'+(2*t.length-t.replace(/[\u0100-\uFFFF]/g,'').length)+" bytes</div>");
