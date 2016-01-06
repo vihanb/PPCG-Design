@@ -54,6 +54,8 @@ var main = {
   CURR_TAB_COLOR: "rgb(72,125,75)",
   BULLETIN_BG_COLOR: "#fff8dc",
   STATS_COLOR: "rgba(250,244,180,0.45)",
+  TAG_COLOR: "rgb(177, 235, 124)",
+  TAG_BORDER_COLOR: "rgb(177, 235, 124)",
   
   // Specify nothing to make these default color
   BOUNTY_COLOR: "rgb(72,125,75)",
@@ -76,6 +78,8 @@ var meta = {
   CONTAINER_BG_COLOR: "#FAFAFA",
   CURR_TAB_COLOR: "rgb(72,125,75)",
   BULLETIN_BG_COLOR: "#fff8dc",
+  TAG_COLOR: "",
+  TAG_BORDER_COLOR: "",
   
   // Specify nothing to make these default color
   BOUNTY_COLOR: "rgb(72,125,75)",
@@ -103,8 +107,9 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}"+
     "html,body{font-family:\""+TEXT_FONT+"\"}"+
     "#header{background:$$HEADER_BG_COLOR;}#header *{color:$$HEADER_TEXT_COLOR;}"+
-    "#content,.container{background:$$CONTAINER_BG_COLOR}"+
-    "a.post-tag,div.module.newuser,div.module.community-bulletin,div.categories,div.user-info.user-hover{background-color:$$BACKGROUND_COLOR;}"+
+    ".container{background:$$CONTAINER_BG_COLOR}"+
+    "a.post-tag{background-color:$$TAG_COLOR;border-color:$$TAG_BORDER_COLOR}"+
+    "div.module.newuser,div.module.community-bulletin,div.categories,div.user-info.user-hover{background-color:$$BACKGROUND_COLOR;}"+
     "#newlogo{font-family:\""+HEADER_FONT+"\";top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}"+
     ".container{"+(obj.BACKGROUND_IMAGE?"background-image:url(\"$$BACKGROUND_IMAGE\");background-repeat:repeat-x;":"")+"background-color:$$BACKGROUND_COLOR;box-shadow:none !important;}</style>").replace(/\$\$(\w+)/g,function(_,x){return eval(site+"."+x)});
   try{qS("link[rel$=\"icon\"]").href = obj.FAVICON;}catch(e){}
