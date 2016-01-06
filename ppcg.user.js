@@ -22,7 +22,7 @@ window.addEventListener("load",function(){
     qS("link[rel$=\"icon\"]").href = FAVICON;
     var x = qS(".beta-title").parentElement;
     qS(".beta-title").parentElement.removeChild(qS(".beta-title"));
-    $(".topbar-wrapper > .network-items").append('<a id="USER_Opt" class="topbar-icon yes-hover" style="width: 36px; background-image: url('+SPRITES'); background-position: 0px 0px;"></a>');
+    $(".topbar-wrapper > .network-items").append('<a id="USER_Opt" class="topbar-icon yes-hover" style="width: 36px; background-image: url('+SPRITES+'); background-position: 0px 0px;"></a>');
     $("#content").css('background', 'none');
     $(".post-tag").css('background', 'rgb(177, 235, 124)');
     $(".post-tag").css('color', '#14761a');
