@@ -63,7 +63,7 @@ var main = {
 /** ~~~~~~~~~~~~~~~~ META SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
   
 var meta = {
-  FAVICON: "//i.imgur.com/DCbmdZ2.png",
+  FAVICON: "//i.imgur.com/xJx4Jdd.png",
   SPRITE_SHEET: "//rawgit.com/vihanb/PPCG-Design/master/sprites.svg",
   
   // Set to empty string for no background image
