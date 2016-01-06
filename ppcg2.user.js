@@ -44,6 +44,7 @@ var main = {
   
   // Set to empty string for no background image
   BACKGROUND_IMAGE: "http://i.stack.imgur.com/t8GhU.png",
+  BACKGROUND_TINT: "linear-gradient(rgba(153, 255, 165, 0.26), rgba(140, 255, 149, 0.26))", // Only a linear graident works
     
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#EDFAEE",
@@ -70,6 +71,7 @@ var meta = {
   
   // Set to empty string for no background image
   BACKGROUND_IMAGE: "http://i.stack.imgur.com/HLJI4.png",
+  BACKGROUND_TINT: "", 
     
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#F4F4F4",
@@ -111,7 +113,7 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     "a.post-tag{background-color:$$TAG_COLOR;border-color:$$TAG_BORDER_COLOR}"+
     "div.module.newuser,div.module.community-bulletin,div.categories,div.user-info.user-hover{background-color:$$BACKGROUND_COLOR;}"+
     "#newlogo{font-family:\""+HEADER_FONT+"\";top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}"+
-    ".container{"+(obj.BACKGROUND_IMAGE?"background-image:url(\"$$BACKGROUND_IMAGE\");background-repeat:repeat-x;":"")+"background-color:$$BACKGROUND_COLOR;box-shadow:none !important;}</style>").replace(/\$\$(\w+)/g,function(_,x){return eval(site+"."+x)});
+    ".container{"+(obj.BACKGROUND_IMAGE?(obj.BACKGROUND_TINT?"background: $$BACKGROUND_TINT, url(\"$$BACKGROUND_IMAGE\");":"background-image:url(\"$$BACKGROUND_IMAGE\");")+"background-repeat:repeat-x;":"")+"background-color:$$BACKGROUND_COLOR;box-shadow:none !important;}</style>").replace(/\$\$(\w+)/g,function(_,x){return eval(site+"."+x)});
   try{qS("link[rel$=\"icon\"]").href = obj.FAVICON;}catch(e){}
   if(PARSE_CODEBLOCKS){
   $(".answer").each(function() {
