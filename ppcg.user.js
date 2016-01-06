@@ -11,7 +11,7 @@ function qS(x){
 }
 window.addEventListener("load",function(){
   // THEME OPTIONS
-  var CR_THEME        = false; // Code Review inspired theme
+  var CR_THEME        = false; // Code Review inspired background
   
   // CONSTANTS
   var FAVICON = "//i.stack.imgur.com/jOhpI.png"; // Favicon
