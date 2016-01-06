@@ -56,6 +56,8 @@ window.addEventListener("load",function(){
   }
   if((window.location+"").search("//meta.codegolf.stackexchange.com")>=0){
     document.querySelector("link[rel$=\"icon\"]").href = FAVICON;
+    $(".envelope-on, .envelope-off, .vote-up-off, .vote-up-on, .vote-down-off, .vote-down-on, .star-on, .star-off, .comment-up-off, .comment-up-on, .comment-flag, .edited-yes, .feed-icon, .vote-accepted-off, .vote-accepted-on, .vote-accepted-bounty, .badge-earned-check, .delete-tag, .grippie, .expander-arrow-hide, .expander-arrow-show, .expander-arrow-small-hide, .expander-arrow-small-show, .anonymous-gravatar, .badge1, .badge2, .badge3, .gp-share, .fb-share, .twitter-share, #notify-container span.notify-close, .migrated.to, .migrated.from")
+        .css("background-image", "url("+SPRITES+")");
   }
   if((window.location+"").search("chat.stackexchange.com")>=0){
     $('img[title="Programming Puzzles & Code Golf"]').attr("src", FAVICON);
