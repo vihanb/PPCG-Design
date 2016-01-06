@@ -8,27 +8,38 @@
 
 function qS(x){return document.querySelector(x)}
 function chars(x){return x.replace(/[\uD800-\uDBFF]/g,'').length}
+function fchars(x){var y=chars(x);return y+" char"+(y==1?"":"s")}
+function bf(x,y){return x+" "+y+" byte"+(x==1?"":"s")}
 function bytes(x,y){ // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
   var ISO_8859_1 = /Japt|TeaScript/i;
+  var UTF_16 = /Ziim/i;
   var custom = /GS2|Seriously|Jelly|APL/i;
   y=y||"";
-  if(ISO_8859_1.test(y))return chars(x)+" ISO-8859-1 bytes";
-  if(custom.test(y))return chars(x)+" "+y.match(custom)[0]+" bytes";
+  if(PARSE_HEXDUMPS){
+    var a="";
+    x.replace(/[\da-f]{6,8}:? ((?:[\da-f] ?){20,})[^\n]*\n?/gi,function(_,z){a+=z.replace(/\s/g,'')});
+    if(a)return bf(a.length/2,"hex");
+    if(/^[\da-f\s-]+$/i.test(x.replace(/\n/g,'')))return bf(x.replace(/[\s-]/g,'').length/2,"hex");
+  }
+  if(/iso.?8859.1/i.test(y)||ISO_8859_1.test(y))return bf(chars(x),"ISO-8859-1");
+  if(/utf.?16/i.test(y)||UTF_16.test(y))return bf(x.replace(/[\u0000-\uFFFF]/g,"$& ").length,"UTF-16");
+  if(custom.test(y))return bf(chars(x),y.match(custom)[0]);
   // Else, fallback to UTF-8
-  return(3*x.length-x.replace(/[\u0080-\uFFFF]/g,'').length-x.replace(/[\u0800-\uFFFF]/g,'').length)+" UTF-8 bytes";
+  return bf(3*x.length-x.replace(/[\u0080-\uFFFF]/g,'').length-x.replace(/[\u0800-\uFFFF]/g,'').length,"UTF-8");
 }
 
-  
+var PARSE_CODEBLOCKS = true; // set to false to not parse code block lengths
+var PARSE_HEXDUMPS = true; // set to false to not parse hexdump lengths
+
 // Fonts
 var HEADER_FONT = "Exo 2";  // Header text
 var TEXT_FONT = "Open Sans"; // Everything else besides code
 var FONT_URL = "//fonts.googleapis.com/css?family=Exo+2|Open+Sans"; // import any webfonts here
-
   
 /** ~~~~~~~~~~~~~~~~ MAIN SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
   
 var main = {
-  FAVICON: "//i.stack.imgur.com/jOhpI.png",
+  FAVICON: "//i.imgur.com/FMih93I.pngg",
   SPRITE_SHEET: "//rawgit.com/vihanb/PPCG-Design/master/sprites.svg",
   
   // Set to empty string for no background image
@@ -52,7 +63,7 @@ var main = {
 /** ~~~~~~~~~~~~~~~~ META SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
   
 var meta = {
-  FAVICON: "//i.stack.imgur.com/jOhpI.png",
+  FAVICON: "//i.imgur.com/sS4ZXQW.png",
   SPRITE_SHEET: "//rawgit.com/vihanb/PPCG-Design/master/sprites.svg",
   
   // Set to empty string for no background image
@@ -89,6 +100,7 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     ".youarehere{color:$$CURR_TAB_COLOR !important;border-bottom:2px solid $$CURR_TAB_COLOR !important;}"+
     (obj.BOUNTY_COLOR?".bounty-indicator-tab{background:$$BOUNTY_BG_COLOR;color:$$BOUNTY_COLOR !important;}":"")+
     "#sidebar .module.community-bulletin{background:$$BULLETIN_BG_COLOR;}"+
+    "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}"+
     "html,body{font-family:\""+TEXT_FONT+"\"}"+
     "#header{background:$$HEADER_BG_COLOR;}#header *{color:$$HEADER_TEXT_COLOR;}"+
     "#content,.container{background:$$CONTAINER_BG_COLOR}"+
@@ -96,6 +108,7 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     "#newlogo{font-family:\""+HEADER_FONT+"\";top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}"+
     ".container{"+(obj.BACKGROUND_IMAGE?"background-image:url(\"$$BACKGROUND_IMAGE\");background-repeat:repeat-x;":"")+"background-color:$$BACKGROUND_COLOR;box-shadow:none !important;}</style>").replace(/\$\$(\w+)/g,function(_,x){return eval(site+"."+x)});
   try{qS("link[rel$=\"icon\"]").href = obj.FAVICON;}catch(e){}
+  if(PARSE_CODEBLOCKS){
   $(".answer").each(function() {
     var h="";
     // Find the first header or strong element (some old posts use **this** for header) and set h to its text
@@ -105,9 +118,10 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     $(this).find("strong").each(function(){if(!h)h=$(this).text();});
     $(this).find("pre code").each(function() {
       var t=$(this).text().trim().replace(/\r\n/g, "\n");
-      $(this).parent().before('<div style="padding-bottom:4px;font:11px \''+TEXT_FONT+'\'">'+bytes(t,h)+", "+chars(t)+" chars</div>");
+      $(this).parent().before('<div style="padding-bottom:4px;font:11px \''+TEXT_FONT+'\'">'+bytes(t,h)+", "+fchars(t)+"</div>");
     });
   });
+  }
   window.addEventListener("load",function(){
   setTimeout(function(){document.getElementById("footer").style.backgroundColor=obj.BACKGROUND_COLOR},300);
   });
