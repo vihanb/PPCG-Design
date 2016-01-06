@@ -44,6 +44,7 @@ window.addEventListener("load",function(){
     "html,body{font-family:\"Open Sans\"}#header *{color:#4C4C4C;}"+
     "#content{background:#FAFAFA}"+
     "#newlogo{font-family:\"Exo 2\";top:-15px;position:relative;}"+
+    "div.categories {background-color: #EDFAEE;}.owner {background-color: #EDFAEE;}"+
     "#newlogo td{padding-right:15px;}"+
     "#hlogo a{width:600px;}</style>";
     qS(".container").style.boxShadow = "none";
