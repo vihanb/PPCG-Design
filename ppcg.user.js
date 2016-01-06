@@ -10,9 +10,13 @@ function qS(x){
   return document.querySelector(x);
 }
 window.addEventListener("load",function(){
+  // THEME OPTIONS
   var CR_THEME        = false; // Code Review inspired theme
   
-  var FAVICON = "//i.stack.imgur.com/jOhpI.png";
+  // CONSTANTS
+  var FAVICON = "//i.stack.imgur.com/jOhpI.png"; // Favicon
+  var BACKGROUND = "//i.stack.imgur.com/t8GhU.png"; // Background Texture
+  
   if((window.location+"").search("//codegolf.stackexchange.com")>=0){
     qS("link[rel$=\"icon\"]").href = FAVICON;
     var x = qS(".beta-title").parentElement;
@@ -45,7 +49,7 @@ window.addEventListener("load",function(){
     if (CR_THEME) {
       $("body .container > div").css("background", "none");
       $("body > .container").css("box-shadow", "none");
-      $("body").css("background", "linear-gradient(rgba(153, 255, 165, 0.26), rgba(140, 255, 149, 0.26)), url(http://i.stack.imgur.com/t8GhU.png)");
+      $("body").css("background", "linear-gradient(rgba(153, 255, 165, 0.26), rgba(140, 255, 149, 0.26)), url("+BACKGROUND+")");
     }
   }
   if((window.location+"").search("//meta.codegolf.stackexchange.com")>=0){
