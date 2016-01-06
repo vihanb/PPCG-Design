@@ -55,7 +55,7 @@ window.addEventListener("load",function(){
     }
   }
   if((window.location+"").search("//meta.codegolf.stackexchange.com")>=0){
-    document.querySelector("link[rel$=\"icon\"").href = FAVICON;
+    document.querySelector("link[rel$=\"icon\"]").href = FAVICON;
   }
   if((window.location+"").search("chat.stackexchange.com")>=0){
     $('img[title="Programming Puzzles & Code Golf"]').attr("src", FAVICON);
