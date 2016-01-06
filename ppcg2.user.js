@@ -1,12 +1,22 @@
 // ==UserScript==
 // @name        CustomizablePPCGUserscript
-// @namespace   PPCGUserScript2
+// @namespace   ETHproductions
 // @version     1
-// @author      ETHproductions, Doᴡɴɢᴏᴀᴛ, Cᴏɴᴏʀ O'Bʀɪᴇɴ, and many others
+// @author      ETHproductions
 // @grant       none
 // ==/UserScript==
 
 function qS(x){return document.querySelector(x)}
+function chars(x){return x.replace(/[\uD800-\uDBFF]/g,'').length}
+function bytes(x,y){ // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
+  var ISO_8859_1 = /Japt|TeaScript/i;
+  var custom = /GS2|Seriously|Jelly|APL/i;
+  y=y||"";
+  if(ISO_8859_1.test(y))return chars(x)+" ISO-8859-1 bytes";
+  if(custom.test(y))return chars(x)+" "+y.match(custom)[0]+" bytes";
+  // Else, fallback to UTF-8
+  return(3*x.length-x.replace(/[\u0080-\uFFFF]/g,'').length-x.replace(/[\u0800-\uFFFF]/g,'').length)+" UTF-8 bytes";
+}
 
   
 // Fonts
@@ -79,7 +89,6 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     ".youarehere{color:$$CURR_TAB_COLOR !important;border-bottom:2px solid $$CURR_TAB_COLOR !important;}"+
     (obj.BOUNTY_COLOR?".bounty-indicator-tab{background:$$BOUNTY_BG_COLOR;color:$$BOUNTY_COLOR !important;}":"")+
     "#sidebar .module.community-bulletin{background:$$BULLETIN_BG_COLOR;}"+
-    "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}"+
     "html,body{font-family:\""+TEXT_FONT+"\"}"+
     "#header{background:$$HEADER_BG_COLOR;}#header *{color:$$HEADER_TEXT_COLOR;}"+
     "#content,.container{background:$$CONTAINER_BG_COLOR}"+
@@ -87,9 +96,17 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     "#newlogo{font-family:\""+HEADER_FONT+"\";top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}"+
     ".container{"+(obj.BACKGROUND_IMAGE?"background-image:url(\"$$BACKGROUND_IMAGE\");background-repeat:repeat-x;":"")+"background-color:$$BACKGROUND_COLOR;box-shadow:none !important;}</style>").replace(/\$\$(\w+)/g,function(_,x){return eval(site+"."+x)});
   try{qS("link[rel$=\"icon\"]").href = obj.FAVICON;}catch(e){}
-  $(".answer pre code").each(function() {
-    var t=$(this).text().trim().replace(/\r\n/g, "\n");
-    $(this).parent().before('<div style="padding-bottom:4px;font:11px \''+TEXT_FONT+'\'">'+(3*t.length-t.replace(/[\u0080-\uFFFF]/g,'').length-t.replace(/[\u0800-\uFFFF]/g,'').length)+" UTF-8 bytes, "+t.replace(/[\uD800-\uDBFF]/g,'').length+" chars</div>");
+  $(".answer").each(function() {
+    var h="";
+    // Find the first header or strong element (some old posts use **this** for header) and set h to its text
+    $(this).find("h1").each(function(){if(!h)h=$(this).text();});
+    $(this).find("h2").each(function(){if(!h)h=$(this).text();});
+    $(this).find("h3").each(function(){if(!h)h=$(this).text();});
+    $(this).find("strong").each(function(){if(!h)h=$(this).text();});
+    $(this).find("pre code").each(function() {
+      var t=$(this).text().trim().replace(/\r\n/g, "\n");
+      $(this).parent().before('<div style="padding-bottom:4px;font:11px \''+TEXT_FONT+'\'">'+bytes(t,h)+", "+chars(t)+" chars</div>");
+    });
   });
   window.addEventListener("load",function(){
   setTimeout(function(){document.getElementById("footer").style.backgroundColor=obj.BACKGROUND_COLOR},300);
