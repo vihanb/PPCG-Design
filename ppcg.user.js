@@ -47,7 +47,7 @@ window.addEventListener("load",function(){
     "#newlogo td{padding-right:15px;}"+
     "#hlogo a{width:600px;}</style>";
     qS(".container").style.boxShadow = "none";
-    $("body .container").prepend('<div style="position: absolute;width: inherit; height: 120px; background: linear-gradient(rgba(153, 255, 165, 0.26), rgba(140, 255, 149, 0.26)), url(http://cdn.sstatic.net/codereview/img/pattern.png?v=8286dee84d00)"></div>');
+    $("body .container").prepend('<div style="position: absolute;width: inherit; height: 120px; background: linear-gradient(rgba(153, 255, 165, 0.26), rgba(140, 255, 149, 0.26)), url(http://i.stack.imgur.com/i6Idq.png)"></div>');
     if (CR_THEME) {
       $("body .container > div").css("background", "none");
       $("body > .container").css("box-shadow", "none");
