@@ -89,7 +89,7 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
   try{qS("link[rel$=\"icon\"]").href = obj.FAVICON;}catch(e){}
   $(".answer pre code").each(function() {
     var t=$(this).text().trim().replace(/\r\n/g, "\n");
-    $(this).parent().before('<div style="padding-bottom:4px;font:11px \''+TEXT_FONT+'\'">'+(3*t.length-t.replace(/[\u0080-\uFFFF]/g,'').length-t.replace(/[\u0800-\uFFFF]/g,'').length)+" UTF-8 bytes, "+t.length+" chars</div>");
+    $(this).parent().before('<div style="padding-bottom:4px;font:11px \''+TEXT_FONT+'\'">'+(3*t.length-t.replace(/[\u0080-\uFFFF]/g,'').length-t.replace(/[\u0800-\uFFFF]/g,'').length)+" UTF-8 bytes, "+t.replace(/[\uD800-\uDBFF]/g,'').length+" chars</div>");
   });
   window.addEventListener("load",function(){
   setTimeout(function(){document.getElementById("footer").style.backgroundColor=obj.BACKGROUND_COLOR},300);
