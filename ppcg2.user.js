@@ -50,7 +50,7 @@ var main = {
   HEADER_BG_COLOR: "transparent",
   HEADER_BG_IMAGE: "",
   HEADER_TEXT_COLOR: "#4C4C4C",
-  CONTAINER_BG_COLOR: "#FAFAFA",
+  CONTAINER_BG_COLOR: "rgb(250, 250, 250)",
   CURR_TAB_COLOR: "rgb(72,125,75)",
   BULLETIN_BG_COLOR: "#fff8dc",
   STATS_COLOR: "rgba(250,244,180,0.45)",
