@@ -11,9 +11,9 @@ function chars(x){return x.replace(/[\uD800-\uDBFF]/g,'').length}
 function fchars(x){var y=chars(x);return y+" char"+(y==1?"":"s")}
 function bf(x,y){return x+" "+y+" byte"+(x==1?"":"s")}
 function bytes(x,y){ // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
-  var ISO_8859_1 = /Japt|TeaScript|Unicorn/i;
+  var ISO_8859_1 = /Japt|TeaScript/i;
   var UTF_16 = /Ziim|Funciton/i;
-  var custom = /GS2|Seriously|Jelly|APL/i;
+  var custom = /GS2|Seriously|Jelly|Unicorn|APL/i;
   y=y||"";
   if(PARSE_HEXDUMPS){
     var a="";
