@@ -12,8 +12,8 @@ function fchars(x){var y=chars(x);return y+" char"+(y==1?"":"s")}
 function bf(x,y){return x+" "+y+" byte"+(x==1?"":"s")}
 function bytes(x,y){ // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
   var ISO_8859_1 = /Japt|TeaScript/i;
-  var UTF_16 = /Ziim/i;
-  var custom = /GS2|Seriously|Jelly|APL/i;
+  var UTF_16 = /Ziim|Funciton/i;
+  var custom = /GS2|Seriously|Unicorn|Jelly|APL/i;
   y=y||"";
   if(PARSE_HEXDUMPS){
     var a="";
@@ -44,16 +44,19 @@ var main = {
   
   // Set to empty string for no background image
   BACKGROUND_IMAGE: "http://i.stack.imgur.com/t8GhU.png",
+  BACKGROUND_TINT: "linear-gradient(rgba(153, 255, 165, 0.26), rgba(140, 255, 149, 0.26))", // Only a linear graident works
     
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#EDFAEE",
   HEADER_BG_COLOR: "transparent",
   HEADER_BG_IMAGE: "",
   HEADER_TEXT_COLOR: "#4C4C4C",
-  CONTAINER_BG_COLOR: "#FAFAFA",
+  CONTAINER_BG_COLOR: "rgb(250, 250, 250)",
   CURR_TAB_COLOR: "rgb(72,125,75)",
   BULLETIN_BG_COLOR: "#fff8dc",
-  STATS_COLOR: "rgba(250,244,180,0.45)",
+  STATS_COLOR: "#FAFAFA",
+  TAG_COLOR: "#E7FFD8", /* Alternative Option: "rgb(177, 235, 124)"*/
+  TAG_BORDER_COLOR: "transparent",
   
   // Specify nothing to make these default color
   BOUNTY_COLOR: "rgb(72,125,75)",
@@ -63,11 +66,12 @@ var main = {
 /** ~~~~~~~~~~~~~~~~ META SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
   
 var meta = {
-  FAVICON: "//i.imgur.com/sS4ZXQW.png",
+  FAVICON: "//i.imgur.com/xJx4Jdd.png",
   SPRITE_SHEET: "//rawgit.com/vihanb/PPCG-Design/master/sprites.svg",
   
   // Set to empty string for no background image
   BACKGROUND_IMAGE: "http://i.stack.imgur.com/HLJI4.png",
+  BACKGROUND_TINT: "", 
     
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#F4F4F4",
@@ -76,6 +80,8 @@ var meta = {
   CONTAINER_BG_COLOR: "#FAFAFA",
   CURR_TAB_COLOR: "rgb(72,125,75)",
   BULLETIN_BG_COLOR: "#fff8dc",
+  TAG_COLOR: "",
+  TAG_BORDER_COLOR: "",
   
   // Specify nothing to make these default color
   BOUNTY_COLOR: "rgb(72,125,75)",
@@ -93,7 +99,28 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     var x = qS(".beta-title").parentElement;
     qS(".beta-title").parentElement.removeChild(qS(".beta-title"));
     x.innerHTML = "<table id=\"newlogo\"><tr><td><img src=\""+main.FAVICON+"\" height=50></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
-    document.head.innerHTML += "<style>#sidebar #beta-stats,#sidebar #promo-box{background:"+main.STATS_COLOR+";}</style>";
+    document.head.innerHTML += "<style>#sidebar #beta-stats,#sidebar #promo-box{border:none;background:"+main.STATS_COLOR+";}</style>";
+	// Leaderboard
+	if($('a.post-tag[href="/questions/tagged/code-golf"]')[0] && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
+		$.get("https://api.stackexchange.com/2.2/questions/"+StackExchange.question.getQuestionId()+"/answers?order=desc&sort=votes&site=codegolf&filter=!w-2aDJ.Zv9-gPnVhDr", function(json) {
+			var answers = json.items.map(function(i) {
+				return [+(i.body_markdown.replace(/<s(trike)?>.+?<\/s\1>/g,"").replace(/\](\(.+?\)|\[\d+\])/g,"").match(/^\s*(?:#+|\*\*|(?=.+\n.*===)).+?(\d+)\D+(?:\n|$)/)||[0,"Score N/A"])[1], i];
+			}).sort(function(a,b){return a[0]-b[0];}).map(function(l) {
+				return '<li>' + (l[1].body_markdown.match(/^\s*(?:#+|\*\*|(?=.+\n.*===))\s*.*?\s*([\w\s\.\u00FF-\uFFFF]+)/)||[0,"Lang N/A"])[1] + ", " + l[0] + ' bytes – <a href="' + l[1].link + '">Link</a></li>';
+			}).join("\n");
+			$(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>'+
+										 '<div id="USER_BOARD" style="display:none"> <br> <ol>'+answers+'</ol> </div>');
+		    $("#USER_BOARD_TEXT").click(function() {
+			    $("#USER_BOARD").slideToggle(50, function() {
+				    $("#USER_BOARD_TEXT").text(function () {
+					return $("#USER_BOARD").is(":visible") ? "Hide Answer Leadboard ▼" : "Show Answer Leadboard ▶";
+				    });
+			    });
+		    });
+		});
+	}
+  } else {
+	qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\""+meta.FAVICON+"\" height=50></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\">meta</span></td></tr></table>";
   }
   document.head.innerHTML += ("<style>@import url("+FONT_URL+");"+
     ".envelope-on,.envelope-off,.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.star-on,.star-off,.comment-up-off,.comment-up-on,.comment-flag,.edited-yes,.feed-icon,.vote-accepted-off,.vote-accepted-on,.vote-accepted-bounty,.badge-earned-check,.delete-tag,.grippie,.expander-arrow-hide,.expander-arrow-show,.expander-arrow-small-hide,.expander-arrow-small-show,.anonymous-gravatar,.badge1,.badge2,.badge3,.gp-share,.fb-share,.twitter-share,#notify-containerspan.notify-close,.migrated.to,.migrated.from{background-image:url(\"$$SPRITE_SHEET\");background-size: initial;}"+
@@ -103,10 +130,12 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}"+
     "html,body{font-family:\""+TEXT_FONT+"\"}"+
     "#header{background:$$HEADER_BG_COLOR;}#header *{color:$$HEADER_TEXT_COLOR;}"+
-    "#content,.container{background:$$CONTAINER_BG_COLOR}"+
-    "a.post-tag,div.module.newuser,div.module.community-bulletin,div.categories,div.user-info.user-hover{background-color:$$BACKGROUND_COLOR;}"+
+    (site=="meta"?".container{background:$$CONTAINER_BG_COLOR}":"")+
+    "a.post-tag{background-color:$$TAG_COLOR;border-color:$$TAG_BORDER_COLOR}"+
+    "div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}"+
     "#newlogo{font-family:\""+HEADER_FONT+"\";top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}"+
-    ".container{"+(obj.BACKGROUND_IMAGE?"background-image:url(\"$$BACKGROUND_IMAGE\");background-repeat:repeat-x;":"")+"background-color:$$BACKGROUND_COLOR;box-shadow:none !important;}</style>").replace(/\$\$(\w+)/g,function(_,x){return eval(site+"."+x)});
+    (site=="meta"?".container{"+(obj.BACKGROUND_IMAGE?(obj.BACKGROUND_TINT?"background: $$BACKGROUND_TINT, url(\"$$BACKGROUND_IMAGE\");":"background-image:url(\"$$BACKGROUND_IMAGE\");")+"background-repeat:repeat-x;":"")+"background-color:$$BACKGROUND_COLOR;box-shadow:none !important;}":"")+
+	 "</style>").replace(/\$\$(\w+)/g,function(_,x){return eval(site+"."+x);});
   try{qS("link[rel$=\"icon\"]").href = obj.FAVICON;}catch(e){}
   if(PARSE_CODEBLOCKS){
   $(".answer").each(function() {
@@ -122,6 +151,13 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     });
   });
   }
+  if (site == "main") {
+    $("#content").css('background', 'none');
+	$("body > .container").css("box-shadow", "none");
+	$("#mainbar, .user-page #content").css('background', main.STATS_COLOR);
+	$("#mainbar").css('padding', '15px');
+	$("body .container").prepend('<div style="position: absolute;width: inherit; height: 120px; background: '+main.BACKGROUND_TINT+', url('+main.BACKGROUND_IMAGE+')"></div>');
+  }
   window.addEventListener("load",function(){
   setTimeout(function(){document.getElementById("footer").style.backgroundColor=obj.BACKGROUND_COLOR},300);
   });
@@ -130,3 +166,4 @@ if ((window.location+"").indexOf("codegolf.stackexchange.com") > -1) {
   /*=== SHOWS VOTE COUNTS ===*/
   void function(t){var e=t.head||t.getElementsByTagName("head")[0]||t.documentElement,o=t.createElement("style"),n="/*Added through UserScript*/.vote-count-post{cursor:pointer;}.vote-count-post[title]{cursor:default;}.vote-count-separator{height:0;*margin-left:0;}";e.appendChild(o),o.styleSheet?o.styleSheet.cssText=n:o.appendChild(t.createTextNode(n));var s=t.createElement("script");s["textContent"in s?"textContent":"text"]="("+function(){var t=location.protocol+"//api.stackexchange.com/2.0/posts/",e="?filter=!)q3b*aB43Xc&key=DwnkTjZvdT0qLs*o8rNDWw((&site="+location.host,o=1,n=StackExchange.helpers,s=$.fn.click;$.fn.click=function(){return this.hasClass("vote-count-post")&&!o?this:s.apply(this,arguments)};var r=function(s){var r,a=$(this),i=this.title;if(!(/up \/ /.test(i)||/View/.test(i)&&o)){o=0;var c=a.siblings('input[type="hidden"]').val();if(c||(r=a.closest("[data-questionid],[data-answerid]"),c=r.attr("data-answerid")||r.attr("data-questionid")),c||(r=a.closest(".suggested-edit"),c=$.trim(r.find(".post-id").text())),c||(r=a.closest(".question-summary"),c=/\d+/.exec(r.attr("id")),c=c&&c[0]),!c)return void console.error("Post ID not found! Please report this at http://stackapps.com/q/3082/9699");n.addSpinner(a),$.ajax({type:"GET",url:t+c+e+"&callback=?",dataType:"json",success:function(t){t=t.items[0];var e=t.up_vote_count,o=t.down_vote_count;e=e?"+"+e:0,o=o?"-"+o:0,$(".error-notification").fadeOut("fast",function(){$(this).remove()}),a.css("cursor","default").attr("title",e+" up / "+o+" down").html('<div style="color:green">'+e+'</div><div class="vote-count-separator"></div><div style="color:maroon">'+o+"</div>")},error:function(t){n.removeSpinner(),n.showErrorPopup(a.parent(),t.responseText&&t.responseText.length<100?t.responseText:"An error occurred during vote count fetch")}}),s.stopImmediatePropagation()}};$.fn.on?$(document).on("click",".vote-count-post",r):$(document).delegate(".vote-count-post","click",r)}+")();",e.appendChild(s),s.parentNode.removeChild(s)}(document);
 }
+
