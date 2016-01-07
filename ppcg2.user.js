@@ -100,6 +100,26 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     qS(".beta-title").parentElement.removeChild(qS(".beta-title"));
     x.innerHTML = "<table id=\"newlogo\"><tr><td><img src=\""+main.FAVICON+"\" height=50></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
     document.head.innerHTML += "<style>#sidebar #beta-stats,#sidebar #promo-box{border:none;background:"+main.STATS_COLOR+";}</style>";
+	// Leaderboard
+	if($('a.post-tag[href="/questions/tagged/code-golf"]')[0] && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
+		$.get("https://api.stackexchange.com/2.2/questions/68504/answers?order=desc&sort=votes&site=codegolf&filter=!w-2aDJ.Zv9-gPnVhDr", function(json) {
+			var answers = json.items.map(function(i) {
+				return [+(i.body_markdown.replace(/<s(trike)?>.+?<\/s\1>/g,"").match(/^\s*(?:#+|\*\*|(?=.+\n.*===)).+?(\d+)\D+(?:\n|$)/)||[0,"Score N/A"])[1], i];
+			}).sort(function(a,b){return a[0]-b[0];}).map(function(l) {
+				if (isNaN(l[0])) console.log(l);
+				return '<li>' + (l[1].body_markdown.match(/^\s*(?:#+|\*\*|(?=.+\n.*===))\s*.*?\s*([\w\s\.\u00FF-\uFFFF]+)/)||[0,"Lang N/A"])[1] + ", " + l[0] + ' – <a href="' + l[1].link + '">Link</a></li>';
+			}).join("\n");
+			$(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>'+
+										 '<div id="USER_BOARD" style="display:none"> <br> <ol>'+answers+'</ol> </div>');
+		    $("#USER_BOARD_TEXT").click(function() {
+			    $("#USER_BOARD").slideToggle(50, function() {
+				    $("#USER_BOARD_TEXT").text(function () {
+					return $("#USER_BOARD").is(":visible") ? "Hide Answer Leadboard ▼" : "Show Answer Leadboard ▶";
+				    });
+			    });
+		    });
+		});
+	}
   }
   document.head.innerHTML += ("<style>@import url("+FONT_URL+");"+
     ".envelope-on,.envelope-off,.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.star-on,.star-off,.comment-up-off,.comment-up-on,.comment-flag,.edited-yes,.feed-icon,.vote-accepted-off,.vote-accepted-on,.vote-accepted-bounty,.badge-earned-check,.delete-tag,.grippie,.expander-arrow-hide,.expander-arrow-show,.expander-arrow-small-hide,.expander-arrow-small-show,.anonymous-gravatar,.badge1,.badge2,.badge3,.gp-share,.fb-share,.twitter-share,#notify-containerspan.notify-close,.migrated.to,.migrated.from{background-image:url(\"$$SPRITE_SHEET\");background-size: initial;}"+
