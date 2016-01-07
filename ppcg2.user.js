@@ -54,8 +54,8 @@ var main = {
   CONTAINER_BG_COLOR: "rgb(250, 250, 250)",
   CURR_TAB_COLOR: "rgb(72,125,75)",
   BULLETIN_BG_COLOR: "#fff8dc",
-  STATS_COLOR: "#F8F8F8",
-  TAG_COLOR: "#EDFAEE", /* Alternative Option: "rgb(177, 235, 124)"*/
+  STATS_COLOR: "#FAFAFA",
+  TAG_COLOR: "#E7FFD8", /* Alternative Option: "rgb(177, 235, 124)"*/
   TAG_BORDER_COLOR: "transparent",
   
   // Specify nothing to make these default color
@@ -129,11 +129,12 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}"+
     "html,body{font-family:\""+TEXT_FONT+"\"}"+
     "#header{background:$$HEADER_BG_COLOR;}#header *{color:$$HEADER_TEXT_COLOR;}"+
-    ".container{background:$$CONTAINER_BG_COLOR}"+
+    (site=="meta"?".container{background:$$CONTAINER_BG_COLOR}":"")+
     "a.post-tag{background-color:$$TAG_COLOR;border-color:$$TAG_BORDER_COLOR}"+
     "div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}"+
     "#newlogo{font-family:\""+HEADER_FONT+"\";top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}"+
-    ".container{"+(obj.BACKGROUND_IMAGE?(obj.BACKGROUND_TINT?"background: $$BACKGROUND_TINT, url(\"$$BACKGROUND_IMAGE\");":"background-image:url(\"$$BACKGROUND_IMAGE\");")+"background-repeat:repeat-x;":"")+"background-color:$$BACKGROUND_COLOR;box-shadow:none !important;}</style>").replace(/\$\$(\w+)/g,function(_,x){return eval(site+"."+x)});
+    (site=="meta"?".container{"+(obj.BACKGROUND_IMAGE?(obj.BACKGROUND_TINT?"background: $$BACKGROUND_TINT, url(\"$$BACKGROUND_IMAGE\");":"background-image:url(\"$$BACKGROUND_IMAGE\");")+"background-repeat:repeat-x;":"")+"background-color:$$BACKGROUND_COLOR;box-shadow:none !important;}":"")+
+	 "</style>").replace(/\$\$(\w+)/g,function(_,x){return eval(site+"."+x);});
   try{qS("link[rel$=\"icon\"]").href = obj.FAVICON;}catch(e){}
   if(PARSE_CODEBLOCKS){
   $(".answer").each(function() {
@@ -149,6 +150,13 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     });
   });
   }
+  if (site == "main") {
+    $("#content").css('background', 'none');
+	$("body > .container").css("box-shadow", "none");
+	$("#mainbar, .user-page #content").css('background', main.STATS_COLOR);
+	$("#mainbar").css('padding', '15px');
+	$("body .container").prepend('<div style="position: absolute;width: inherit; height: 120px; background: '+main.BACKGROUND_TINT+', url('+main.BACKGROUND_IMAGE+')"></div>');
+  }
   window.addEventListener("load",function(){
   setTimeout(function(){document.getElementById("footer").style.backgroundColor=obj.BACKGROUND_COLOR},300);
   });
@@ -157,3 +165,4 @@ if ((window.location+"").indexOf("codegolf.stackexchange.com") > -1) {
   /*=== SHOWS VOTE COUNTS ===*/
   void function(t){var e=t.head||t.getElementsByTagName("head")[0]||t.documentElement,o=t.createElement("style"),n="/*Added through UserScript*/.vote-count-post{cursor:pointer;}.vote-count-post[title]{cursor:default;}.vote-count-separator{height:0;*margin-left:0;}";e.appendChild(o),o.styleSheet?o.styleSheet.cssText=n:o.appendChild(t.createTextNode(n));var s=t.createElement("script");s["textContent"in s?"textContent":"text"]="("+function(){var t=location.protocol+"//api.stackexchange.com/2.0/posts/",e="?filter=!)q3b*aB43Xc&key=DwnkTjZvdT0qLs*o8rNDWw((&site="+location.host,o=1,n=StackExchange.helpers,s=$.fn.click;$.fn.click=function(){return this.hasClass("vote-count-post")&&!o?this:s.apply(this,arguments)};var r=function(s){var r,a=$(this),i=this.title;if(!(/up \/ /.test(i)||/View/.test(i)&&o)){o=0;var c=a.siblings('input[type="hidden"]').val();if(c||(r=a.closest("[data-questionid],[data-answerid]"),c=r.attr("data-answerid")||r.attr("data-questionid")),c||(r=a.closest(".suggested-edit"),c=$.trim(r.find(".post-id").text())),c||(r=a.closest(".question-summary"),c=/\d+/.exec(r.attr("id")),c=c&&c[0]),!c)return void console.error("Post ID not found! Please report this at http://stackapps.com/q/3082/9699");n.addSpinner(a),$.ajax({type:"GET",url:t+c+e+"&callback=?",dataType:"json",success:function(t){t=t.items[0];var e=t.up_vote_count,o=t.down_vote_count;e=e?"+"+e:0,o=o?"-"+o:0,$(".error-notification").fadeOut("fast",function(){$(this).remove()}),a.css("cursor","default").attr("title",e+" up / "+o+" down").html('<div style="color:green">'+e+'</div><div class="vote-count-separator"></div><div style="color:maroon">'+o+"</div>")},error:function(t){n.removeSpinner(),n.showErrorPopup(a.parent(),t.responseText&&t.responseText.length<100?t.responseText:"An error occurred during vote count fetch")}}),s.stopImmediatePropagation()}};$.fn.on?$(document).on("click",".vote-count-post",r):$(document).delegate(".vote-count-post","click",r)}+")();",e.appendChild(s),s.parentNode.removeChild(s)}(document);
 }
+
