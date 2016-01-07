@@ -9,7 +9,6 @@
 function qS(x){
   return document.querySelector(x);
 }
-window.addEventListener("load",function(){
   // THEME OPTIONS
   var CR_THEME        = false; // Code Review inspired background
   
@@ -67,5 +66,3 @@ window.addEventListener("load",function(){
   if((window.location+"").search("chat.stackexchange.com")>=0){
     $('img[title="Programming Puzzles & Code Golf"]').attr("src", FAVICON);
   }
-});
-
