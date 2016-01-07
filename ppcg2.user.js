@@ -12,8 +12,8 @@ function fchars(x){var y=chars(x);return y+" char"+(y==1?"":"s")}
 function bf(x,y){return x+" "+y+" byte"+(x==1?"":"s")}
 function bytes(x,y){ // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
   var ISO_8859_1 = /Japt|TeaScript/i;
-  var UTF_16 = /Ziim|Funciton/i;
-  var custom = /GS2|Seriously|Jelly|Unicorn|APL/i;
+  var UTF_16 = /Ziim/i;
+  var custom = /GS2|Seriously|Jelly|APL/i;
   y=y||"";
   if(PARSE_HEXDUMPS){
     var a="";
@@ -54,7 +54,7 @@ var main = {
   CONTAINER_BG_COLOR: "rgb(250, 250, 250)",
   CURR_TAB_COLOR: "rgb(72,125,75)",
   BULLETIN_BG_COLOR: "#fff8dc",
-  STATS_COLOR: "rgba(250,244,180,0.45)",
+  STATS_COLOR: "#F8F8F8",
   TAG_COLOR: "rgb(177, 235, 124)",
   TAG_BORDER_COLOR: "rgb(177, 235, 124)",
   
@@ -99,7 +99,7 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     var x = qS(".beta-title").parentElement;
     qS(".beta-title").parentElement.removeChild(qS(".beta-title"));
     x.innerHTML = "<table id=\"newlogo\"><tr><td><img src=\""+main.FAVICON+"\" height=50></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
-    document.head.innerHTML += "<style>#sidebar #beta-stats,#sidebar #promo-box{background:"+main.STATS_COLOR+";}</style>";
+    document.head.innerHTML += "<style>#sidebar #beta-stats,#sidebar #promo-box{border:none;background:"+main.STATS_COLOR+";}</style>";
   }
   document.head.innerHTML += ("<style>@import url("+FONT_URL+");"+
     ".envelope-on,.envelope-off,.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.star-on,.star-off,.comment-up-off,.comment-up-on,.comment-flag,.edited-yes,.feed-icon,.vote-accepted-off,.vote-accepted-on,.vote-accepted-bounty,.badge-earned-check,.delete-tag,.grippie,.expander-arrow-hide,.expander-arrow-show,.expander-arrow-small-hide,.expander-arrow-small-show,.anonymous-gravatar,.badge1,.badge2,.badge3,.gp-share,.fb-share,.twitter-share,#notify-containerspan.notify-close,.migrated.to,.migrated.from{background-image:url(\"$$SPRITE_SHEET\");background-size: initial;}"+
