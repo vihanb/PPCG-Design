@@ -104,9 +104,9 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
 	if($('a.post-tag[href="/questions/tagged/code-golf"]')[0] && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
 		$.get("https://api.stackexchange.com/2.2/questions/"+StackExchange.question.getQuestionId()+"/answers?order=desc&sort=votes&site=codegolf&filter=!w-2aDJ.Zv9-gPnVhDr", function(json) {
 			var answers = json.items.map(function(i) {
-				return [+(i.body_markdown.replace(/<s(trike)?>.+?<\/s\1>/g,"").match(/^\s*(?:#+|\*\*|(?=.+\n.*===)).+?(\d+)\D+(?:\n|$)/)||[0,"Score N/A"])[1], i];
+				return [+(i.body_markdown.replace(/<s(trike)?>.+?<\/s\1>/g,"").replace(/\](\(.+?\)|\[\d+\])/g,"").match(/^\s*(?:#+|\*\*|(?=.+\n.*===)).+?(\d+)\D+(?:\n|$)/)||[0,"Score N/A"])[1], i];
 			}).sort(function(a,b){return a[0]-b[0];}).map(function(l) {
-				return '<li>' + (l[1].body_markdown.match(/^\s*(?:#+|\*\*|(?=.+\n.*===))\s*.*?\s*([\w\s\.\u00FF-\uFFFF]+)/)||[0,"Lang N/A"])[1] + ", " + l[0] + ' – <a href="' + l[1].link + '">Link</a></li>';
+				return '<li>' + (l[1].body_markdown.match(/^\s*(?:#+|\*\*|(?=.+\n.*===))\s*.*?\s*([\w\s\.\u00FF-\uFFFF]+)/)||[0,"Lang N/A"])[1] + ", " + l[0] + ' bytes – <a href="' + l[1].link + '">Link</a></li>';
 			}).join("\n");
 			$(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>'+
 										 '<div id="USER_BOARD" style="display:none"> <br> <ol>'+answers+'</ol> </div>');
