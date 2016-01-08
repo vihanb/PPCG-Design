@@ -48,7 +48,7 @@ var main = {
   BACKGROUND_TINT: "linear-gradient(rgba(153, 255, 165, 0.26), rgba(140, 255, 149, 0.26))", // Only a linear graident works
 
   BACKGROUND_LIGHT: eval(localStorage.getItem("main.BACKGROUND_LIGHT")) || false, // Lighter shade of the background, CHANGE THROUGH OPTIONS
-  MODE_DARK: eval(localStorage.getItm("main.MODE_DARK")) || false,
+  MODE_DARK: eval(localStorage.getItem("main.MODE_DARK")) || false,
     
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#EDFAEE",
@@ -93,10 +93,11 @@ var meta = {
 };
 
 var darktheme = {
-	BACKGROUND_COLOR: "back"
+	BACKGROUND_COLOR: "black"
 };
 
 var optionbox = { // Customizes option box
+	BACKGROUND_TINT: "linear-gradient(rgba(69, 174, 103, 0.57), rgba(73, 166, 83, 0.47))",
 	BACKGROUND_COLOR: "#FAFAFA"
 };
 
@@ -116,7 +117,7 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
 					'<div style="position:absolute;z-index:3;width:40%;height:40%;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:'+optionbox.BACKGROUND_COLOR+';padding:1em;">'+
 					'<h1>Userscript Options</h1><div>'+
 					'<div style="width:50%;height:100%;float:left;">'+
-					'<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on"><label for="light_bg_on">Lighter Background?</label>'+
+					'<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on"><label for="light_bg_on">Lighter Background?</label><br>'+
 					'<input class="OPT_Bool" data-var="main.MODE_DARK" type="checkbox" id="dark_theme_on"><label for="dark_theme_on">Dark Theme? (WIP)</label>'+
 					'</div><div style="width:50%;height:100%;float:right;">'+
 					''+
@@ -202,5 +203,3 @@ if ((window.location+"").indexOf("codegolf.stackexchange.com") > -1) {
   /*=== SHOWS VOTE COUNTS ===*/
   void function(t){var e=t.head||t.getElementsByTagName("head")[0]||t.documentElement,o=t.createElement("style"),n="/*Added through UserScript*/.vote-count-post{cursor:pointer;}.vote-count-post[title]{cursor:default;}.vote-count-separator{height:0;*margin-left:0;}";e.appendChild(o),o.styleSheet?o.styleSheet.cssText=n:o.appendChild(t.createTextNode(n));var s=t.createElement("script");s["textContent"in s?"textContent":"text"]="("+function(){var t=location.protocol+"//api.stackexchange.com/2.0/posts/",e="?filter=!)q3b*aB43Xc&key=DwnkTjZvdT0qLs*o8rNDWw((&site="+location.host,o=1,n=StackExchange.helpers,s=$.fn.click;$.fn.click=function(){return this.hasClass("vote-count-post")&&!o?this:s.apply(this,arguments)};var r=function(s){var r,a=$(this),i=this.title;if(!(/up \/ /.test(i)||/View/.test(i)&&o)){o=0;var c=a.siblings('input[type="hidden"]').val();if(c||(r=a.closest("[data-questionid],[data-answerid]"),c=r.attr("data-answerid")||r.attr("data-questionid")),c||(r=a.closest(".suggested-edit"),c=$.trim(r.find(".post-id").text())),c||(r=a.closest(".question-summary"),c=/\d+/.exec(r.attr("id")),c=c&&c[0]),!c)return void console.error("Post ID not found! Please report this at http://stackapps.com/q/3082/9699");n.addSpinner(a),$.ajax({type:"GET",url:t+c+e+"&callback=?",dataType:"json",success:function(t){t=t.items[0];var e=t.up_vote_count,o=t.down_vote_count;e=e?"+"+e:0,o=o?"-"+o:0,$(".error-notification").fadeOut("fast",function(){$(this).remove()}),a.css("cursor","default").attr("title",e+" up / "+o+" down").html('<div style="color:green">'+e+'</div><div class="vote-count-separator"></div><div style="color:maroon">'+o+"</div>")},error:function(t){n.removeSpinner(),n.showErrorPopup(a.parent(),t.responseText&&t.responseText.length<100?t.responseText:"An error occurred during vote count fetch")}}),s.stopImmediatePropagation()}};$.fn.on?$(document).on("click",".vote-count-post",r):$(document).delegate(".vote-count-post","click",r)}+")();",e.appendChild(s),s.parentNode.removeChild(s)}(document);
 }
-
-
