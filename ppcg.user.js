@@ -27,7 +27,28 @@ function bytes(x,y){ // Takes in a length of text and piece of header text, and 
   // Else, fallback to UTF-8
   return bf(3*x.length-x.replace(/[\u0080-\uFFFF]/g,'').length-x.replace(/[\u0800-\uFFFF]/g,'').length,"UTF-8");
 }
-
+function loadAnswers(onFinish) {
+    var answers = [], i=5;
+    function loadPage() {
+        $.get(
+            'https://api.stackexchange.com/2.2/questions/' +
+            String(window.location).match(/\d+/)[0] + '/answers?page=' +
+            (page++).toString() + '&pagesize=100&order=asc&sort=creation&site=codegolf&filter=!)Q29lpdRHRpfMsoUn(ODuEiP', readPage);
+    }
+    function readPage(data) {
+        if (data.hasOwnProperty('error_id'))
+            onFinish(data.error_id.toString());
+        else {
+           answers = answers.concat(data.items);
+           if (data.has_more)
+               loadPage();
+           else
+               onFinish(answers,console.log("answers",answers));
+        }
+    }
+    var page = 1;
+    loadPage(page, readPage);
+}
 
 var PARSE_CODEBLOCKS = true; // set to false to not parse code block lengths
 var PARSE_HEXDUMPS = true; // set to false to not parse hexdump lengths
@@ -130,6 +151,7 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
 	  $(this).prop('checked', eval(localStorage.getItem($(this).data('var'))));
 	  console.log(localStorage.getItem('main.BACKGROUND_LIGHT'));
   });
+}
   	
   if(site == "main") {
     var x = qS(".beta-title").parentElement;
@@ -138,23 +160,25 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     document.head.innerHTML += "<style>#sidebar #beta-stats,#sidebar #promo-box{border:none;background:"+main.STATS_COLOR+";}</style>";
 	// Leaderboard
     if($('a.post-tag[href="/questions/tagged/code-golf"]')[0] && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
-		$.get("https://api.stackexchange.com/2.2/questions/"+String(window.location).match(/\d+/)[0]+"/answers?order=desc&sort=votes&site=codegolf&filter=!)Q29lpdRHRpfMsqq*xSJF24y", function(json) {
-      var answers = json.items.map(function(i) {
-				return [+(i.body.replace(/<(strike|s|del)>.*<\/\1>/g,"").replace(/\](\(.+?\)|\[\d+\])/g,"").match(/^\s*(?:<h\d>|<strong>).*[,\-]\s+(\d+)/)||[0,"Score N/A"])[1], i];
-			}).sort(function(a,b){return a[0]-b[0];}).map(function(l) {
-        return '<li>' + (l[1].body.replace(/<(strike|s|del)>.*<\/\1>/g,"").replace(/\](\(.+?\)|\[\d+\])/g,"").match(/^\s*(?:<h\d>|<strong>)\s*.*?\s*((?:.(?!,\s+\d+))*.)/)||[0,"Lang N/A"])[1].trim() + ", " + l[0] + ' bytes – <a href="' + l[1].link + '">Link</a></li>';
-			}).join("\n");
-			$(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>'+
-										 '<div id="USER_BOARD" style="display:none"> <br> <ol>'+answers+'</ol> </div>');
-		    $("#USER_BOARD_TEXT").click(function() {
-			    $("#USER_BOARD").slideToggle(50, function() {
-				    $("#USER_BOARD_TEXT").text(function () {
-					return $("#USER_BOARD").is(":visible") ? "Hide Answer Leadboard ▼" : "Show Answer Leadboard ▶";
-				    });
-			    });
-		    });
-		});
-	}
+      var answers = [];
+      loadAnswers(function(json) {
+        answers = json.map(function(i) {
+          var j=[+(i.body.replace(/<(strike|s|del)>.*<\/\1>/g,"").replace(/<a [^>]+>(.*)<\/a>/g,"$1").match(/^\s*(?:<h\d>|<strong>).*,\s+(\d+)/)||[0,"Score N/A"])[1], i];
+          return j;
+        });
+        answers=answers.sort(function(a,b){return a[0]-b[0];}).map(function(l) {
+          return '<li>' + (l[1].body.replace(/<(strike|s|del)>.*<\/\1>/g,"").replace(/<a [^>]+>(.*)<\/a>/g,"$1").match(/^\s*(?:<h\d>|<strong>)\s*.*?\s*((?:.(?!,\s+\d+))*.)/)||[0,"Lang N/A"])[1].trim() + ", " + l[0] + ' bytes – <a href="' + l[1].link + '">Link</a></li>';
+			  });
+			  $(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>'+
+				  						 '<div id="USER_BOARD" style="display:none"> <br> <ol>'+answers.join("\n")+'</ol> </div>');
+		      $("#USER_BOARD_TEXT").click(function() {
+			      $("#USER_BOARD").slideToggle(50, function() {
+				      $("#USER_BOARD_TEXT").text(function () {
+					      return $("#USER_BOARD").is(":visible") ? "Hide Answer Leadboard ▼" : "Show Answer Leadboard ▶";
+				      });
+			      });
+		      });
+        });
   } else {
 	  qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\""+meta.FAVICON+"\" height=50></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\">meta</span></td></tr></table>";
   }
