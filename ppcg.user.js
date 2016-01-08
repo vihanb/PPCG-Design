@@ -46,6 +46,8 @@ var main = {
   // Set to empty string for no background image
   BACKGROUND_IMAGE: "http://i.stack.imgur.com/t8GhU.png",
   BACKGROUND_TINT: "linear-gradient(rgba(153, 255, 165, 0.26), rgba(140, 255, 149, 0.26))", // Only a linear graident works
+
+  BACKGROUND_LIGHT: eval(localStorage.getItem("main.BACKGROUND_LIGHT")) || false, // Lighter shade of the background, CHANGE THROUGH OPTIONS
     
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#EDFAEE",
@@ -87,7 +89,11 @@ var meta = {
   // Specify nothing to make these default color
   BOUNTY_COLOR: "rgb(72,125,75)",
   BOUNTY_BG_COLOR: "rgb(172,225,175)",
-}
+};
+
+var optionbox = { // Customizes option box
+	BACKGROUND_COLOR: "#FAFAFA"
+};
 
 
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
@@ -96,6 +102,25 @@ document.head.innerHTML += '<style>.favicon-codegolf{background-position: initia
 if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
   var site = /^https?:\/\/meta/.test(window.location)?"meta":"main";
   var obj = site == "meta" ? meta : main;
+  
+  // Options Menu
+  $(".topbar-wrapper > .network-items").append('<a id="USER_Opt" class="topbar-icon yes-hover" style="z-index:1;width: 36px; background-image: url('+main.SPRITE_SHEET+'); background-position: 0px 0px;"></a>');
+  $("body").prepend('<div id="USER_OptMenu" style="display: none; width: inherit; height: inherit;"><div id="USER_Backblur" style="position:absolute;z-index:2;width:100%;height:100%;background:rgba(0,0,0,0.5)"></div>'+
+					'<div style="position:absolute;z-index:3;width:40%;height:40%;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:'+optionbox.BACKGROUND_COLOR+';padding:1em;">'+
+					'<h1>Userscript Options</h1><div>'+
+					'<div style="width:50%;height:100%;float:left;">'+
+					'<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox"><label>Lighter Background?</label>'+
+					'</div><div style="width:50%;height:100%;float:right;">Some more options</div>'+
+					'</div>For changed to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
+  $("#USER_Opt").click(function() { $("#USER_OptMenu").fadeIn(50); });
+  $("#USER_Backblur").click(function() { $("#USER_OptMenu").fadeOut(50); });
+  $(".OPT_Bool").each(function() { $(this).prop("checked", eval(localStorage.getItem($(this).data('var'))) || eval($(this).data('var'))); });
+  $(".OPT_Bool").change(function() {
+	  localStorage.setItem($(this).data('var'), $(this).is(':checked'));
+	  $(this).prop('checked', eval(localStorage.getItem($(this).data('var'))));
+	  console.log(localStorage.getItem('main.BACKGROUND_LIGHT'));
+  });
+  	
   if(site == "main") {
     var x = qS(".beta-title").parentElement;
     qS(".beta-title").parentElement.removeChild(qS(".beta-title"));
@@ -129,6 +154,7 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     (obj.BOUNTY_COLOR?".bounty-indicator-tab{background:$$BOUNTY_BG_COLOR;color:$$BOUNTY_COLOR !important;}":"")+
     "#sidebar .module.community-bulletin{background:$$BULLETIN_BG_COLOR;}"+
     "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}"+
+	".yes-hover{cursor:pointer !important;}"+
     "html,body{font-family:\""+TEXT_FONT+"\"}"+
     "#header{background:$$HEADER_BG_COLOR;}#header *{color:$$HEADER_TEXT_COLOR;}"+
     (site=="meta"?".container{background:$$CONTAINER_BG_COLOR}":"")+
@@ -157,7 +183,7 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
 	$("body > .container").css("box-shadow", "none");
 	$("#mainbar, .user-page #content").css('background', main.STATS_COLOR);
 	$("#mainbar").css('padding', '15px');
-	$("body .container").prepend('<div style="position: absolute;width: inherit; height: 120px; background: '+main.BACKGROUND_TINT+', url('+main.BACKGROUND_IMAGE+')"></div>');
+	$("body .container").prepend('<div style="position: absolute;width: inherit; height: 120px; background: '+(localStorage.getItem('main.BACKGROUND_LIGHT')==="true"?'':main.BACKGROUND_TINT+', ')+ 'url('+main.BACKGROUND_IMAGE+')"></div>');
   }
   window.addEventListener("load",function(){
   setTimeout(function(){document.getElementById("footer").style.backgroundColor=obj.BACKGROUND_COLOR},300);
@@ -167,4 +193,5 @@ if ((window.location+"").indexOf("codegolf.stackexchange.com") > -1) {
   /*=== SHOWS VOTE COUNTS ===*/
   void function(t){var e=t.head||t.getElementsByTagName("head")[0]||t.documentElement,o=t.createElement("style"),n="/*Added through UserScript*/.vote-count-post{cursor:pointer;}.vote-count-post[title]{cursor:default;}.vote-count-separator{height:0;*margin-left:0;}";e.appendChild(o),o.styleSheet?o.styleSheet.cssText=n:o.appendChild(t.createTextNode(n));var s=t.createElement("script");s["textContent"in s?"textContent":"text"]="("+function(){var t=location.protocol+"//api.stackexchange.com/2.0/posts/",e="?filter=!)q3b*aB43Xc&key=DwnkTjZvdT0qLs*o8rNDWw((&site="+location.host,o=1,n=StackExchange.helpers,s=$.fn.click;$.fn.click=function(){return this.hasClass("vote-count-post")&&!o?this:s.apply(this,arguments)};var r=function(s){var r,a=$(this),i=this.title;if(!(/up \/ /.test(i)||/View/.test(i)&&o)){o=0;var c=a.siblings('input[type="hidden"]').val();if(c||(r=a.closest("[data-questionid],[data-answerid]"),c=r.attr("data-answerid")||r.attr("data-questionid")),c||(r=a.closest(".suggested-edit"),c=$.trim(r.find(".post-id").text())),c||(r=a.closest(".question-summary"),c=/\d+/.exec(r.attr("id")),c=c&&c[0]),!c)return void console.error("Post ID not found! Please report this at http://stackapps.com/q/3082/9699");n.addSpinner(a),$.ajax({type:"GET",url:t+c+e+"&callback=?",dataType:"json",success:function(t){t=t.items[0];var e=t.up_vote_count,o=t.down_vote_count;e=e?"+"+e:0,o=o?"-"+o:0,$(".error-notification").fadeOut("fast",function(){$(this).remove()}),a.css("cursor","default").attr("title",e+" up / "+o+" down").html('<div style="color:green">'+e+'</div><div class="vote-count-separator"></div><div style="color:maroon">'+o+"</div>")},error:function(t){n.removeSpinner(),n.showErrorPopup(a.parent(),t.responseText&&t.responseText.length<100?t.responseText:"An error occurred during vote count fetch")}}),s.stopImmediatePropagation()}};$.fn.on?$(document).on("click",".vote-count-post",r):$(document).delegate(".vote-count-post","click",r)}+")();",e.appendChild(s),s.parentNode.removeChild(s)}(document);
 }
+
 
