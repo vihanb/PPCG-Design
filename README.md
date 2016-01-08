@@ -4,7 +4,9 @@ A userscript to redesign and add features to the PPCG website.
 
 ### A collaborative userscript made by:
 
-@Doᴡɴɢᴏᴀᴛ, @ETHproductions, @PhiNotPi, @Cᴏɴᴏʀ O'Bʀɪᴇɴ, @mınxomaτ, @JAtkin, @RikerW, @Calvin's Hobbies, @El'endia Starman, and @issacg, (Hopefully I didn't miss anyone)
+@Doᴡɴɢᴏᴀᴛ, @ETHproductions, @PhiNotPi, @Cᴏɴᴏʀ O'Bʀɪᴇɴ, @mınxomaτ, @JAtkin, and @El'endia Starman.
+
+Wither help from: @RikerW, @Calvin's Hobbies, and @issacg
 
 If you'd like to become a collaborator, feel free to tell me in [chat](http://chat.stackexchange.com/rooms/33840/ppcg-graduation-design-discussion) (@Doᴡɴɢᴏᴀᴛ)
 
