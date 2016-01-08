@@ -166,7 +166,7 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
           var j=[+(i.body.replace(/<(strike|s|del)>.*<\/\1>/g,"").replace(/<a [^>]+>(.*)<\/a>/g,"$1").match(/^\s*(?:<h\d>|<strong>).*,\s+(\d+)/)||[0,"Score N/A"])[1], i];
           return j;
         });
-        answers=answers.sort(function(a,b){return a[0]-b[0];}).map(function(l) {
+        answers=answers.filter(function(a){return(""+a[0])!="NaN"}).sort(function(a,b){return a[0]-b[0];}).map(function(l) {
           return '<li>' + (l[1].body.replace(/<(strike|s|del)>.*<\/\1>/g,"").replace(/<a [^>]+>(.*)<\/a>/g,"$1").match(/^\s*(?:<h\d>|<strong>)\s*.*?\s*((?:.(?!,\s+\d+))*.)/)||[0,"Lang N/A"])[1].trim() + ", " + l[0] + ' bytes – <a href="' + l[1].link + '">Link</a></li>';
 			  });
 			  $(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>'+
