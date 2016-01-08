@@ -27,28 +27,7 @@ function bytes(x,y){ // Takes in a length of text and piece of header text, and 
   // Else, fallback to UTF-8
   return bf(3*x.length-x.replace(/[\u0080-\uFFFF]/g,'').length-x.replace(/[\u0800-\uFFFF]/g,'').length,"UTF-8");
 }
-function loadAnswers(onFinish) {
-    var answers = [], i=5;
-    function loadPage() {
-        $.get(
-            'https://api.stackexchange.com/2.2/questions/' +
-            String(window.location).match(/\d+/)[0] + '/answers?page=' +
-            (page++).toString() + '&pagesize=100&order=asc&sort=creation&site=codegolf&filter=!)Q29lpdRHRpfMsoUn(ODuEiP', readPage);
-    }
-    function readPage(data) {
-        if (data.hasOwnProperty('error_id'))
-            onFinish(data.error_id.toString());
-        else {
-           answers = answers.concat(data.items);
-           if (data.has_more)
-               loadPage();
-           else
-               onFinish(answers,console.log("answers",answers));
-        }
-    }
-    var page = 1;
-    loadPage(page, readPage);
-}
+
 
 var PARSE_CODEBLOCKS = true; // set to false to not parse code block lengths
 var PARSE_HEXDUMPS = true; // set to false to not parse hexdump lengths
@@ -122,7 +101,7 @@ var optionbox = { // Customizes option box
 	BACKGROUND_COLOR: "#FAFAFA"
 };
 
-if (localStorage.getItem('main.MODE_DARK') == "true") main = $.extend(main, darktheme);
+if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true") main = $.extend(main, darktheme);
 
 
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
@@ -151,7 +130,6 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
 	  $(this).prop('checked', eval(localStorage.getItem($(this).data('var'))));
 	  console.log(localStorage.getItem('main.BACKGROUND_LIGHT'));
   });
-}
   	
   if(site == "main") {
     var x = qS(".beta-title").parentElement;
@@ -160,27 +138,24 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     document.head.innerHTML += "<style>#sidebar #beta-stats,#sidebar #promo-box{border:none;background:"+main.STATS_COLOR+";}</style>";
 	// Leaderboard
     if($('a.post-tag[href="/questions/tagged/code-golf"]')[0] && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
-      var answers = [];
-      loadAnswers(function(json) {
-        answers = json.map(function(i) {
-          var j=[+(i.body.replace(/<(strike|s|del)>.*<\/\1>/g,"").replace(/<a [^>]+>(.*)<\/a>/g,"$1").match(/^\s*(?:<h\d>|<strong>).*,\s+(\d+)/)||[0,"Score N/A"])[1], i];
-          return j;
-        });
-        answers=answers.filter(function(a){return(""+a[0])!="NaN"}).sort(function(a,b){return a[0]-b[0];}).map(function(l) {
-          return '<li>' + (l[1].body.replace(/<(strike|s|del)>.*<\/\1>/g,"").replace(/<a [^>]+>(.*)<\/a>/g,"$1").match(/^\s*(?:<h\d>|<strong>)\s*.*?\s*((?:.(?!,\s+\d+))*.)/)||[0,"Lang N/A"])[1].trim() + ", " + l[0] + ' bytes – <a href="' + l[1].link + '">Link</a></li>';
-			  });
-			  $(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>'+
-				  						 '<div id="USER_BOARD" style="display:none"> <br> <ol>'+answers.join("\n")+'</ol> </div>');
-		      $("#USER_BOARD_TEXT").click(function() {
-			      $("#USER_BOARD").slideToggle(50, function() {
-				      $("#USER_BOARD_TEXT").text(function () {
-					      return $("#USER_BOARD").is(":visible") ? "Hide Answer Leadboard ▼" : "Show Answer Leadboard ▶";
-				      });
-			      });
-		      });
-        });
-	  qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\""+main.FAVICON+"\" height=50></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
-    }} else {
+		$.get("https://api.stackexchange.com/2.2/questions/"+String(window.location).match(/\d+/)[0]+"/answers?order=desc&sort=votes&site=codegolf&filter=!)Q29lpdRHRpfMsqq*xSJF24y", function(json) {
+      var answers = json.items.map(function(i) {
+				return [+(i.body.replace(/<(strike|s|del)>.*<\/\1>/g,"").replace(/\](\(.+?\)|\[\d+\])/g,"").match(/^\s*(?:<h\d>|<strong>).*[,\-]\s+(\d+)/)||[0,"Score N/A"])[1], i];
+			}).sort(function(a,b){return a[0]-b[0];}).map(function(l,i) {
+        return '<tr><td>'+(i+1)+'</td><td>' + (l[1].body.replace(/<(strike|s|del)>.*<\/\1>/g,"").replace(/\](\(.+?\)|\[\d+\])/g,"").match(/^\s*(?:<h\d>|<strong>)\s*.*?\s*((?:.(?!,\s+\d+))*.)/)||[0,"Lang N/A"])[1].trim() + "</td><td>" + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
+			}).join("\n");
+			$(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>'+
+										 '<div id="USER_BOARD" style="display:none"> <br> <table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>'+answers+'</tbody></table> </div>');
+		    $("#USER_BOARD_TEXT").click(function() {
+			    $("#USER_BOARD").slideToggle(50, function() {
+				    $("#USER_BOARD_TEXT").text(function () {
+					return $("#USER_BOARD").is(":visible") ? "Hide Answer Leadboard ▼" : "Show Answer Leadboard ▶";
+				    });
+			    });
+		    });
+		});
+	}
+  } else {
 	  qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\""+meta.FAVICON+"\" height=50></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\">meta</span></td></tr></table>";
   }
   document.head.innerHTML += ("<style>@import url("+FONT_URL+");"+
@@ -191,6 +166,7 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
     "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}"+
 	".yes-hover{cursor:pointer !important;}"+
     "html,body{font-family:\""+TEXT_FONT+"\"}"+
+	".LEADERBOARD {border-collapse: collapse} .LEADERBOARD td { padding: 6px 8px } .LEADERBOARD tr:nth-child(even) { background-color: #F1F1F1 } .LEADERBOARD thead { border-bottom: 1px solid #DDD }"+
     "#header{background:$$HEADER_BG_COLOR;}#header *{color:$$HEADER_TEXT_COLOR;}"+
     (site=="meta"?".container{background:$$CONTAINER_BG_COLOR}":"")+
     "a.post-tag{background-color:$$TAG_COLOR;border-color:$$TAG_BORDER_COLOR}"+
@@ -223,7 +199,11 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
   window.addEventListener("load",function(){
   setTimeout(function(){document.getElementById("footer").style.backgroundColor=obj.BACKGROUND_COLOR},300);
   });
+}
 if ((window.location+"").indexOf("codegolf.stackexchange.com") > -1) {
   /*=== SHOWS VOTE COUNTS ===*/
   void function(t){var e=t.head||t.getElementsByTagName("head")[0]||t.documentElement,o=t.createElement("style"),n="/*Added through UserScript*/.vote-count-post{cursor:pointer;}.vote-count-post[title]{cursor:default;}.vote-count-separator{height:0;*margin-left:0;}";e.appendChild(o),o.styleSheet?o.styleSheet.cssText=n:o.appendChild(t.createTextNode(n));var s=t.createElement("script");s["textContent"in s?"textContent":"text"]="("+function(){var t=location.protocol+"//api.stackexchange.com/2.0/posts/",e="?filter=!)q3b*aB43Xc&key=DwnkTjZvdT0qLs*o8rNDWw((&site="+location.host,o=1,n=StackExchange.helpers,s=$.fn.click;$.fn.click=function(){return this.hasClass("vote-count-post")&&!o?this:s.apply(this,arguments)};var r=function(s){var r,a=$(this),i=this.title;if(!(/up \/ /.test(i)||/View/.test(i)&&o)){o=0;var c=a.siblings('input[type="hidden"]').val();if(c||(r=a.closest("[data-questionid],[data-answerid]"),c=r.attr("data-answerid")||r.attr("data-questionid")),c||(r=a.closest(".suggested-edit"),c=$.trim(r.find(".post-id").text())),c||(r=a.closest(".question-summary"),c=/\d+/.exec(r.attr("id")),c=c&&c[0]),!c)return void console.error("Post ID not found! Please report this at http://stackapps.com/q/3082/9699");n.addSpinner(a),$.ajax({type:"GET",url:t+c+e+"&callback=?",dataType:"json",success:function(t){t=t.items[0];var e=t.up_vote_count,o=t.down_vote_count;e=e?"+"+e:0,o=o?"-"+o:0,$(".error-notification").fadeOut("fast",function(){$(this).remove()}),a.css("cursor","default").attr("title",e+" up / "+o+" down").html('<div style="color:green">'+e+'</div><div class="vote-count-separator"></div><div style="color:maroon">'+o+"</div>")},error:function(t){n.removeSpinner(),n.showErrorPopup(a.parent(),t.responseText&&t.responseText.length<100?t.responseText:"An error occurred during vote count fetch")}}),s.stopImmediatePropagation()}};$.fn.on?$(document).on("click",".vote-count-post",r):$(document).delegate(".vote-count-post","click",r)}+")();",e.appendChild(s),s.parentNode.removeChild(s)}(document);
 }
+
+
+
