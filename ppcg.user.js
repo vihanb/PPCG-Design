@@ -109,7 +109,7 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
 					'<div style="position:absolute;z-index:3;width:40%;height:40%;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:'+optionbox.BACKGROUND_COLOR+';padding:1em;">'+
 					'<h1>Userscript Options</h1><div>'+
 					'<div style="width:50%;height:100%;float:left;">'+
-					'<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox"><label>Lighter Background?</label>'+
+					'<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on"><label for="light_bg_on">Lighter Background?</label>'+
 					'</div><div style="width:50%;height:100%;float:right;">Some more options</div>'+
 					'</div>For changed to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
   $("#USER_Opt").click(function() { $("#USER_OptMenu").fadeIn(50); });
