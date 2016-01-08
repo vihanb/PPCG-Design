@@ -48,6 +48,7 @@ var main = {
   BACKGROUND_TINT: "linear-gradient(rgba(153, 255, 165, 0.26), rgba(140, 255, 149, 0.26))", // Only a linear graident works
 
   BACKGROUND_LIGHT: eval(localStorage.getItem("main.BACKGROUND_LIGHT")) || false, // Lighter shade of the background, CHANGE THROUGH OPTIONS
+  MODE_DARK: eval(localStorage.getItm("main.MODE_DARK")) || false,
     
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#EDFAEE",
@@ -91,9 +92,15 @@ var meta = {
   BOUNTY_BG_COLOR: "rgb(172,225,175)",
 };
 
+var darktheme = {
+	BACKGROUND_COLOR: "back"
+};
+
 var optionbox = { // Customizes option box
 	BACKGROUND_COLOR: "#FAFAFA"
 };
+
+if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true") main = $.extend(main, darktheme);
 
 
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
@@ -110,8 +117,10 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
 					'<h1>Userscript Options</h1><div>'+
 					'<div style="width:50%;height:100%;float:left;">'+
 					'<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on"><label for="light_bg_on">Lighter Background?</label>'+
-					'</div><div style="width:50%;height:100%;float:right;">Some more options</div>'+
-					'</div>For changed to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
+					'<input class="OPT_Bool" data-var="main.MODE_DARK" type="checkbox" id="dark_theme_on"><label for="dark_theme_on">Dark Theme? (WIP)</label>'+
+					'</div><div style="width:50%;height:100%;float:right;">'+
+					''+
+					'</div></div>For changes to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
   $("#USER_Opt").click(function() { $("#USER_OptMenu").fadeIn(50); });
   $("#USER_Backblur").click(function() { $("#USER_OptMenu").fadeOut(50); });
   $(".OPT_Bool").each(function() { $(this).prop("checked", eval(localStorage.getItem($(this).data('var'))) || eval($(this).data('var'))); });
