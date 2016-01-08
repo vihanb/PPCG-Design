@@ -122,7 +122,7 @@ var optionbox = { // Customizes option box
 	BACKGROUND_COLOR: "#FAFAFA"
 };
 
-if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true") main = $.extend(main, darktheme);
+if (localStorage.getItem('main.MODE_DARK') == "true") main = $.extend(main, darktheme);
 
 
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
