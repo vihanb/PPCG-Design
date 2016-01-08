@@ -170,7 +170,7 @@ if((window.location+"").search("//(?:meta.)?codegolf.stackexchange.com")>=0){
         return '<tr><td>'+(i+1)+'</td><td>' + (l[1].body.replace(/<(strike|s|del)>.*<\/\1>/g,"").replace(/\](\(.+?\)|\[\d+\])/g,"").match(/^\s*(?:<h\d>|<strong>)\s*.*?\s*((?:.(?!,\s+\d+))*.)/)||[0,"Lang N/A"])[1].trim() + "</td><td>" + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
 			  });
 			  $(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>'+
-				  			   '<div id="USER_BOARD" style="display:none"><table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>'+answers+'</tbody></table> </div>');
+				  			   '<div id="USER_BOARD" style="display:none"><table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>'+answers.join("\n")+'</tbody></table> </div>');
 		      $("#USER_BOARD_TEXT").click(function() {
 			      $("#USER_BOARD").slideToggle(50, function() {
 				      $("#USER_BOARD_TEXT").text(function () {
