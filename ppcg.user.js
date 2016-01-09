@@ -165,16 +165,17 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     if(!main.NO_LEADERBOARD && $('a.post-tag[href="/questions/tagged/code-golf"]')[0] && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
       var answers = [];
       loadAnswers(function(json) {
-        answers = json.map(function(i) {
+        answers = json.map(function(i,l,a) {
+		  var copyvalue = i.body.slice();
           i.body = i.body.replace(/^(?!<p><strong>|<h\d>)(.(?!<p><strong>|<h\d>))*/,"").replace(/<(strike|s|del)>.*<\/\1>/g,"").replace(/<a [^>]+>(.*)<\/a>/g,"$1").replace(/\(\s*(\d+)/g,", $1").replace(/\s*-\s+|:\s*/,", ");
           var j=+( (i.body.match(/\b(\d+)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/)||[])[1] || (i.body.match(/^\s*(?:<h\d>|<p><strong>).*?(\d+)\D*?<\/(?:h\d|strong)>/)||[])[1] );
           i.body = i.body.replace(RegExp(",?\\s*"+j+".*"),"");
-          return [j, i];
+          return [j, i, copyvalue];
         });
         var lv = 0;
-        answers=answers.filter(function(a){return(""+a[0])!="NaN"}).sort(function(a,b){return a[0]-b[0];}).map(function(l,i,a) {
+        answers=answers.filter(function(a){return(""+a[0])!="NaN";}).sort(function(a,b){return a[0]-b[0];}).map(function(l,i,a) {
         if((a[i-1]||[NaN])[0] !== l[0]) lv = (i||0) + 1;
-        return '<tr><td>'+lv+'</td><td>' + (l[1].body.match(/^\s*(?:<h\d>|<p><strong>)(.*)/)||[0,"Lang N/A"])[1].trim() + "</td><td>" + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
+        return '<tr><td>'+lv+'</td><td>' + (l[2].match(/\s*(?:<h\d>|<p><strong>)(\s*<a [^ >]+.+?<\/a>|(?:.+?(?=,?\s*\d+\s*\b[A-Za-z]+?(?:<\/|$))|(?:[\w\s\.\u00FF-\uFFFF!?]|(?:(?=.+,),))+(?:(?=\(\S+?\))\S+?\)|)))/)||[0,"Lang N/A"])[1].trim() + "</td><td>" + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
 			  });
 			  $(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>'+
 				  			   '<div id="USER_BOARD" style="display:none"><table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>'+answers.join("\n")+'</tbody></table> </div>');
