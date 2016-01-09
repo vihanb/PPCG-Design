@@ -1,9 +1,11 @@
 // ==UserScript==
-// @name        CustomizablePPCGUserscript
-// @namespace   ETHproductions
-// @version     1
+// @name        PPCG Graduation Script
+// @namespace   https://github.com/vihanb/PPCG-Design
+// @version     2.1.0
+// @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com*
-// @author      ETHproductions
+// @match       *://chat*stackexchange.com*
+// @author      PPCG Community
 // @grant       none
 // ==/UserScript==
 
