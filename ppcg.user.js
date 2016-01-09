@@ -176,7 +176,7 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
         var lv = 0;
         answers=answers.filter(function(a){return(""+a[0])!="NaN";}).sort(function(a,b){return a[0]-b[0];}).map(function(l,i,a) {
         if((a[i-1]||[NaN])[0] !== l[0]) lv = (i||0) + 1;
-        return '<tr><td>'+lv+'</td><td>' + (l[2].match(/\s*(?:<h\d>|<p><strong>)(\s*<a [^ >]+.+?<\/a>|(?:[\w\s\.\u00FF-\uFFFF!?]|(?:(?=.+,),))+)/)||[0,"Lang N/A"])[1].trim() + "</td><td>" + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
+        return '<tr><td>'+lv+'</td><td>' + (l[2].match(/\s*(?:<h\d>|<p><strong>)(\s*<a [^ >]+.+?<\/a>|(?:[\w\s\.\u00FF-\uFFFF!?]|(?:(?=-[\w\s\.\u00FF-\uFFFF!?]).)|(?:(?=.+(,)),))+)/)||[0,"Lang N/A"])[1].trim() + "</td><td>" + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
 			  });
 			  $(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>'+
 				  			   '<div id="USER_BOARD" style="display:none"><table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>'+answers.join("\n")+'</tbody></table> </div>');
