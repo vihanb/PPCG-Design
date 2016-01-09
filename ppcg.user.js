@@ -7,7 +7,8 @@
 // ==/UserScript==
 
 function qS(x){return document.querySelector(x)}
-function chars(x){return x.replace(/[\uD800-\uDBFF]/g,'').length}
+function unicodes(x){return(x.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\n|./g)||[]).map(function(c){return c[1]?(c.charCodeAt(0)&1023)*1024+(c.charCodeAt(1)&1023)+65536:c.charCodeAt(0)})}
+function chars(x){return unicodes(x).length}
 function fchars(x){var y=chars(x);return y+" char"+(y==1?"":"s")}
 function bf(x,y){return x+" "+y+" byte"+(x==1?"":"s")}
 function bytes(x,y){ // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
@@ -17,15 +18,15 @@ function bytes(x,y){ // Takes in a length of text and piece of header text, and 
   y=y||"";
   if(PARSE_HEXDUMPS){
     var a="";
-    x.replace(/[\da-f]{6,8}:? ((?:[\da-f] ?){20,})[^\n]*\n?/gi,function(_,z){a+=z.replace(/\s/g,'')});
+    x.replace(/[\da-f]{6,8}:? ((?:[\da-f][\da-f] ?){10,})[^\n]*\n?/gi,function(_,z){a+=z.replace(/\s/g,'')});
     if(a)return bf(a.length/2,"hex");
     if(/^[\da-f\s-]+$/i.test(x.replace(/\n/g,'')))return bf(x.replace(/[\s-]/g,'').length/2,"hex");
   }
   if(/iso.?8859.1/i.test(y)||ISO_8859_1.test(y))return bf(chars(x),"ISO-8859-1");
-  if(/utf.?16/i.test(y)||UTF_16.test(y))return bf(x.replace(/[\u0000-\uFFFF]/g,"$& ").length,"UTF-16");
+  if(/utf.?16/i.test(y)||UTF_16.test(y))return bf(x.length*2,"UTF-16");
   if(custom.test(y))return bf(chars(x),y.match(custom)[0]);
   // Else, fallback to UTF-8
-  return bf(3*x.length-x.replace(/[\u0080-\uFFFF]/g,'').length-x.replace(/[\u0800-\uFFFF]/g,'').length,"UTF-8");
+  return bf(unicodes(x).map(function(c){return c>>16?4:c>>11?3:c>>7?2:1}).reduce(function(a,b){return a+b},0),"UTF-8");
 }
 function loadAnswers(onFinish) {
     var answers = [], i=5;
