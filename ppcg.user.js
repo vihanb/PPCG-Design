@@ -3,8 +3,9 @@
 // @namespace   https://github.com/vihanb/PPCG-Design
 // @version     2.1.0
 // @description A script to self-graduate PPCG
-// @match       *://*.codegolf.stackexchange.com*
-// @match       *://chat*stackexchange.com*
+// @match       *://codegolf.stackexchange.com/*
+// @match       *://*.codegolf.stackexchange.com/*
+// @match       *://chat.stackexchange.com/*
 // @author      PPCG Community
 // @grant       none
 // ==/UserScript==
