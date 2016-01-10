@@ -239,6 +239,7 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
 		".container{background:rgb(237, 250, 238);background-image:url(http://i.stack.imgur.com/t8GhU.png);background-repeat:repeat-x}"+
 		"</style>"; //workaround for several links
 	$(".started a:not(.started-link)").css('color','#487D4B');
+	$("body .container").prepend('<div style="display:none;position: absolute;width: inherit; height: 120px; background: '+(localStorage.getItem('main.BACKGROUND_LIGHT')==="true"?'':main.BACKGROUND_TINT+', ')+ 'url('+main.BACKGROUND_IMAGE+')"></div>');
   }
   window.addEventListener("load",function(){
   setTimeout(function(){document.getElementById("footer").style.backgroundColor=obj.BACKGROUND_COLOR},300);
