@@ -18,5 +18,3 @@ You can run this userscript by installing [Tampermonkey](https://tampermonkey.ne
 
  - `sprites.svg` contains *all* the icons, etc. If you're using Adobe Illustrator, make sure ("responsive") is turned off before saving
  - `ppcg.user.js` is the userscript.
- - `ppcg2.user.js` is another (slightly different) userscript.
- - `logo/` contains the logo in various colors
