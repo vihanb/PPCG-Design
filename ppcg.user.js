@@ -233,8 +233,8 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
 	$("body > .container").css("box-shadow", "none");
 	$("#mainbar, .user-page #content").css('background', main.STATS_COLOR);
 	$("#mainbar").css('padding', '15px');
-	$(".question-hyperlink, .answer-hyperlink").css('color', '#5DA261');
-	$(".question-hyperlink:visited, .answer-hyperlink:visited").css('color', '#254127');
+	document.head.innerHTML+="<style>.question-hyperlink, .answer-hyperlink{color:#5DA261}.question-hyperlink:visited, .answer-hyperlink:visited{color:#254127}"
+	+"</style>"; //workaround for visited links
 	$("#tabs a:hover").css({'color':'#5DA261 !important','border-bottom':'2px solid #5DA261'});
 	$(".started a:not(.started-link), .started-link:hover").css('color','#487D4B');
 	$("body .container").prepend('<div style="position: absolute;width: inherit; height: 120px; background: '+(localStorage.getItem('main.BACKGROUND_LIGHT')==="true"?'':main.BACKGROUND_TINT+', ')+ 'url('+main.BACKGROUND_IMAGE+')"></div>');
