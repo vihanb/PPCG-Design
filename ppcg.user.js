@@ -231,13 +231,14 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   if (site == "main") {
     $("#content").css('background', 'none');
 	$("body > .container").css("box-shadow", "none");
-	$(".bounty-indicator").css('background-color','#6DAB71')
+	$(".bounty-indicator").css('background-color','#6DAB71');
 	$("#mainbar, .user-page #content").css('background', main.STATS_COLOR);
 	$("#mainbar").css('padding', '15px');
 	document.head.innerHTML+="<style>.question-hyperlink, .answer-hyperlink{color:#5DA261}.question-hyperlink:visited, .answer-hyperlink:visited{color:#254127}"+
 		"#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover{color:#5DA261;border-bottom:2px solid #5DA261}"+
 		".container{background:rgb(237, 250, 238);background-image:url(http://i.stack.imgur.com/t8GhU.png);background-repeat:repeat-x}"+
 		"</style>"; //workaround for several links
+	$(".container div:first").remove();
 	$(".started a:not(.started-link)").css('color','#487D4B');
 	$("body .container").prepend('<div style="position: absolute;width: inherit; height: 120px; background: '+(localStorage.getItem('main.BACKGROUND_LIGHT')==="true"?'':main.BACKGROUND_TINT+', ')+ 'url('+main.BACKGROUND_IMAGE+')"></div>');
   }
