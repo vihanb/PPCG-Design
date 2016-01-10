@@ -60,7 +60,7 @@ var PARSE_HEXDUMPS = true; // set to false to not parse hexdump lengths
 
 // Fonts
 var HEADER_FONT = "Exo 2";  // Header text
-var TEXT_FONT = "Open Sans"; // Everything else besides code
+var TEXT_FONT = '"Open Sans", "Lato", "Helvetica Neue", "Arial", sans-serif'; // Everything else besides code
 var FONT_URL = "//fonts.googleapis.com/css?family=Exo+2|Open+Sans"; // import any webfonts here
   
 /** ~~~~~~~~~~~~~~~~ MAIN SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
@@ -205,7 +205,7 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}"+
     ".yes-hover{cursor:pointer !important;}"+
     ".LEADERBOARD {border-collapse: collapse} .LEADERBOARD td { padding: 6px 8px } .LEADERBOARD tr:nth-child(even) { background-color: #F1F1F1 } .LEADERBOARD thead { border-bottom: 1px solid #DDD }"+
-    "html,body{font-family:\""+TEXT_FONT+"\"}"+
+    "html,body{font-family:"+TEXT_FONT+"}"+
     "#header{background:$$HEADER_BG_COLOR;}#header *{color:$$HEADER_TEXT_COLOR;}"+
     (site=="meta"?".container{background:$$CONTAINER_BG_COLOR}":"")+
     "a.post-tag{background-color:$$TAG_COLOR;border-color:$$TAG_BORDER_COLOR}"+
