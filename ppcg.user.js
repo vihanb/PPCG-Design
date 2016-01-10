@@ -234,7 +234,7 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
 	$("#mainbar, .user-page #content").css('background', main.STATS_COLOR);
 	$("#mainbar").css('padding', '15px');
 	document.head.innerHTML+="<style>.question-hyperlink, .answer-hyperlink{color:#5DA261}.question-hyperlink:visited, .answer-hyperlink:visited{color:#254127}"+
-		"#tabs a:hover{color:#5DA261 !important;border-bottom:2px solid #5DA261}"+
+		"#tabs a:hover{color:#5DA261;border-bottom:2px solid #5DA261}"+
 		".started-link:hover{color:#487D4B}"
 		+"</style>"; //workaround for several links
 	$(".started a:not(.started-link)").css('color','#487D4B');
