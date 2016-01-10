@@ -212,6 +212,9 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     "div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}"+
     "#newlogo{font-family:\""+HEADER_FONT+"\";top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}"+
     (site=="meta"?".container{"+(obj.BACKGROUND_IMAGE?(obj.BACKGROUND_TINT?"background: $$BACKGROUND_TINT, url(\"$$BACKGROUND_IMAGE\");":"background-image:url(\"$$BACKGROUND_IMAGE\");")+"background-repeat:repeat-x;":"")+"background-color:$$BACKGROUND_COLOR;box-shadow:none !important;}":"")+
+    (site=="meta"?"input[type=submit], input[type=button], button, .button, a.button, a.button:visited, .btn{font-family:'Open Sans';border:1px solid #444;box-shadow:none}":
+    	"input[type=submit], input[type=button], button, .button, a.button, a.button:visited, .btn{font-family:'Open Sans';border:1px solid #5DA261;background-color:#5DA261;box-shadow:none}"+
+    	"input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover{font-family:'Open Sans';border:1px solid #487D4B;background-color:#487D4B;box-shadow:none}")+
 	 "</style>").replace(/\$\$(\w+)/g,function(_,x){return eval(site+"."+x);});
   try{qS("link[rel$=\"icon\"]").href = obj.FAVICON;}catch(e){}
   if(PARSE_CODEBLOCKS){
