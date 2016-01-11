@@ -197,6 +197,7 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     }} else {
 	  qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\""+meta.FAVICON+"\" height=50></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\">meta</span></td></tr></table>";
   }
+  $("input[type=text], input[type=number], input[type=url], input[type=email], input[type=tel], textarea").css('font-family','Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,serif !important')
   document.head.innerHTML += ("<style>@import url("+FONT_URL+");"+
     ".envelope-on,.envelope-off,.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.star-on,.star-off,.comment-up-off,.comment-up-on,.comment-flag,.edited-yes,.feed-icon,.vote-accepted-off,.vote-accepted-on,.vote-accepted-bounty,.badge-earned-check,.delete-tag,.grippie,.expander-arrow-hide,.expander-arrow-show,.expander-arrow-small-hide,.expander-arrow-small-show,.anonymous-gravatar,.badge1,.badge2,.badge3,.gp-share,.fb-share,.twitter-share,#notify-containerspan.notify-close,.migrated.to,.migrated.from{background-image:url(\"$$SPRITE_SHEET\");background-size: initial;}"+
     ".youarehere{color:$$CURR_TAB_COLOR !important;border-bottom:2px solid $$CURR_TAB_COLOR !important;}"+
@@ -238,7 +239,6 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
 		"#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover{color:#5DA261;border-bottom:2px solid #5DA261}"+
 		".container{background:rgb(237, 250, 238);background-image:url(http://i.stack.imgur.com/t8GhU.png);background-repeat:repeat-x}"+
 		"</style>"; //workaround for several links
-	$("textarea").css('font-family','Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,serif !important')
 	$(".started a:not(.started-link)").css('color','#487D4B');
 	$("body .container").prepend('<div style="display:none;position: absolute;width: inherit; height: 120px; background: '+(localStorage.getItem('main.BACKGROUND_LIGHT')==="true"?'':main.BACKGROUND_TINT+', ')+ 'url('+main.BACKGROUND_IMAGE+')"></div>');
   }
