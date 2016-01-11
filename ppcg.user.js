@@ -214,6 +214,7 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     (site=="meta"?".container{"+(obj.BACKGROUND_IMAGE?(obj.BACKGROUND_TINT?"background: $$BACKGROUND_TINT, url(\"$$BACKGROUND_IMAGE\");":"background-image:url(\"$$BACKGROUND_IMAGE\");")+"background-repeat:repeat-x;":"")+"background-color:$$BACKGROUND_COLOR;box-shadow:none !important;}":"")+
     "input[type=submit], input[type=button], button, .button, a.button, a.button:visited, .btn{"+(site=="meta"?"background-color:#303030":"border:1px solid #6DAB71;background-color:#6DAB71")+";box-shadow:none;font-family:'Open Sans'}"+
     (site=="main"?"input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover{border:1px solid #5DA261;background-color:#5DA261}":"")+
+    "input[type=text], input[type=number], input[type=url], input[type=email], input[type=tel], textarea{font-family:Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,sans-serif}"+
 	 "</style>").replace(/\$\$(\w+)/g,function(_,x){return eval(site+"."+x);});
   try{qS("link[rel$=\"icon\"]").href = obj.FAVICON;}catch(e){}
   if(PARSE_CODEBLOCKS){
