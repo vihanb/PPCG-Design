@@ -18,7 +18,7 @@ function bf(x,y){return x+" "+y+" byte"+(x==1?"":"s")}
 function bytes(x,y){ // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
   var ISO_8859_1 = /^(Japt|TeaScript|Retina)/i;
   var UTF_16 = /^(Ziim|Funciton)/i;
-  var custom = /^(GS2|Seriously|Unicorn|Jelly|APL)/i;
+  var custom = /^(GS2|Seriously|Unicorn|Jelly|(Dyalog )?APL)/i;
   y=y||"";
   if(PARSE_HEXDUMPS){
     var a="";
