@@ -212,6 +212,7 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     "div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}"+
     "#newlogo{font-family:\""+HEADER_FONT+"\";top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}"+
     (site=="meta"?".container{"+(obj.BACKGROUND_IMAGE?(obj.BACKGROUND_TINT?"background: $$BACKGROUND_TINT, url(\"$$BACKGROUND_IMAGE\");":"background-image:url(\"$$BACKGROUND_IMAGE\");")+"background-repeat:repeat-x;":"")+"background-color:$$BACKGROUND_COLOR;box-shadow:none !important;}":"")+
+    ".mod-flair,.started .mod-flair{color:#F0C800}.mod-flair:hover,.started .mod-flair:hover{color:#FFE32E}"+
 	 "</style>").replace(/\$\$(\w+)/g,function(_,x){return eval(site+"."+x);});
   try{qS("link[rel$=\"icon\"]").href = obj.FAVICON;}catch(e){}
   if(PARSE_CODEBLOCKS){
