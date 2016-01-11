@@ -215,6 +215,7 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     "input[type=submit], input[type=button], button, .button, a.button, a.button:visited, .btn{"+(site=="meta"?"background-color:#303030":"border:1px solid #6DAB71;background-color:#6DAB71")+";box-shadow:none;font-family:'Open Sans'}"+
     (site=="main"?"input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover{border:1px solid #5DA261;background-color:#5DA261}":"")+
     "input[type=text], input[type=number], input[type=url], input[type=email], input[type=tel], textarea{font-family:Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,sans-serif}"+
+    ".mod-flair,.started .mod-flair{color:#F0C800}.mod-flair:hover,.started .mod-flair:hover{color:#FFE32E}"+
 	 "</style>").replace(/\$\$(\w+)/g,function(_,x){return eval(site+"."+x);});
   try{qS("link[rel$=\"icon\"]").href = obj.FAVICON;}catch(e){}
   if(PARSE_CODEBLOCKS){
