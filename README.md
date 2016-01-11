@@ -4,7 +4,7 @@ A userscript to redesign and add features to the PPCG website.
 
 ### A collaborative userscript made by:
 
-@Doᴡɴɢᴏᴀᴛ, @ETHproductions, @PhiNotPi, @Cᴏɴᴏʀ O'Bʀɪᴇɴ, @mınxomaτ, @JAtkin, and @El'endia Starman.
+@Doᴡɴɢᴏᴀᴛ, @ETHproductions, @PhiNotPi, @Cᴏɴᴏʀ O'Bʀɪᴇɴ, @mınxomaτ, @JAtkin, @El'endia Starman, and @ՊՓԼՃՐՊՃՈԲՍԼ.
 
 Wither help from: @RikerW, @Calvin's Hobbies, and @issacg
 

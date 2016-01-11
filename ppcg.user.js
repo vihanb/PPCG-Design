@@ -16,9 +16,9 @@ function chars(x){return unicodes(x).length}
 function fchars(x){var y=chars(x);return y+" char"+(y==1?"":"s")}
 function bf(x,y){return x+" "+y+" byte"+(x==1?"":"s")}
 function bytes(x,y){ // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
-  var ISO_8859_1 = /Japt|TeaScript|Retina/i;
-  var UTF_16 = /Ziim|Funciton/i;
-  var custom = /GS2|Seriously|Unicorn|Jelly|APL/i;
+  var ISO_8859_1 = /^(Japt|TeaScript|Retina)/i;
+  var UTF_16 = /^(Ziim|Funciton)/i;
+  var custom = /^(GS2|Seriously|Unicorn|Jelly|(Dyalog )?APL)/i;
   y=y||"";
   if(PARSE_HEXDUMPS){
     var a="";
@@ -212,6 +212,10 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     "div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}"+
     "#newlogo{font-family:\""+HEADER_FONT+"\";top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}"+
     (site=="meta"?".container{"+(obj.BACKGROUND_IMAGE?(obj.BACKGROUND_TINT?"background: $$BACKGROUND_TINT, url(\"$$BACKGROUND_IMAGE\");":"background-image:url(\"$$BACKGROUND_IMAGE\");")+"background-repeat:repeat-x;":"")+"background-color:$$BACKGROUND_COLOR;box-shadow:none !important;}":"")+
+    "input[type=submit], input[type=button], button, .button, a.button, a.button:visited, .btn{"+(site=="meta"?"background-color:#303030":"border:1px solid #6DAB71;background-color:#6DAB71")+";box-shadow:none;font-family:'Open Sans'}"+
+    (site=="main"?"input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover{border:1px solid #5DA261;background-color:#5DA261}":"")+
+    "input[type=text], input[type=number], input[type=url], input[type=email], input[type=tel], textarea{font-family:Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,sans-serif}"+
+    ".mod-flair,.started .mod-flair{color:#F0C800}.mod-flair:hover,.started .mod-flair:hover{color:#FFE32E}"+
 	 "</style>").replace(/\$\$(\w+)/g,function(_,x){return eval(site+"."+x);});
   try{qS("link[rel$=\"icon\"]").href = obj.FAVICON;}catch(e){}
   if(PARSE_CODEBLOCKS){
@@ -231,13 +235,16 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   if (site == "main") {
     $("#content").css('background', 'none');
 	$("body > .container").css("box-shadow", "none");
+	$(".bounty-indicator").css('background-color','#6DAB71');
 	$("#mainbar, .user-page #content").css('background', main.STATS_COLOR);
 	$("#mainbar").css('padding', '15px');
-	document.head.innerHTML+="<style>.question-hyperlink, .answer-hyperlink{color:#5DA261}.question-hyperlink:visited, .answer-hyperlink:visited{color:#254127}"+
+	document.head.innerHTML+="<style>.question-hyperlink, .answer-hyperlink{color:#5DA261}.question-hyperlink:visited,.answer-hyperlink:visited,.started-link:visited{color:#254127}"+
 		"#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover{color:#5DA261;border-bottom:2px solid #5DA261}"+
-		+"</style>"; //workaround for several links
+		".container{background:rgb(237, 250, 238);background-image:url(http://i.stack.imgur.com/t8GhU.png);background-repeat:repeat-x}"+
+    		"a{color:#6DAB71}a:hover,.question-hyperlink:hover,.answer-hyperlink:hover,.started-link:hover{color:#487D4B}"+
+		"</style>"; //workaround for several links
 	$(".started a:not(.started-link)").css('color','#487D4B');
-	$("body .container").prepend('<div style="position: absolute;width: inherit; height: 120px; background: '+(localStorage.getItem('main.BACKGROUND_LIGHT')==="true"?'':main.BACKGROUND_TINT+', ')+ 'url('+main.BACKGROUND_IMAGE+')"></div>');
+	$("body .container").prepend('<div style="display:none;position: absolute;width: inherit; height: 120px; background: '+(localStorage.getItem('main.BACKGROUND_LIGHT')==="true"?'':main.BACKGROUND_TINT+', ')+ 'url('+main.BACKGROUND_IMAGE+')"></div>');
   }
   window.addEventListener("load",function(){
   setTimeout(function(){document.getElementById("footer").style.backgroundColor=obj.BACKGROUND_COLOR},300);
