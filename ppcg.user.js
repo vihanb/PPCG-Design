@@ -238,6 +238,7 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
 		"#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover{color:#5DA261;border-bottom:2px solid #5DA261}"+
 		".container{background:rgb(237, 250, 238);background-image:url(http://i.stack.imgur.com/t8GhU.png);background-repeat:repeat-x}"+
 		"</style>"; //workaround for several links
+	$("textarea").css('font-family','Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,serif')
 	$(".started a:not(.started-link)").css('color','#487D4B');
 	$("body .container").prepend('<div style="display:none;position: absolute;width: inherit; height: 120px; background: '+(localStorage.getItem('main.BACKGROUND_LIGHT')==="true"?'':main.BACKGROUND_TINT+', ')+ 'url('+main.BACKGROUND_IMAGE+')"></div>');
   }
