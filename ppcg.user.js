@@ -16,9 +16,9 @@ function chars(x){return unicodes(x).length}
 function fchars(x){var y=chars(x);return y+" char"+(y==1?"":"s")}
 function bf(x,y){return x+" "+y+" byte"+(x==1?"":"s")}
 function bytes(x,y){ // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
-  var ISO_8859_1 = /Japt|TeaScript|Retina/i;
-  var UTF_16 = /Ziim|Funciton/i;
-  var custom = /GS2|Seriously|Unicorn|Jelly|APL/i;
+  var ISO_8859_1 = /^(Japt|TeaScript|Retina)/i;
+  var UTF_16 = /^(Ziim|Funciton)/i;
+  var custom = /^(GS2|Seriously|Unicorn|Jelly|(Dyalog )?APL)/i;
   y=y||"";
   if(PARSE_HEXDUMPS){
     var a="";
@@ -59,9 +59,14 @@ var PARSE_CODEBLOCKS = true; // set to false to not parse code block lengths
 var PARSE_HEXDUMPS = true; // set to false to not parse hexdump lengths
 
 // Fonts
-var HEADER_FONT = "Exo 2";  // Header text
+var HEADER_FONT = '"Lato", "Open Sans", "Arial", sans-serif';  // Header text
 var TEXT_FONT = '"Open Sans", "Lato", "Helvetica Neue", "Arial", sans-serif'; // Everything else besides code
-var FONT_URL = "//fonts.googleapis.com/css?family=Exo+2|Open+Sans"; // import any webfonts here
+var INPUT_FONT = '"Consolas", "Menlo", "Monaco", "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace, sans-serif'; // Everything that's an input
+var FONT_URL = "//fonts.googleapis.com/css?family=Lato:700|Open+Sans"; // import any webfonts here
+
+// Colors
+var MOD_FLAIR = "#F0C800"; // Mod diamond
+var MOD_FLAIR_HOVER = "#FFE32E"; // Mod diamond on hover
   
 /** ~~~~~~~~~~~~~~~~ MAIN SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
   
@@ -88,10 +93,14 @@ var main = {
   STATS_COLOR: "#FAFAFA",
   TAG_COLOR: "#E7FFD8", /* Alternative Option: "rgb(177, 235, 124)"*/
   TAG_BORDER_COLOR: "transparent",
+	
+  BUTTON_COLOR: "#6DAB71",
+  BUTTON_HOVER: "#5DA261",
   
   // Specify nothing to make these default color
   BOUNTY_COLOR: "rgb(72,125,75)",
   BOUNTY_BG_COLOR: "rgb(172,225,175)",
+  BOUNTY_INDICATOR: "#6DAB71"
 };
   
 /** ~~~~~~~~~~~~~~~~ META SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
@@ -113,10 +122,12 @@ var meta = {
   BULLETIN_BG_COLOR: "#fff8dc",
   TAG_COLOR: "",
   TAG_BORDER_COLOR: "",
+  BUTTON_COLOR: "#303030",
   
   // Specify nothing to make these default color
   BOUNTY_COLOR: "rgb(72,125,75)",
   BOUNTY_BG_COLOR: "rgb(172,225,175)",
+  BOUNTY_INDICATOR: "#6DAB71"
 };
 
 var darktheme = {
@@ -206,11 +217,15 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     ".yes-hover{cursor:pointer !important;}"+
     ".LEADERBOARD {border-collapse: collapse} .LEADERBOARD td { padding: 6px 8px } .LEADERBOARD tr:nth-child(even) { background-color: #F1F1F1 } .LEADERBOARD thead { border-bottom: 1px solid #DDD }"+
     "html,body{font-family:"+TEXT_FONT+"}"+
+    "input[type=submit], input[type=button], button, .button, a.button, a.button:visited, .btn { box-shadow: none; border: 1px solid $$BUTTON_COLOR; background-color: $$BUTTON_COLOR }"+
+    "input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover { border: 1px solid $$BUTTON_HOVER; background-color: $$BUTTON_HOVER }"+
+	"input[type=text], input[type=number], input[type=url], input[type=email], input[type=tel], textarea{font-family: "+INPUT_FONT+" }"+
+	".mod-flair,.started .mod-flair{ color: "+MOD_FLAIR+" !important }.mod-flair:hover,.started .mod-flair:hover{color:"+MOD_FLAIR_HOVER+"}"+
     "#header{background:$$HEADER_BG_COLOR;}#header *{color:$$HEADER_TEXT_COLOR;}"+
     (site=="meta"?".container{background:$$CONTAINER_BG_COLOR}":"")+
     "a.post-tag{background-color:$$TAG_COLOR;border-color:$$TAG_BORDER_COLOR}"+
     "div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}"+
-    "#newlogo{font-family:\""+HEADER_FONT+"\";top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}"+
+    "#newlogo{font-family:"+HEADER_FONT+";top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}"+
     (site=="meta"?".container{"+(obj.BACKGROUND_IMAGE?(obj.BACKGROUND_TINT?"background: $$BACKGROUND_TINT, url(\"$$BACKGROUND_IMAGE\");":"background-image:url(\"$$BACKGROUND_IMAGE\");")+"background-repeat:repeat-x;":"")+"background-color:$$BACKGROUND_COLOR;box-shadow:none !important;}":"")+
 	 "</style>").replace(/\$\$(\w+)/g,function(_,x){return eval(site+"."+x);});
   try{qS("link[rel$=\"icon\"]").href = obj.FAVICON;}catch(e){}
@@ -231,10 +246,12 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   if (site == "main") {
     $("#content").css('background', 'none');
 	$("body > .container").css("box-shadow", "none");
+	$(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
 	$("#mainbar, .user-page #content").css('background', main.STATS_COLOR);
 	$("#mainbar").css('padding', '15px');
-	document.head.innerHTML+="<style>.question-hyperlink, .answer-hyperlink{color:#5DA261}.question-hyperlink:visited, .answer-hyperlink:visited{color:#254127}"+
+	document.head.innerHTML+="<style>.question-hyperlink, .answer-hyperlink{color:#5DA261}.question-hyperlink:visited, .answer-hyperlink:visited,.started-link:visited{color:#254127}"+
 		"#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover{color:#5DA261;border-bottom:2px solid #5DA261}"+
+		"a:hover,.question-hyperlink:hover,.answer-hyperlink:hover,.started-link:hover{color:#487D4B}"
 		+"</style>"; //workaround for several links
 	$(".started a:not(.started-link)").css('color','#487D4B');
 	$("body .container").prepend('<div style="position: absolute;width: inherit; height: 120px; background: '+(localStorage.getItem('main.BACKGROUND_LIGHT')==="true"?'':main.BACKGROUND_TINT+', ')+ 'url('+main.BACKGROUND_IMAGE+')"></div>');
@@ -247,7 +264,3 @@ if ((window.location+"").indexOf("codegolf.stackexchange.com") > -1) {
   void function(t){var e=t.head||t.getElementsByTagName("head")[0]||t.documentElement,o=t.createElement("style"),n="/*Added through UserScript*/.vote-count-post{cursor:pointer;}.vote-count-post[title]{cursor:default;}.vote-count-separator{height:0;*margin-left:0;}";e.appendChild(o),o.styleSheet?o.styleSheet.cssText=n:o.appendChild(t.createTextNode(n));var s=t.createElement("script");s["textContent"in s?"textContent":"text"]="("+function(){var t=location.protocol+"//api.stackexchange.com/2.0/posts/",e="?filter=!)q3b*aB43Xc&key=DwnkTjZvdT0qLs*o8rNDWw((&site="+location.host,o=1,n=StackExchange.helpers,s=$.fn.click;$.fn.click=function(){return this.hasClass("vote-count-post")&&!o?this:s.apply(this,arguments)};var r=function(s){var r,a=$(this),i=this.title;if(!(/up \/ /.test(i)||/View/.test(i)&&o)){o=0;var c=a.siblings('input[type="hidden"]').val();if(c||(r=a.closest("[data-questionid],[data-answerid]"),c=r.attr("data-answerid")||r.attr("data-questionid")),c||(r=a.closest(".suggested-edit"),c=$.trim(r.find(".post-id").text())),c||(r=a.closest(".question-summary"),c=/\d+/.exec(r.attr("id")),c=c&&c[0]),!c)return void console.error("Post ID not found! Please report this at http://stackapps.com/q/3082/9699");n.addSpinner(a),$.ajax({type:"GET",url:t+c+e+"&callback=?",dataType:"json",success:function(t){t=t.items[0];var e=t.up_vote_count,o=t.down_vote_count;e=e?"+"+e:0,o=o?"-"+o:0,$(".error-notification").fadeOut("fast",function(){$(this).remove()}),a.css("cursor","default").attr("title",e+" up / "+o+" down").html('<div style="color:green">'+e+'</div><div class="vote-count-separator"></div><div style="color:maroon">'+o+"</div>")},error:function(t){n.removeSpinner(),n.showErrorPopup(a.parent(),t.responseText&&t.responseText.length<100?t.responseText:"An error occurred during vote count fetch")}}),s.stopImmediatePropagation()}};$.fn.on?$(document).on("click",".vote-count-post",r):$(document).delegate(".vote-count-post","click",r)}+")();",e.appendChild(s),s.parentNode.removeChild(s)}(document);
 }
 }
-
-
-
-
