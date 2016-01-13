@@ -184,7 +184,7 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
         answers = json.map(function(i,l,a) {
 		  var copyvalue = i.body.slice().replace(/<(strike|s|del)>.*<\/\1>/g,"");
           i.body = i.body.replace(/^(?!<p><strong>|<h\d>)(.(?!<p><strong>|<h\d>))*/,"").replace(/<(strike|s|del)>.*<\/\1>/g,"").replace(/<a [^>]+>(.*)<\/a>/g,"$1").replace(/\(\s*(\d+)/g,", $1").replace(/\s*-\s+|:\s*/,", ");
-          var j=+( (i.body.match(/(?:<h\d>|<p><strong>).+(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/)||[])[1] || (i.body.match(/^\s*(?:<h\d>|<p><strong>).*?(\d+)\D*?<\/(?:h\d|strong)>/)||[])[1] );
+          var j=+( (i.body.match(/(?:<h\d>|<p><strong>).+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/)||[])[1] || (i.body.match(/^\s*(?:<h\d>|<p><strong>).*?(\d+)\D*?<\/(?:h\d|strong)>/)||[])[1] );
           i.body = i.body.replace(RegExp(",?\\s*"+j+".*"),"");
           return [j, i, copyvalue];
         });
