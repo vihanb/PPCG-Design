@@ -37,7 +37,7 @@ function loadAnswers(onFinish) {
     function loadPage() {
         $.get(
             'https://api.stackexchange.com/2.2/questions/' +
-            String(window.location).match(/\d+/)[0] + '/answers?page=' +
+            String(window.location).match(/\d+/)[0] + '/answers?key=43GcpjKdprvwYoLebJVMOg((&page=' +
             (page++).toString() + '&pagesize=100&order=asc&sort=creation&site=codegolf&filter=!)Q29lpdRHRpfMsoUn(ODuEiP', readPage);
     }
     function readPage(data) {
