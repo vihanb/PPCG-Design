@@ -16,7 +16,7 @@ function chars(x){return unicodes(x).length}
 function fchars(x){var y=chars(x);return y+" char"+(y==1?"":"s")}
 function bf(x,y){return x+" "+y+" byte"+(x==1?"":"s")}
 function bytes(x,y){ // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
-  var ISO_8859_1 = /^(Japt|TeaScript|Retina|Pyth(?:on))/i;
+  var ISO_8859_1 = /^(Japt|TeaScript|Retina|Pyth(?!on))/i;
   var UTF_16 = /^(Ziim|Funciton)/i;
   var custom = /^(GS2|Seriously|Unicorn|Jelly|(Dyalog )?APL)/i;
   y=y||"";
