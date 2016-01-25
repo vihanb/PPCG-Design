@@ -16,7 +16,7 @@ function chars(x){return unicodes(x).length}
 function fchars(x){var y=chars(x);return y+" char"+(y==1?"":"s")}
 function bf(x,y){return x+" "+y+" byte"+(x==1?"":"s")}
 function bytes(x,y){ // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
-  var ISO_8859_1 = /^(Japt|TeaScript|Retina|Pyth)/i;
+  var ISO_8859_1 = /^(Japt|TeaScript|Retina|Pyth\b)/i;
   var UTF_16 = /^(Ziim|Funciton)/i;
   var custom = /^(GS2|Seriously|Unicorn|Jelly|(Dyalog )?APL)/i;
   y=y||"";
@@ -239,7 +239,7 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     $(this).find("strong").each(function(){if(!h)h=$(this).text();});
     $(this).find("pre code").each(function() {
       var t=$(this).text().trim().replace(/\r\n/g, "\n");
-      $(this).parent().before('<div style="padding-bottom:4px;font:11px \''+TEXT_FONT+'\'">'+bytes(t,h)+", "+fchars(t)+"</div>");
+      $(this).parent().before('<div style="padding-bottom:4px;font:11px '+TEXT_FONT+'">'+bytes(t,h)+", "+fchars(t)+"</div>");
     });
   });
   }
