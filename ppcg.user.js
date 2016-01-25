@@ -108,7 +108,7 @@ var main = {
   
 var meta = {
   FAVICON: "//i.imgur.com/xJx4Jdd.png",
-  SPRITE_SHEET: "//rawgit.com/vihanb/PPCG-Design/master/sprites.svg",
+  SPRITE_SHEET: "//cdn.rawgit.com/vihanb/PPCG-Design/master/sprites.svg",
   
   // Set to empty string for no background image
   BACKGROUND_IMAGE: "http://i.stack.imgur.com/HLJI4.png",
