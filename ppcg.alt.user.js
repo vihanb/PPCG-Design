@@ -210,7 +210,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   if (site == "main") {
     var x = qS(".beta-title").parentElement;
     qS(".beta-title").parentElement.removeChild(qS(".beta-title"));
-    x.innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + main.FAVICON + "\" height=50></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
+    x.innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
     document.head.innerHTML += "<style>#sidebar #beta-stats,#sidebar #promo-box{border:none;background:" + main.STATS_COLOR + ";}</style>";
     // Leaderboard
     if (!main.NO_LEADERBOARD && $('a.post-tag[href="/questions/tagged/code-golf"]')[0] && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
@@ -260,6 +260,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     ".yes-hover{cursor:pointer !important;}" +
     ".LEADERBOARD {border-collapse: collapse} .LEADERBOARD td { padding: 6px 8px } .LEADERBOARD tr:nth-child(even) { background-color: #F1F1F1 } .LEADERBOARD thead { border-bottom: 1px solid #DDD }" +
     "html,body{font-family:" + TEXT_FONT + "}" +
+    "#hlogo{margin: 25px 0 0 0;}" +
     "#sidebar > .module{margin-left: 12px;}" +
     "input[type=submit], input[type=button], button, .button, a.button, a.button:visited, .btn { box-shadow: none; border: 1px solid $$BUTTON_COLOR; background-color: $$BUTTON_COLOR }" +
     "input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover { border: 1px solid $$BUTTON_HOVER; background-color: $$BUTTON_HOVER }" +
