@@ -79,9 +79,9 @@ var main = {
   BACKGROUND_IMAGE: "http://i.stack.imgur.com/t8GhU.png",
   BACKGROUND_TINT: "linear-gradient(rgba(153, 255, 165, 0.26), rgba(140, 255, 149, 0.26))", // Only a linear graident works
 
-  BACKGROUND_LIGHT: eval(localStorage.getItem("main.BACKGROUND_LIGHT")) || false, // Lighter shade of the background, CHANGE THROUGH OPTIONS
-  MODE_DARK: eval(localStorage.getItem("main.MODE_DARK")) || false,
-  NO_LEADERBOARD: eval(localStorage.getItem("main.NO_LEADERBOARD")) || false,
+  BACKGROUND_LIGHT: (localStorage.getItem("main.BACKGROUND_LIGHT") === "true"), // Lighter shade of the background, CHANGE THROUGH OPTIONS
+  MODE_DARK: (localStorage.getItem("main.MODE_DARK") === "true"),
+  NO_LEADERBOARD: (localStorage.getItem("main.NO_LEADERBOARD") === "true"),
     
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#EDFAEE",
@@ -183,17 +183,19 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       var answers = [];
       loadAnswers(function(json) {
         answers = json.map(function(i,l,a) {
-		  var copyvalue = i.body.slice().replace(/<(strike|s|del)>.*<\/\1>/g,"");
+		  var copyvalue = i.body.slice().replace(/<(strike|s|del)>.*?<\/\1>/g,"");
           i.body = i.body.replace(/^(?!<p><strong>|<h\d>)(.(?!<p><strong>|<h\d>))*/,"").replace(/<(strike|s|del)>.*<\/\1>/g,"").replace(/<a [^>]+>(.*)<\/a>/g,"$1").replace(/\(\s*(\d+)/g,", $1").replace(/\s*-\s+|:\s*/,", ");
           var j=+( (i.body.match(/(?:<h\d>|<p><strong>).+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/)||[])[1] || (i.body.match(/^\s*(?:<h\d>|<p><strong>).*?(\d+)\D*?<\/(?:h\d|strong)>/)||[])[1] );
           i.body = i.body.replace(RegExp(",?\\s*"+j+".*"),"");
-          return [j, i, copyvalue];
+		  // Taken (and modified) from http://codegolf.stackexchange.com/a/69936/40695
+		  var e = ((copyvalue.match(/<(h\d|strong)>(.+?)<\/\1>/)||[])[2]||"Unknown Language").replace(/<.*?>/g, "").replace(/^([A-Za-z]+)\s+\d+$/, "$1").replace(/([\–\|\/\-:\—,]\s*\d+\s*(b[l]?y[te]{2}s?|char[a-z]*|codels?)\s*)+/g,"").replace(/(,| [-&(–—5]| [0-7]\d)(?! W|...\)).*/g, "").replace(/2 |:/g,"").replace(/(Ver(sion)?.?\s*)\d{2,}w\d{2,}a/g,"");
+          return [j, i, copyvalue, e];
         });
         var lv = 0;
         answers=answers.filter(function(a){return(""+a[0])!="NaN";}).sort(function(a,b){return a[0]-b[0];}).map(function(l,i,a) {
         if((a[i-1]||[NaN])[0] !== l[0]) lv = (i||0) + 1;
 			console.log((l[2].match(/(?:<h\d>|<p><strong>)(.+?)[, -]\s*(?:-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/)||[])[1]);
-        return '<tr><td>'+lv+'</td><td>' + ( (l[2].match(/(?:<h\d>|<p><strong>)(.+?)[, -]\s*(?:(?:\d*\.\d+|\d+)(?:\s*%)?(?:\s*[+*\/\-]\s*(?:\d*\.\d+|\d+)(?:\s*%)?)+\s*=\s*)?(?:-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/)||[])[1]||(l[2].match(/\s*(?:<h\d>|<p><strong>)(\s*<a [^ >]+.+?<\/a>|(?:[#A-Za-z_\s\.\u00FF-\uFFFF!?]|(?:(?=\d+[^\d\n]+\d+\D*(?:<\/|$|\n))\d)|(?:(?=-\s?[A-Za-z_\u00FF-\uFFFF!?]).)|(?:(?=.+(,)),))+)/)||[0,"Lang N/A"])[1]).trim() + "</td><td>" + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
+        return '<tr><td>'+lv+'</td><td>' + (l[3] /*(l[2].match(/(?:<h\d>|<p><strong>)(.+?)[, -]\s*(?:(?:\d*\.\d+|\d+)(?:\s*%)?(?:\s*[+*\/\-]\s*(?:\d*\.\d+|\d+)(?:\s*%)?)+\s*=\s*)?(?:-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/)||[])[1]||(l[2].match(/\s*(?:<h\d>|<p><strong>)(\s*<a [^ >]+.+?<\/a>|(?:[#A-Za-z_\s\.\u00FF-\uFFFF!?]|(?:(?=\d+[^\d\n]+\d+\D*(?:<\/|$|\n))\d)|(?:(?=-\s?[A-Za-z_\u00FF-\uFFFF!?]).)|(?:(?=.+(,)),))+)/)||[0,"Lang N/A"])[1]*/).trim() + "</td><td>" + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
 			  });
 			  $(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>'+
 				  			   '<div id="USER_BOARD" style="display:none"><table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>'+answers.join("\n")+'</tbody></table> </div>');
