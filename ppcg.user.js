@@ -239,7 +239,7 @@ if(/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     $(this).find("strong").each(function(){if(!h)h=$(this).text();});
     $(this).find("pre code").each(function() {
       var t=$(this).text().trim().replace(/\r\n/g, "\n");
-      $(this).parent().before('<div style="padding-bottom:4px;font:11px '+TEXT_FONT+'">'+bytes(t,h)+", "+fchars(t)+"</div>");
+      $(this).parent().before('<div style="padding-bottom:4px;font-size:11px;font-family:'+TEXT_FONT+'">'+bytes(t,h)+", "+fchars(t)+"</div>");
     });
   });
   }
