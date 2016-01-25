@@ -115,7 +115,6 @@ var main = {
   HEADER_BG_COLOR: "transparent",
   HEADER_BG_IMAGE: "",
   HEADER_TEXT_COLOR: "#4C4C4C",
-  CONTAINER_BG_COLOR: "rgb(250, 250, 250)",
   CURR_TAB_COLOR: "rgb(72,125,75)",
   BULLETIN_BG_COLOR: "#fff8dc",
   STATS_COLOR: "#FAFAFA",
@@ -146,9 +145,9 @@ var meta = {
   BACKGROUND_COLOR: "#F4F4F4",
   HEADER_BG_COLOR: "transparent",
   HEADER_TEXT_COLOR: "#4C4C4C",
-  CONTAINER_BG_COLOR: "#FAFAFA",
   CURR_TAB_COLOR: "rgb(72,125,75)",
   BULLETIN_BG_COLOR: "#fff8dc",
+  STATS_COLOR: "#FAFAFA",
   TAG_COLOR: "",
   TAG_BORDER_COLOR: "",
   BUTTON_COLOR: "#303030",
@@ -232,7 +231,6 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
           return a[0] - b[0];
         }).map(function(l, i, a) {
           if ((a[i - 1] || [NaN])[0] !== l[0]) lv = (i || 0) + 1;
-          console.log((l[2].match(/(?:<h\d>|<p><strong>)(.+?)[, -]\s*(?:-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/) || [])[1]);
           return '<tr><td>' + lv + '</td><td>' + (l[3] /*(l[2].match(/(?:<h\d>|<p><strong>)(.+?)[, -]\s*(?:(?:\d*\.\d+|\d+)(?:\s*%)?(?:\s*[+*\/\-]\s*(?:\d*\.\d+|\d+)(?:\s*%)?)+\s*=\s*)?(?:-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/)||[])[1]||(l[2].match(/\s*(?:<h\d>|<p><strong>)(\s*<a [^ >]+.+?<\/a>|(?:[#A-Za-z_\s\.\u00FF-\uFFFF!?]|(?:(?=\d+[^\d\n]+\d+\D*(?:<\/|$|\n))\d)|(?:(?=-\s?[A-Za-z_\u00FF-\uFFFF!?]).)|(?:(?=.+(,)),))+)/)||[0,"Lang N/A"])[1]*/ ).trim() + "</td><td>" + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
         });
         $(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>' +
@@ -250,6 +248,8 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   } else {
     qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.FAVICON + "\" height=50></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\">meta</span></td></tr></table>";
   }
+  $("#mainbar, .user-page #content").css('background', obj.STATS_COLOR);
+  $("#mainbar").css('padding', '15px');
   document.head.innerHTML += ("<style>@import url(" + FONT_URL + ");" +
     ".envelope-on,.envelope-off,.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.star-on,.star-off,.comment-up-off,.comment-up-on,.comment-flag,.edited-yes,.feed-icon,.vote-accepted-off,.vote-accepted-on,.vote-accepted-bounty,.badge-earned-check,.delete-tag,.grippie,.expander-arrow-hide,.expander-arrow-show,.expander-arrow-small-hide,.expander-arrow-small-show,.anonymous-gravatar,.badge1,.badge2,.badge3,.gp-share,.fb-share,.twitter-share,#notify-containerspan.notify-close,.migrated.to,.migrated.from{background-image:url(\"$$SPRITE_SHEET\");background-size: initial;}" +
     ".youarehere{color:$$CURR_TAB_COLOR !important;border-bottom:2px solid $$CURR_TAB_COLOR !important;}" +
@@ -259,16 +259,15 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     ".yes-hover{cursor:pointer !important;}" +
     ".LEADERBOARD {border-collapse: collapse} .LEADERBOARD td { padding: 6px 8px } .LEADERBOARD tr:nth-child(even) { background-color: #F1F1F1 } .LEADERBOARD thead { border-bottom: 1px solid #DDD }" +
     "html,body{font-family:" + TEXT_FONT + "}" +
+    "#sidebar > .module{margin-left: 12px;}" +
     "input[type=submit], input[type=button], button, .button, a.button, a.button:visited, .btn { box-shadow: none; border: 1px solid $$BUTTON_COLOR; background-color: $$BUTTON_COLOR }" +
     "input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover { border: 1px solid $$BUTTON_HOVER; background-color: $$BUTTON_HOVER }" +
     "input[type=text], input[type=number], input[type=url], input[type=email], input[type=tel], textarea{font-family: " + INPUT_FONT + " }" +
     ".mod-flair,.started .mod-flair{ color: " + MOD_FLAIR + " !important }.mod-flair:hover,.started .mod-flair:hover{color:" + MOD_FLAIR_HOVER + "}" +
     "#header{background:$$HEADER_BG_COLOR;}#header *{color:$$HEADER_TEXT_COLOR;}" +
-    (site == "meta" ? ".container{background:$$CONTAINER_BG_COLOR}" : "") +
     "a.post-tag{background-color:$$TAG_COLOR;border-color:$$TAG_BORDER_COLOR}" +
     "div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}" +
     "#newlogo{font-family:" + HEADER_FONT + ";top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}" +
-    (site == "meta" ? ".container{" + (obj.BACKGROUND_IMAGE ? (obj.BACKGROUND_TINT ? "background: $$BACKGROUND_TINT, url(\"$$BACKGROUND_IMAGE\");" : "background-image:url(\"$$BACKGROUND_IMAGE\");") + "background-repeat:repeat-x;" : "") + "background-color:$$BACKGROUND_COLOR;box-shadow:none !important;}" : "") +
     "</style>").replace(/\$\$(\w+)/g, function(_, x) {
     return eval(site + "." + x);
   });
@@ -301,16 +300,14 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     $("#content").css('background', 'none');
     $("body > .container").css("box-shadow", "none");
     $(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
-    $("#mainbar, .user-page #content").css('background', main.STATS_COLOR);
-    $("#mainbar").css('padding', '15px');
     document.head.innerHTML += "<style>.question-hyperlink, .answer-hyperlink{color:#5DA261}.question-hyperlink:visited, .answer-hyperlink:visited,.started-link:visited{color:#254127}" +
       "#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover{color:#5DA261;border-bottom:2px solid #5DA261}" +
       "a:hover,.question-hyperlink:hover,.answer-hyperlink:hover,.started-link:hover{color:#487D4B}" +
       "a{color:#5DA261}" +
       "</style>"; //workaround for several links
     $(".started a:not(.started-link)").css('color', '#487D4B');
-    $("body .container").prepend('<div style="position: absolute;width: inherit; height: 120px; background: ' + (localStorage.getItem('main.BACKGROUND_LIGHT') === "true" ? '' : main.BACKGROUND_TINT + ', ') + 'url(' + main.BACKGROUND_IMAGE + ')"></div>');
   }
+  $("body .container").prepend('<div style="position: absolute;width: inherit; height: 120px; background: ' + (localStorage.getItem('main.BACKGROUND_LIGHT') === "true" ? '' : obj.BACKGROUND_TINT + ', ') + 'url(' + obj.BACKGROUND_IMAGE + ')"></div>');
   window.addEventListener("load", function() {
     setTimeout(function() {
       document.getElementById("footer").style.backgroundColor = obj.BACKGROUND_COLOR
