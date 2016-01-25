@@ -73,7 +73,7 @@ var MOD_FLAIR_HOVER = "#FFE32E"; // Mod diamond on hover
   
 var main = {
   FAVICON: "//i.imgur.com/FMih93I.pngg",
-  SPRITE_SHEET: "//rawgit.com/vihanb/PPCG-Design/master/sprites.svg",
+  SPRITE_SHEET: "//cdn.rawgit.com/vihanb/PPCG-Design/master/sprites.svg",
   
   // Set to empty string for no background image
   BACKGROUND_IMAGE: "http://i.stack.imgur.com/t8GhU.png",
