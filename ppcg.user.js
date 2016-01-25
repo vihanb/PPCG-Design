@@ -65,7 +65,7 @@ function loadAnswers(onFinish) {
     $.get(
       'https://api.stackexchange.com/2.2/questions/' +
       String(window.location).match(/\d+/)[0] + '/answers?key=43GcpjKdprvwYoLebJVMOg((&page=' +
-      (page++).toString() + '&pagesize=100&order=asc&sort=creation&site=codegolf&filter=!)Q29lpdRHRpfMsoUn(ODuEiP', readPage);
+      (page++).toString() + '&pagesize=100&order=asc&sort=creation&site=codegolf&filter=!.Fjs-H6J36vlFbqzY4mEMnTsXxwcX', readPage);
   }
 
   function readPage(data) {
@@ -231,10 +231,10 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
           return a[0] - b[0];
         }).map(function(l, i, a) {
           if ((a[i - 1] || [NaN])[0] !== l[0]) lv = (i || 0) + 1;
-          return '<tr><td>' + lv + '</td><td>' + (l[3] /*(l[2].match(/(?:<h\d>|<p><strong>)(.+?)[, -]\s*(?:(?:\d*\.\d+|\d+)(?:\s*%)?(?:\s*[+*\/\-]\s*(?:\d*\.\d+|\d+)(?:\s*%)?)+\s*=\s*)?(?:-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/)||[])[1]||(l[2].match(/\s*(?:<h\d>|<p><strong>)(\s*<a [^ >]+.+?<\/a>|(?:[#A-Za-z_\s\.\u00FF-\uFFFF!?]|(?:(?=\d+[^\d\n]+\d+\D*(?:<\/|$|\n))\d)|(?:(?=-\s?[A-Za-z_\u00FF-\uFFFF!?]).)|(?:(?=.+(,)),))+)/)||[0,"Lang N/A"])[1]*/ ).trim() + "</td><td>" + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
+          return '<tr><td>' + lv + '</td><td><a href="'+l[1].owner.link+'">'+l[1].owner.display_name+'</a></td><td>' + (l[3] /*(l[2].match(/(?:<h\d>|<p><strong>)(.+?)[, -]\s*(?:(?:\d*\.\d+|\d+)(?:\s*%)?(?:\s*[+*\/\-]\s*(?:\d*\.\d+|\d+)(?:\s*%)?)+\s*=\s*)?(?:-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/)||[])[1]||(l[2].match(/\s*(?:<h\d>|<p><strong>)(\s*<a [^ >]+.+?<\/a>|(?:[#A-Za-z_\s\.\u00FF-\uFFFF!?]|(?:(?=\d+[^\d\n]+\d+\D*(?:<\/|$|\n))\d)|(?:(?=-\s?[A-Za-z_\u00FF-\uFFFF!?]).)|(?:(?=.+(,)),))+)/)||[0,"Lang N/A"])[1]*/ ).trim() + "</td><td>" + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
         });
         $(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>' +
-          '<div id="USER_BOARD" style="display:none"><table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>' + answers.join("\n") + '</tbody></table> </div>');
+          '<div id="USER_BOARD" style="display:none"><table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Author</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>' + answers.join("\n") + '</tbody></table> </div>');
         $("#USER_BOARD_TEXT").click(function() {
           $("#USER_BOARD").slideToggle(50, function() {
             $("#USER_BOARD_TEXT").text(function() {
