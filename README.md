@@ -17,4 +17,5 @@ You can run this userscript by installing [Tampermonkey](https://tampermonkey.ne
 ### Parts
 
  - `sprites.svg` contains *all* the icons, etc. If you're using Adobe Illustrator, make sure ("responsive") is turned off before saving
+ - `ppcg.alt.user.js` is a new theme, but the same userscript otherwise.
  - `ppcg.user.js` is the userscript.
