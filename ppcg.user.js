@@ -8,6 +8,7 @@
 // @match       *://chat.stackexchange.com/*
 // @author      PPCG Community
 // @grant       none
+// @updateURL   https://rawgit.com/vihanb/PPCG-Design/master/ppcg.user.js
 // ==/UserScript==
 
 function qS(x){return document.querySelector(x)}
