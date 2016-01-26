@@ -105,7 +105,7 @@ var main = {
   SPRITE_SHEET: "//cdn.rawgit.com/vihanb/PPCG-Design/master/sprites.svg",
 
   // Set to empty string for no background image
-  BACKGROUND_IMAGE: "//i.stack.imgur.com/V7bow.png",
+  BACKGROUND_IMAGE: "//i.stack.imgur.com/V7bow.png ",
   BACKGROUND_SIZE: "650px 150px",
 
   BACKGROUND_LIGHT: (localStorage.getItem("main.BACKGROUND_LIGHT") === "true"), // Lighter shade of the background, CHANGE THROUGH OPTIONS
