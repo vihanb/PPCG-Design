@@ -309,7 +309,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       "</style>"; //workaround for several links
     $(".started a:not(.started-link)").css('color', '#487D4B');
   }
-  $("body .container").prepend('<div style="position: absolute;width: inherit; height: 120px; background: ' + (localStorage.getItem('main.BACKGROUND_LIGHT') === "true" ? '' : obj.BACKGROUND_TINT + ', ') + 'url(' + obj.BACKGROUND_IMAGE + ')"></div>');
+  $("body .container").prepend('<div style="position: absolute;width: inherit; height: 120px; background-attachment: fixed; background: ' + (localStorage.getItem('main.BACKGROUND_LIGHT') === "true" ? '' : obj.BACKGROUND_TINT + ', ') + 'url(' + obj.BACKGROUND_IMAGE + ')"></div>');
   window.addEventListener("load", function() {
     setTimeout(function() {
       document.getElementById("footer").style.backgroundColor = obj.BACKGROUND_COLOR
