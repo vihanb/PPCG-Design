@@ -35,6 +35,7 @@ function bf(x, y) {
 
 function bytes(x, y) { // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
   var ISO_8859_1 = /^(Japt|TeaScript|Retina|Pyth\b)/i;
+  var ISO_8859_7 = /^(Jolf)/;
   var UTF_16 = /^(Ziim|Funciton)/i;
   var custom = /^(GS2|Seriously|Unicorn|Jelly|(Dyalog )?APL)/i;
   y = y || "";
@@ -47,6 +48,7 @@ function bytes(x, y) { // Takes in a length of text and piece of header text, an
     if (/^[\da-f\s-]+$/i.test(x.replace(/\n/g, ''))) return bf(x.replace(/[\s-]/g, '').length / 2, "hex");
   }
   if (/iso.?8859.1/i.test(y) || ISO_8859_1.test(y)) return bf(chars(x), "ISO-8859-1");
+  if (/iso.?8859.7/i.test(y) || ISO_8859_7.test(y)) return bf(chars(x), "ISO-8859-7");
   if (/utf.?16/i.test(y) || UTF_16.test(y)) return bf(x.length * 2, "UTF-16");
   if (custom.test(y)) return bf(chars(x), y.match(custom)[0]);
   // Else, fallback to UTF-8
@@ -103,7 +105,7 @@ var main = {
   SPRITE_SHEET: "//cdn.rawgit.com/vihanb/PPCG-Design/master/sprites.svg",
 
   // Set to empty string for no background image
-  BACKGROUND_IMAGE: "http://i.stack.imgur.com/cel56.png",
+  BACKGROUND_IMAGE: "//i.stack.imgur.com/V7bow.png",
   BACKGROUND_SIZE: "650px 150px",
 
   BACKGROUND_LIGHT: (localStorage.getItem("main.BACKGROUND_LIGHT") === "true"), // Lighter shade of the background, CHANGE THROUGH OPTIONS
@@ -169,7 +171,6 @@ var optionbox = { // Customizes option box
 };
 
 if (localStorage.getItem('main.MODE_DARK') == "true") main = $.extend(main, darktheme);
-
 
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
 document.head.innerHTML += '<style>.favicon-codegolf{background-position: initial !important; background-image: url("' + main.FAVICON + '"); background-size: 100% 100% !important;}' +
@@ -309,7 +310,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       "</style>"; //workaround for several links
     $(".started a:not(.started-link)").css('color', '#487D4B');
   }
-  $("body .container").prepend('<div style="position: absolute;width: inherit; height: 120px; background: url(' + obj.BACKGROUND_IMAGE + '); background-size: '+obj.BACKGROUND_SIZE+';"></div>');
+  $("body .container").prepend('<div style="position: absolute;width: inherit; height: 120px; background: url(' + obj.BACKGROUND_IMAGE + '); background-size: '+obj.BACKGROUND_SIZE+'; background-attachment: fixed;"></div>');
   window.addEventListener("load", function() {
     setTimeout(function() {
       document.getElementById("footer").style.backgroundColor = obj.BACKGROUND_COLOR
