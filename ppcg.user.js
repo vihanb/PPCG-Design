@@ -120,10 +120,12 @@ var main = {
   CURR_TAB_COLOR: "#62BA15",
   BULLETIN_BG_COLOR: "#fff8dc",
   STATS_COLOR: "#FAFAFA",
+  
   TAG_COLOR: "#D4F493",
   TAG_HOVER: "#329300",
-  /* Alternative Option: "rgb(177, 235, 124)"*/
-  TAG_BORDER_COLOR: "transparent",
+  
+  TAG_SHADOW_COLOR: "#abc577",
+  TAG_HOVER_SHADOW_COLOR: "#256c00",
 
   BUTTON_COLOR: "#6DAB71",
   BUTTON_HOVER: "#5DA261",
@@ -271,8 +273,8 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     "input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover { border: 1px solid $$BUTTON_HOVER; background-color: $$BUTTON_HOVER }" +
     ".mod-flair,.started .mod-flair{ color: " + MOD_FLAIR + " !important }.mod-flair:hover,.started .mod-flair:hover{color:" + MOD_FLAIR_HOVER + "}" +
     "#header{background:$$HEADER_BG_COLOR;}#header *{color:$$HEADER_TEXT_COLOR;}" +
-    "a.post-tag{border-radius: 0;font-family:"+MONOSPACE_FONT+";font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border-color:$$TAG_BORDER_COLOR; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease}" +
-    "a.post-tag:hover{background: $$TAG_HOVER; color: white}" +
+    "a.post-tag{border-radius: 0;font-family:"+MONOSPACE_FONT+";font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border:none; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; border-bottom: 2px solid $$TAG_SHADOW_COLOR}" +
+    "a.post-tag:hover{border-bottom-color: $$TAG_HOVER_SHADOW_COLOR;background: $$TAG_HOVER; color: white}" +
     "div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}" +
     "#newlogo{font-family:" + HEADER_FONT + ";top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}" +
     "</style>").replace(/\$\$(\w+)/g, function(_, x) {
