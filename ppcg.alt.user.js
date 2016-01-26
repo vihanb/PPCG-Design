@@ -91,8 +91,8 @@ var PARSE_HEXDUMPS = true; // set to false to not parse hexdump lengths
 // Fonts
 var HEADER_FONT = '"Lato", "Open Sans", "Arial", sans-serif'; // Header text
 var TEXT_FONT = '"Open Sans", "Lato", "Helvetica Neue", "Arial", sans-serif'; // Everything else besides code
-var MONOSPACE_FONT = "Inconsolata, monospace"; // Monospace font & Tag font
-var FONT_URL = "//fonts.googleapis.com/css?family=Lato:700|Open+Sans|Inconsolata"; // import any webfonts here
+var INPUT_FONT = '"Consolas", "Menlo", "Monaco", "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace, sans-serif'; // Everything that's an input
+var FONT_URL = "//fonts.googleapis.com/css?family=Lato:700|Open+Sans"; // import any webfonts here
 
 // Colors
 var MOD_FLAIR = "#F0C800"; // Mod diamond
@@ -101,12 +101,12 @@ var MOD_FLAIR_HOVER = "#FFE32E"; // Mod diamond on hover
 /** ~~~~~~~~~~~~~~~~ MAIN SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
 
 var main = {
-  FAVICON: "//i.stack.imgur.com/oHkfe.png",
+  FAVICON: "//i.imgur.com/FMih93I.pngg",
   SPRITE_SHEET: "//cdn.rawgit.com/vihanb/PPCG-Design/master/sprites.svg",
 
   // Set to empty string for no background image
-  BACKGROUND_IMAGE: "//i.stack.imgur.com/hBv7v.png",
-  BACKGROUND_SIZE: "650px 150px",
+  BACKGROUND_IMAGE: "http://i.stack.imgur.com/t8GhU.png",
+  BACKGROUND_TINT: "linear-gradient(rgba(153, 255, 165, 0.26), rgba(140, 255, 149, 0.26))", // Only a linear graident works
 
   BACKGROUND_LIGHT: (localStorage.getItem("main.BACKGROUND_LIGHT") === "true"), // Lighter shade of the background, CHANGE THROUGH OPTIONS
   MODE_DARK: (localStorage.getItem("main.MODE_DARK") === "true"),
@@ -116,12 +116,11 @@ var main = {
   BACKGROUND_COLOR: "#EDFAEE",
   HEADER_BG_COLOR: "transparent",
   HEADER_BG_IMAGE: "",
-  HEADER_TEXT_COLOR: "#FFF",
-  CURR_TAB_COLOR: "#62BA15",
+  HEADER_TEXT_COLOR: "#4C4C4C",
+  CURR_TAB_COLOR: "rgb(72,125,75)",
   BULLETIN_BG_COLOR: "#fff8dc",
   STATS_COLOR: "#FAFAFA",
-  TAG_COLOR: "#D4F493",
-  TAG_HOVER: "#329300",
+  TAG_COLOR: "#E7FFD8",
   /* Alternative Option: "rgb(177, 235, 124)"*/
   TAG_BORDER_COLOR: "transparent",
 
@@ -142,7 +141,7 @@ var meta = {
 
   // Set to empty string for no background image
   BACKGROUND_IMAGE: "http://i.stack.imgur.com/HLJI4.png",
-  BACKGROUND_SIZE: "auto",
+  BACKGROUND_TINT: "",
 
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#F4F4F4",
@@ -170,9 +169,8 @@ var optionbox = { // Customizes option box
   BACKGROUND_COLOR: "#FAFAFA"
 };
 
-var BGHEIGHT = 0; // this + 130
-
 if (localStorage.getItem('main.MODE_DARK') == "true") main = $.extend(main, darktheme);
+
 
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
 document.head.innerHTML += '<style>.favicon-codegolf{background-position: initial !important; background-image: url("' + main.FAVICON + '"); background-size: 100% 100% !important;}' +
@@ -213,7 +211,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   if (site == "main") {
     var x = qS(".beta-title").parentElement;
     qS(".beta-title").parentElement.removeChild(qS(".beta-title"));
-    x.innerHTML = "<table id=\"newlogo\"><tr><td><img style=\"margin-top: "+BGHEIGHT+"px;\" src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
+    x.innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + main.FAVICON + "\" height=50></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
     document.head.innerHTML += "<style>#sidebar #beta-stats,#sidebar #promo-box{border:none;background:" + main.STATS_COLOR + ";}</style>";
     // Leaderboard
     if (!main.NO_LEADERBOARD && $('a.post-tag[href="/questions/tagged/code-golf"]')[0] && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
@@ -247,10 +245,10 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
           });
         });
       });
-      //qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
+      qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + main.FAVICON + "\" height=50></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
     }
   } else {
-    //qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\">meta</span></td></tr></table>";
+    qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.FAVICON + "\" height=50></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\">meta</span></td></tr></table>";
   }
   $("#mainbar, .user-page #content").css('background', obj.STATS_COLOR);
   $("#mainbar").css('padding', '15px');
@@ -263,16 +261,13 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     ".yes-hover{cursor:pointer !important;}" +
     ".LEADERBOARD {border-collapse: collapse} .LEADERBOARD td { padding: 6px 8px } .LEADERBOARD tr:nth-child(even) { background-color: #F1F1F1 } .LEADERBOARD thead { border-bottom: 1px solid #DDD }" +
     "html,body{font-family:" + TEXT_FONT + "}" +
-    "#hlogo{margin: 25px 0 0 0;}" +
-    "#hmenus{margin-top:"+BGHEIGHT+"px}" +
     "#sidebar > .module{margin-left: 12px;}" +
     "input[type=submit], input[type=button], button, .button, a.button, a.button:visited, .btn { box-shadow: none; border: 1px solid $$BUTTON_COLOR; background-color: $$BUTTON_COLOR }" +
-    ".module.community-bulletin{border: none}" +
     "input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover { border: 1px solid $$BUTTON_HOVER; background-color: $$BUTTON_HOVER }" +
+    "input[type=text], input[type=number], input[type=url], input[type=email], input[type=tel], textarea{font-family: " + INPUT_FONT + " }" +
     ".mod-flair,.started .mod-flair{ color: " + MOD_FLAIR + " !important }.mod-flair:hover,.started .mod-flair:hover{color:" + MOD_FLAIR_HOVER + "}" +
     "#header{background:$$HEADER_BG_COLOR;}#header *{color:$$HEADER_TEXT_COLOR;}" +
-    "a.post-tag{border-radius: 0;font-family:"+MONOSPACE_FONT+";font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border-color:$$TAG_BORDER_COLOR; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease}" +
-    "a.post-tag:hover{background: $$TAG_HOVER; color: white}" +
+    "a.post-tag{background-color:$$TAG_COLOR;border-color:$$TAG_BORDER_COLOR}" +
     "div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}" +
     "#newlogo{font-family:" + HEADER_FONT + ";top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}" +
     "</style>").replace(/\$\$(\w+)/g, function(_, x) {
@@ -314,7 +309,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       "</style>"; //workaround for several links
     $(".started a:not(.started-link)").css('color', '#487D4B');
   }
-  $("body .container").prepend('<div style="position: absolute;width: inherit; height: '+(BGHEIGHT + 130)+'px; background: url(' + obj.BACKGROUND_IMAGE + '); background-size: '+obj.BACKGROUND_SIZE+'; background-attachment: fixed;"></div>');
+  $("body .container").prepend('<div style="position: absolute;width: inherit; height: 120px; background-attachment: fixed; background: ' + (localStorage.getItem('main.BACKGROUND_LIGHT') === "true" ? '' : obj.BACKGROUND_TINT + ', ') + 'url(' + obj.BACKGROUND_IMAGE + ')"></div>');
   window.addEventListener("load", function() {
     setTimeout(function() {
       document.getElementById("footer").style.backgroundColor = obj.BACKGROUND_COLOR
