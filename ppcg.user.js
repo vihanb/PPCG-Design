@@ -35,6 +35,7 @@ function bf(x, y) {
 
 function bytes(x, y) { // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
   var ISO_8859_1 = /^(Japt|TeaScript|Retina|Pyth\b)/i;
+  var ISO_8859_7 = /^(Jolf)/;
   var UTF_16 = /^(Ziim|Funciton)/i;
   var custom = /^(GS2|Seriously|Unicorn|Jelly|(Dyalog )?APL)/i;
   y = y || "";
@@ -47,6 +48,7 @@ function bytes(x, y) { // Takes in a length of text and piece of header text, an
     if (/^[\da-f\s-]+$/i.test(x.replace(/\n/g, ''))) return bf(x.replace(/[\s-]/g, '').length / 2, "hex");
   }
   if (/iso.?8859.1/i.test(y) || ISO_8859_1.test(y)) return bf(chars(x), "ISO-8859-1");
+  if (/iso.?8859.7/i.test(y) || ISO_8859_7.test(y)) return bf(chars(x), "ISO-8859-7");
   if (/utf.?16/i.test(y) || UTF_16.test(y)) return bf(x.length * 2, "UTF-16");
   if (custom.test(y)) return bf(chars(x), y.match(custom)[0]);
   // Else, fallback to UTF-8
