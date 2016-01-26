@@ -121,7 +121,7 @@ var main = {
   BULLETIN_BG_COLOR: "#fff8dc",
   STATS_COLOR: "#FAFAFA",
   TAG_COLOR: "#D4F493",
-  TAG_HOVER: "#072",
+  TAG_HOVER: "#329300",
   /* Alternative Option: "rgb(177, 235, 124)"*/
   TAG_BORDER_COLOR: "transparent",
 
