@@ -137,7 +137,6 @@ var main = {
 };
 
 /** ~~~~~~~~~~~~~~~~ META SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
-
 var meta = {
   FAVICON: "//i.imgur.com/xJx4Jdd.png",
   DISP_ICON: "//i.stack.imgur.com/dY4TQ.png",
