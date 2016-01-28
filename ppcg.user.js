@@ -267,6 +267,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     "html,body{font-family:" + TEXT_FONT + "}" +
     "#hlogo{margin: 25px 0 0 0;}" +
     "#hmenus{margin-top:"+BGHEIGHT+"px}" +
+    "#content{margin-top: 7px;}"+
     "#sidebar > .module{margin-left: 12px;}" +
     "input[type=submit], input[type=button], button, .button, a.button, a.button:visited, .btn { box-shadow: none; border: 1px solid $$BUTTON_COLOR; background-color: $$BUTTON_COLOR }" +
     ".module.community-bulletin{border: none}" +
