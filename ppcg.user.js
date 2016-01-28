@@ -105,7 +105,7 @@ var main = {
   SPRITE_SHEET: "//cdn.rawgit.com/vihanb/PPCG-Design/master/sprites.svg",
 
   // Set to empty string for no background image
-  BACKGROUND_IMAGE: "//i.stack.imgur.com/hBv7v.png",
+  BACKGROUND_IMAGE: "//i.stack.imgur.com/vAWfF.png ",
   BACKGROUND_SIZE: "650px 150px",
 
   BACKGROUND_LIGHT: (localStorage.getItem("main.BACKGROUND_LIGHT") === "true"), // Lighter shade of the background, CHANGE THROUGH OPTIONS
@@ -140,16 +140,17 @@ var main = {
 
 var meta = {
   FAVICON: "//i.imgur.com/xJx4Jdd.png",
+  DISP_ICON: "//i.stack.imgur.com/dY4TQ.png",
   SPRITE_SHEET: "//cdn.rawgit.com/vihanb/PPCG-Design/master/sprites.svg",
 
   // Set to empty string for no background image
-  BACKGROUND_IMAGE: "http://i.stack.imgur.com/HLJI4.png",
-  BACKGROUND_SIZE: "auto",
+  BACKGROUND_IMAGE: "//i.stack.imgur.com/4535h.png",
+  BACKGROUND_SIZE: "650px 150px",
 
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#F4F4F4",
   HEADER_BG_COLOR: "transparent",
-  HEADER_TEXT_COLOR: "#4C4C4C",
+  HEADER_TEXT_COLOR: "#FFF",
   CURR_TAB_COLOR: "rgb(72,125,75)",
   BULLETIN_BG_COLOR: "#fff8dc",
   STATS_COLOR: "#FAFAFA",
@@ -252,7 +253,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       //qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
     }
   } else {
-    //qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\">meta</span></td></tr></table>";
+    qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.DISP_ICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\" style=\"font-size: 14px; color: #CF7720\">meta</span></td></tr></table>";
   }
   $("#mainbar, .user-page #content").css('background', obj.STATS_COLOR);
   $("#mainbar").css('padding', '15px');
@@ -273,11 +274,12 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     ".module.community-bulletin{border: none}" +
     "input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover { border: 1px solid $$BUTTON_HOVER; background-color: $$BUTTON_HOVER }" +
     ".mod-flair,.started .mod-flair{ color: " + MOD_FLAIR + " !important }.mod-flair:hover,.started .mod-flair:hover{color:" + MOD_FLAIR_HOVER + "}" +
-    "#header{background:$$HEADER_BG_COLOR;}#header *{color:$$HEADER_TEXT_COLOR;}" +
+    "#header{background:$$HEADER_BG_COLOR;}#header *, #hlogo a{color:$$HEADER_TEXT_COLOR;}" +
     "a.post-tag{border-radius: 0;font-family:"+MONOSPACE_FONT+";font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border:none; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; border-bottom: 2px solid $$TAG_SHADOW_COLOR}" +
     "a.post-tag:hover{border-bottom-color: $$TAG_HOVER_SHADOW_COLOR;background: $$TAG_HOVER; color: white}" +
     "div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}" +
-    "#newlogo{font-family:" + HEADER_FONT + ";top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}" +
+    "#newlogo{top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}" +
+    "#newlogo, #hlogo a{font-family:" + HEADER_FONT + ";}"+
     "</style>").replace(/\$\$(\w+)/g, function(_, x) {
     return eval(site + "." + x);
   });
@@ -306,6 +308,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       });
     });
   }
+  $("body .container").prepend('<div style="position: absolute;width: inherit; height: '+(BGHEIGHT + 130)+'px; background: url(' + obj.BACKGROUND_IMAGE + '); background-size: '+obj.BACKGROUND_SIZE+'; background-attachment: fixed;"></div>');
   if (site == "main") {
     $("#content").css('background', 'none');
     $("body > .container").css("box-shadow", "none");
@@ -317,7 +320,6 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       "</style>"; //workaround for several links
     $(".started a:not(.started-link)").css('color', '#487D4B');
   }
-  $("body .container").prepend('<div style="position: absolute;width: inherit; height: '+(BGHEIGHT + 130)+'px; background: url(' + obj.BACKGROUND_IMAGE + '); background-size: '+obj.BACKGROUND_SIZE+'; background-attachment: fixed;"></div>');
   window.addEventListener("load", function() {
     setTimeout(function() {
       document.getElementById("footer").style.backgroundColor = obj.BACKGROUND_COLOR
