@@ -102,7 +102,7 @@ var MOD_FLAIR_HOVER = "#FFE32E"; // Mod diamond on hover
 
 var main = {
   FAVICON: "//i.stack.imgur.com/oHkfe.png",
-  SPRITE_SHEET: "//cdn.rawgit.com/vihanb/PPCG-Design/master/sprites.svg",
+  SPRITE_SHEET: "//cdn.rawgit.com/vihanb/PPCG-Design/master/assets/sprites.svg",
 
   // Set to empty string for no background image
   BACKGROUND_IMAGE: "//i.stack.imgur.com/vAWfF.png ",
@@ -141,7 +141,7 @@ var main = {
 var meta = {
   FAVICON: "//i.imgur.com/xJx4Jdd.png",
   DISP_ICON: "//i.stack.imgur.com/dY4TQ.png",
-  SPRITE_SHEET: "//cdn.rawgit.com/vihanb/PPCG-Design/master/sprites.svg",
+  SPRITE_SHEET: "//cdn.rawgit.com/vihanb/PPCG-Design/master/assets/sprites.svg",
 
   // Set to empty string for no background image
   BACKGROUND_IMAGE: "//i.stack.imgur.com/4535h.png",
