@@ -61,7 +61,7 @@ function bytes(x, y) { // Takes in a length of text and piece of header text, an
 
 function loadAnswers(onFinish) {
   var answers = [],
-    i = 5;
+      i = 5;
 
   function loadPage() {
     $.get(
@@ -103,10 +103,15 @@ var MOD_FLAIR_HOVER = "#FFE32E"; // Mod diamond on hover
 var main = {
   FAVICON: "//i.stack.imgur.com/oHkfe.png",
   SPRITE_SHEET: "//cdn.rawgit.com/vihanb/PPCG-Design/master/assets/sprites.svg",
+  SEARCH_TEXT: "Search codegolf.SE",
 
   // Set to empty string for no background image
   BACKGROUND_IMAGE: "//i.stack.imgur.com/vAWfF.png ",
   BACKGROUND_SIZE: "650px 150px",
+  BG_COL: "#175D2E",
+  BG_COL_HOVER: "white",
+  BG_START: "white",
+  BG_REV: "#62BA15",
 
   BACKGROUND_LIGHT: (localStorage.getItem("main.BACKGROUND_LIGHT") === "true"), // Lighter shade of the background, CHANGE THROUGH OPTIONS
   MODE_DARK: (localStorage.getItem("main.MODE_DARK") === "true"),
@@ -120,10 +125,10 @@ var main = {
   CURR_TAB_COLOR: "#62BA15",
   BULLETIN_BG_COLOR: "#fff8dc",
   STATS_COLOR: "#FAFAFA",
-  
+
   TAG_COLOR: "#D4F493",
   TAG_HOVER: "#329300",
-  
+
   TAG_SHADOW_COLOR: "#abc577",
   TAG_HOVER_SHADOW_COLOR: "#256c00",
 
@@ -142,9 +147,15 @@ var meta = {
   DISP_ICON: "//i.stack.imgur.com/dY4TQ.png",
   SPRITE_SHEET: "//cdn.rawgit.com/vihanb/PPCG-Design/master/assets/sprites.svg",
 
+  SEARCH_TEXT: "Search meta.codegolf.SE",
+
   // Set to empty string for no background image
   BACKGROUND_IMAGE: "//i.stack.imgur.com/4535h.png",
   BACKGROUND_SIZE: "650px 150px",
+  BG_COL: "#474747",
+  BG_COL_HOVER: "#474747",
+  BG_START: "rgba(255, 255, 255, 0.8)",
+  BG_REV: "white",
 
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#F4F4F4",
@@ -183,18 +194,20 @@ if ((window.location + "").search("//(?:meta.)?codegolf.stackexchange.com") >= 0
   var site = /^https?:\/\/meta/.test(window.location) ? "meta" : "main";
   var obj = site == "meta" ? meta : main;
 
+  $("#search input").attr("placeholder", obj.SEARCH_TEXT);
+
   // Options Menu
   $(".topbar-wrapper > .network-items").append('<a id="USER_Opt" class="topbar-icon yes-hover" style="z-index:1;width: 36px; background-image: url(' + main.SPRITE_SHEET + '); background-position: 0px 0px;"></a>');
   $("body").prepend('<div id="USER_OptMenu" style="display: none; width: inherit; height: inherit;"><div id="USER_Backblur" style="position:absolute;z-index:2;width:100%;height:100%;background:rgba(0,0,0,0.5)"></div>' +
-    '<div style="position:absolute;z-index:3;width:40%;height:40%;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:' + optionbox.BACKGROUND_COLOR + ';padding:1em;">' +
-    '<h1>Userscript Options</h1><div>' +
-    '<div style="width:50%;height:100%;float:left;">' +
-    '<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on"><label for="light_bg_on">Lighter Background?</label><br>' +
-    '<input class="OPT_Bool" data-var="main.MODE_DARK" type="checkbox" id="dark_theme_on"><label for="dark_theme_on">Dark Theme? (WIP)</label><br>' +
-    '<input class="OPT_Bool" data-var="main.NO_LEADERBOARD" type="checkbox" id="noleader"><label for="noleader">Disable Auto Leaderboard?</label>' +
-    '</div><div style="width:50%;height:100%;float:right;">' +
-    '' +
-    '</div></div>For changes to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
+                    '<div style="position:absolute;z-index:3;width:40%;height:40%;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:' + optionbox.BACKGROUND_COLOR + ';padding:1em;">' +
+                    '<h1>Userscript Options</h1><div>' +
+                    '<div style="width:50%;height:100%;float:left;">' +
+                    '<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on"><label for="light_bg_on">Lighter Background?</label><br>' +
+                    '<input class="OPT_Bool" data-var="main.MODE_DARK" type="checkbox" id="dark_theme_on"><label for="dark_theme_on">Dark Theme? (WIP)</label><br>' +
+                    '<input class="OPT_Bool" data-var="main.NO_LEADERBOARD" type="checkbox" id="noleader"><label for="noleader">Disable Auto Leaderboard?</label>' +
+                    '</div><div style="width:50%;height:100%;float:right;">' +
+                    '' +
+                    '</div></div>For changes to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
   $("#USER_Opt").click(function() {
     $("#USER_OptMenu").fadeIn(50);
   });
@@ -240,7 +253,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
           return '<tr><td>' + lv + '</td><td><a href="'+l[1].owner.link+'">'+l[1].owner.display_name+'</a></td><td>' + (l[3] /*(l[2].match(/(?:<h\d>|<p><strong>)(.+?)[, -]\s*(?:(?:\d*\.\d+|\d+)(?:\s*%)?(?:\s*[+*\/\-]\s*(?:\d*\.\d+|\d+)(?:\s*%)?)+\s*=\s*)?(?:-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/)||[])[1]||(l[2].match(/\s*(?:<h\d>|<p><strong>)(\s*<a [^ >]+.+?<\/a>|(?:[#A-Za-z_\s\.\u00FF-\uFFFF!?]|(?:(?=\d+[^\d\n]+\d+\D*(?:<\/|$|\n))\d)|(?:(?=-\s?[A-Za-z_\u00FF-\uFFFF!?]).)|(?:(?=.+(,)),))+)/)||[0,"Lang N/A"])[1]*/ ).trim() + "</td><td>" + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
         });
         $(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>' +
-          '<div id="USER_BOARD" style="display:none"><table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Author</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>' + answers.join("\n") + '</tbody></table> </div>');
+                                         '<div id="USER_BOARD" style="display:none"><table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Author</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>' + answers.join("\n") + '</tbody></table> </div>');
         $("#USER_BOARD_TEXT").click(function() {
           $("#USER_BOARD").slideToggle(50, function() {
             $("#USER_BOARD_TEXT").text(function() {
@@ -254,8 +267,8 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   } else {
     qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.DISP_ICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\" style=\"font-size: 14px; color: #CF7720\">meta</span></td></tr></table>";
   }
-  // tio.net support
-  if (window.location.pathname.indexOf("/questions/") === 0) { // question
+  // tio.net (WIP) support
+  if (false && window.location.pathname.indexOf("/questions/") === 0) { // question
     $(".answer").each(function() {
       var tiolinks = $(this).find('a[href*="tryitonline.net"]');
       if (tiolinks[0]) {
@@ -267,7 +280,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
           }).forEach(function(l){
             parts[l[0]] = l[1];
           });
-          
+
           var code = parts["code"] || "";
           var input = parts["input"] || "";
           var url = $(this).attr('href').match(/https?:\/\/[^\/]+/)[0];
@@ -286,34 +299,40 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       }
     });
   }
-  
+
   // style
   $("#mainbar, .user-page #content").css('background', obj.STATS_COLOR);
   $("#mainbar").css('padding', '15px');
-  document.head.innerHTML += ("<style>@import url(" + FONT_URL + ");" +
-    ".envelope-on,.envelope-off,.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.star-on,.star-off,.comment-up-off,.comment-up-on,.comment-flag,.edited-yes,.feed-icon,.vote-accepted-off,.vote-accepted-on,.vote-accepted-bounty,.badge-earned-check,.delete-tag,.grippie,.expander-arrow-hide,.expander-arrow-show,.expander-arrow-small-hide,.expander-arrow-small-show,.anonymous-gravatar,.badge1,.badge2,.badge3,.gp-share,.fb-share,.twitter-share,#notify-containerspan.notify-close,.migrated.to,.migrated.from{background-image:url(\"$$SPRITE_SHEET\");background-size: initial;}" +
-    ".youarehere{color:$$CURR_TAB_COLOR !important;border-bottom:2px solid $$CURR_TAB_COLOR !important;}" +
-    (obj.BOUNTY_COLOR ? ".bounty-indicator-tab{background:$$BOUNTY_BG_COLOR;color:$$BOUNTY_COLOR !important;}" : "") +
-    "#sidebar .module.community-bulletin{background:$$BULLETIN_BG_COLOR;}" +
-    "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}" +
-    ".yes-hover{cursor:pointer !important;}" +
-    ".LEADERBOARD {border-collapse: collapse} .LEADERBOARD td { padding: 6px 8px } .LEADERBOARD tr:nth-child(even) { background-color: #F1F1F1 } .LEADERBOARD thead { border-bottom: 1px solid #DDD }" +
-    "html,body{font-family:" + TEXT_FONT + "}" +
-    "#hlogo{margin: 25px 0 0 0;}" +
-    "#hmenus{margin-top:"+BGHEIGHT+"px}" +
-    "#content{margin-top: 7px;}"+
-    "#sidebar > .module{margin-left: 12px;}" +
-    "input[type=submit], input[type=button], button, .button, a.button, a.button:visited, .btn { box-shadow: none; border: 1px solid $$BUTTON_COLOR; background-color: $$BUTTON_COLOR }" +
-    ".module.community-bulletin{border: none}" +
-    "input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover { border: 1px solid $$BUTTON_HOVER; background-color: $$BUTTON_HOVER }" +
-    ".mod-flair,.started .mod-flair{ color: " + MOD_FLAIR + " !important }.mod-flair:hover,.started .mod-flair:hover{color:" + MOD_FLAIR_HOVER + "}" +
-    "#header{background:$$HEADER_BG_COLOR;}#header *, #hlogo a{color:$$HEADER_TEXT_COLOR;}" +
-    "a.post-tag{border-radius: 0;font-family:"+MONOSPACE_FONT+";font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border:none; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; border-bottom: 2px solid $$TAG_SHADOW_COLOR}" +
-    "a.post-tag:hover{border-bottom-color: $$TAG_HOVER_SHADOW_COLOR;background: $$TAG_HOVER; color: white}" +
-    "div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}" +
-    "#newlogo{top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}" +
-    "#newlogo, #hlogo a{font-family:" + HEADER_FONT + ";}"+
-    "</style>").replace(/\$\$(\w+)/g, function(_, x) {
+  document.head.innerHTML +=
+    ("<style>@import url(" + FONT_URL + ");" +
+     ".envelope-on,.envelope-off,.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.star-on,.star-off,.comment-up-off,.comment-up-on,.comment-flag,.edited-yes,.feed-icon,.vote-accepted-off,.vote-accepted-on,.vote-accepted-bounty,.badge-earned-check,.delete-tag,.grippie,.expander-arrow-hide,.expander-arrow-show,.expander-arrow-small-hide,.expander-arrow-small-show,.anonymous-gravatar,.badge1,.badge2,.badge3,.gp-share,.fb-share,.twitter-share,#notify-containerspan.notify-close,.migrated.to,.migrated.from{background-image:url(\"$$SPRITE_SHEET\");background-size: initial;}" +
+     ".youarehere{color:$$CURR_TAB_COLOR !important;border-bottom:2px solid $$CURR_TAB_COLOR !important;}" +
+     (obj.BOUNTY_COLOR ? ".bounty-indicator-tab{background:$$BOUNTY_BG_COLOR;color:$$BOUNTY_COLOR !important;}" : "") +
+     "#sidebar .module.community-bulletin{background:$$BULLETIN_BG_COLOR;}" +
+     "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}" +
+     ".yes-hover{cursor:pointer !important;}" +
+     ".LEADERBOARD {border-collapse: collapse} .LEADERBOARD td { padding: 6px 8px } .LEADERBOARD tr:nth-child(even) { background-color: #F1F1F1 } .LEADERBOARD thead { border-bottom: 1px solid #DDD }" +
+     "html,body{font-family:" + TEXT_FONT + "}" +
+     "#hlogo{margin: 25px 0 0 0;}" +
+     "#content{margin-top: 7px;}"+
+     "#hmenus > div.nav:not(.mainnavs) a{text-align:center; color: $$BG_COL;font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;background: $$BG_START;padding: 8px 12px;-webkit-transition: color 0.15s ease, background 0.15s ease;-moz-transition: color 0.15s ease, background 0.15s ease;-ms-transition: color 0.15s ease, background 0.15s ease;-o-transition: color 0.15s ease, background 0.15s ease;}"+
+     "#hmenus > div.nav:not(.mainnavs) a:hover{color: $$BG_COL_HOVER;background: $$BG_REV;}" +
+     "#sidebar > .module{margin-left: 12px;}" +
+     "input[type=submit], input[type=button], button, .button, a.button, a.button:visited, .btn { box-shadow: none; border: 1px solid $$BUTTON_COLOR; background-color: $$BUTTON_COLOR }" +
+     ".module.community-bulletin{border: none}" +
+     "input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover { border: 1px solid $$BUTTON_HOVER; background-color: $$BUTTON_HOVER }" +
+     ".mod-flair,.started .mod-flair{ color: " + MOD_FLAIR + " !important }.mod-flair:hover,.started .mod-flair:hover{color:" + MOD_FLAIR_HOVER + "}" +
+     "#hmenus > div.nav.mainnavs{position: relative; top: 50%; transform: translateY(-50%);}" +
+     "div.nav.askquestion li{display:initial;}"+
+     "#hmenus{top: 50%;transform: translateY(-50%);}" +
+     "#hmenus > div.nav.askquestion li:not(:first-child) > a { margin-top: 5px; }"+
+     "#header{background:$$HEADER_BG_COLOR;}#header *, #hlogo a{color:$$HEADER_TEXT_COLOR;}" +
+     "a.post-tag{border-radius: 0;text-align:center;font-family:"+MONOSPACE_FONT+";font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border:none; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; border-bottom: 2px solid $$TAG_SHADOW_COLOR}" +
+     "a.post-tag:hover{border-bottom-color: $$TAG_HOVER_SHADOW_COLOR;background: $$TAG_HOVER; color: white}" +
+     "div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}" +
+     "#newlogo{top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}" +
+     "#newlogo, #hlogo a{font-family:" + HEADER_FONT + ";}"+
+     "</style>").replace(/\$\$(\w+)/g, function(_, x) {
     return eval(site + "." + x);
   });
   try {
@@ -363,22 +382,22 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     void
     function(t) {
       var e = t.head || t.getElementsByTagName("head")[0] || t.documentElement,
-        o = t.createElement("style"),
-        n = "/*Added through UserScript*/.vote-count-post{cursor:pointer;}.vote-count-post[title]{cursor:default;}.vote-count-separator{height:0;*margin-left:0;}";
+          o = t.createElement("style"),
+          n = "/*Added through UserScript*/.vote-count-post{cursor:pointer;}.vote-count-post[title]{cursor:default;}.vote-count-separator{height:0;*margin-left:0;}";
       e.appendChild(o), o.styleSheet ? o.styleSheet.cssText = n : o.appendChild(t.createTextNode(n));
       var s = t.createElement("script");
       s["textContent" in s ? "textContent" : "text"] = "(" + function() {
         var t = location.protocol + "//api.stackexchange.com/2.0/posts/",
-          e = "?filter=!)q3b*aB43Xc&key=DwnkTjZvdT0qLs*o8rNDWw((&site=" + location.host,
-          o = 1,
-          n = StackExchange.helpers,
-          s = $.fn.click;
+            e = "?filter=!)q3b*aB43Xc&key=DwnkTjZvdT0qLs*o8rNDWw((&site=" + location.host,
+            o = 1,
+            n = StackExchange.helpers,
+            s = $.fn.click;
         $.fn.click = function() {
           return this.hasClass("vote-count-post") && !o ? this : s.apply(this, arguments)
         };
         var r = function(s) {
           var r, a = $(this),
-            i = this.title;
+              i = this.title;
           if (!(/up \/ /.test(i) || /View/.test(i) && o)) {
             o = 0;
             var c = a.siblings('input[type="hidden"]').val();
@@ -390,7 +409,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
               success: function(t) {
                 t = t.items[0];
                 var e = t.up_vote_count,
-                  o = t.down_vote_count;
+                    o = t.down_vote_count;
                 e = e ? "+" + e : 0, o = o ? "-" + o : 0, $(".error-notification").fadeOut("fast", function() {
                   $(this).remove()
                 }), a.css("cursor", "default").attr("title", e + " up / " + o + " down").html('<div style="color:green">' + e + '</div><div class="vote-count-separator"></div><div style="color:maroon">' + o + "</div>")
@@ -405,14 +424,5 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       } + ")();", e.appendChild(s), s.parentNode.removeChild(s)
     }(document);
   }
-  if ((window.location + "").indexOf("meta.codegolf.stackexchange.com") > -1) {
-    var pq_links = document.getElementById('nav-unanswered').parentElement.parentElement;
-    var pq_li = document.createElement('li');
-    var pq_a = document.createElement('a');
-    pq_a.innerHTML = '<b><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button">Propose Question</a></b>';
-    pq_a.title = "Propose a question in the sandbox.";
-    pq_a.href = "http://meta.codegolf.stackexchange.com/";
-    pq_li.appendChild(pq_a);
-    pq_links.appendChild(pq_li);
-  }
+  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox.">Propose Question</a></li>');
 }
