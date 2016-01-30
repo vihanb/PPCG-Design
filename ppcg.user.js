@@ -426,3 +426,9 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   }
   $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox.">Propose Question</a></li>');
 }
+
+if ((window.location + "").indexOf("codegolf.stackexchange.com") > -1) {
+      var fb_content = document.getElementById('content');
+      fb_content.setAttribute('style','background: rgb(250, 250, 250);');
+      fb_content.parentElement.setAttribute('style','background: rgb(250, 250, 250);');
+}
