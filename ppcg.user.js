@@ -405,4 +405,14 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       } + ")();", e.appendChild(s), s.parentNode.removeChild(s)
     }(document);
   }
+  if ((window.location + "").indexOf("meta.codegolf.stackexchange.com") > -1) {
+    var pq_links = document.getElementById('nav-unanswered').parentElement.parentElement;
+    var pq_li = document.createElement('li');
+    var pq_a = document.createElement('a');
+    pq_a.innerHTML = '<b><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button">Propose Question</a></b>';
+    pq_a.title = "Propose a question in the sandbox.";
+    pq_a.href = "http://meta.codegolf.stackexchange.com/";
+    pq_li.appendChild(pq_a);
+    pq_links.appendChild(pq_li);
+  }
 }
