@@ -254,6 +254,40 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   } else {
     qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.DISP_ICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\" style=\"font-size: 14px; color: #CF7720\">meta</span></td></tr></table>";
   }
+  // tio.net support
+  if (window.location.pathname.indexOf("/questions/") === 0) { // question
+    $(".answer").each(function() {
+      var tiolinks = $(this).find('a[href*="tryitonline.net"]');
+      if (tiolinks[0]) {
+        // They are tryitonline links
+        tiolinks.each(function() {
+          var parts = {};
+          var _parts = $(this).attr('href').split("#")[1].split("&").map(function(i) {
+            return [i.split("=")[0],i.split("=")[1]]
+          }).forEach(function(l){
+            parts[l[0]] = l[1];
+          });
+          
+          var code = parts["code"] || "";
+          var input = parts["input"] || "";
+          var url = $(this).attr('href').match(/https?:\/\/[^\/]+/)[0];
+          if (url && code) { // Was able to get data
+            var r = new XMLHttpRequest();
+            r.open("POST", "http://crossorigin.me/" + url + "/cgi-bin/backend");
+            r.onreadystatechange = function() {
+              console.log(r, "code=" + code + "&input=" + input);
+              if (r.readyState === 4 && r.status === 200) { // all good
+                console.log(r.responseText);
+              }
+            };
+            r.send("code=" + code + "&input=" + input);
+          }
+        });
+      }
+    });
+  }
+  
+  // style
   $("#mainbar, .user-page #content").css('background', obj.STATS_COLOR);
   $("#mainbar").css('padding', '15px');
   document.head.innerHTML += ("<style>@import url(" + FONT_URL + ");" +
