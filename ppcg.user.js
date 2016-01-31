@@ -190,6 +190,55 @@ if (localStorage.getItem('main.MODE_DARK') == "true") main = $.extend(main, dark
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
 document.head.innerHTML += '<style>.favicon-codegolf{background-position: initial !important; background-image: url("' + main.FAVICON + '"); background-size: 100% 100% !important;}' +
   '.favicon-codegolfmeta{background-position: initial !important; background-image: url("' + meta.FAVICON + '"); background-size: 100% 100% !important;}</style>';
+if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
+  $("body").css("background", "white");
+  $("#sound").css({
+    "background": "url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Speaker_Icon.svg/200px-Speaker_Icon.svg.png)",
+    "background-size": "16px 16px"
+  });
+  $("#roomname").css("font-family", "'Lato Black'");
+  $("#searchbox").css("padding-left", "4px !important");
+
+/*  $("body").append('<img id="CHATBOX" style="z-index: 1000; display:none; position: fixed;">');
+
+  $(document).on('mouseenter', 'li[id^="summary_"], li[id^="summary_"] *', function() {
+    $("#CHATBOX").show();
+    var src = $(this).find('a[href*=".png"],a[href*=".jpeg"],a[href*=".jpg"],a[href*=".gif"],a[href*=".svg"]').attr('href');
+    var pos = $(this).get(0).getBoundingClientRect();
+    var i = new Image(src);
+    i.onload = function() {
+      $("#CHATBOX").attr({
+        'src': src,
+      });
+      $("#CHATBOX").css({
+      'left': pos.left - i.width + 'px',
+      'top': pos.top - i.height + 'px'
+    });
+    }
+  });
+
+  $(document).on('mouseleave', 'li[id^="summary_"]', function() {
+    $("#CHATBOX").hide();
+  });//*/// Doesn't work :(
+
+  document.head.innerHTML += '<style>'+
+    '@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic&subset=latin,greek);'+
+    'body { font-family: "Open Sans" }' +
+
+    '.button { cursor: pointer; background: #96db62; border: none; border-bottom: 1px solid rgb(106, 194, 65) }' +
+    '.button:hover { background: #51cc47; border-bottom-color: #449656; }' +
+
+    '.favorite-room-vote { background: url(http://i.stack.imgur.com/DhUx0.png); background-size: 16px 16px }' +
+    '.favorite-room-vote.favorite-room { background: url(http://i.stack.imgur.com/lbBdl.png); background-size: 16px 16px }' +
+
+    '.message:hover { border: 1px solid #e3e3e3 !important }' +
+
+    '.message:hover .action-link, .message:hover .action-link .img.menu { background-color: #F3F3F3 !important }' +
+    '.message:hover .action-link .img.menu { background-image: url(http://i.stack.imgur.com/3gBKh.png) !important; background-size: 16px 16px; background-position: 0px -1px !important; }' +
+
+    'span.mention { padding: 0px 3px; background: rgba(193, 255, 185, 0.73) }' +
+    '</style>';
+}
 if ((window.location + "").search("//(?:meta.)?codegolf.stackexchange.com") >= 0) {
   var site = /^https?:\/\/meta/.test(window.location) ? "meta" : "main";
   var obj = site == "meta" ? meta : main;
