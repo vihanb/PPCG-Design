@@ -469,7 +469,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       });
     });
   }
-  $("body .container").prepend('<div style="position: absolute;width: inherit; z-index: -1; height: 200px; background: url(' + obj.BACKGROUND_IMAGE + '); background-size: '+obj.BACKGROUND_SIZE+'; background-attachment: fixed;"></div>');
+  $("body .container").prepend('<div style="position: absolute;width: inherit; z-index: -1; height: 130px; background: url(' + obj.BACKGROUND_IMAGE + '); background-size: '+obj.BACKGROUND_SIZE+'; background-attachment: fixed;"></div>');
   if (site == "main") {
     addQuestionOfTheDay();
     $(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
