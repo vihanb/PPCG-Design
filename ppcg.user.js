@@ -96,7 +96,7 @@ var FONT_URL = "//fonts.googleapis.com/css?family=Lato:700|Open+Sans|Inconsolata
 
 // Colors
 var MOD_FLAIR = "#F0C800"; // Mod diamond
-var MOD_FLAIR_HOVER = "#FFE32E"; // Mod diamond on hover
+var MOD_FLAIR_HOVER = "#FFE32E";
 
 /** ~~~~~~~~~~~~~~~~ MAIN SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
 
@@ -111,7 +111,7 @@ var main = {
   BG_COL: "#175D2E",
   BG_COL_HOVER: "white",
   BG_START: "white",
-  BG_REV: "#62BA15",
+  BG_REV: "#329300",
 
   BACKGROUND_LIGHT: (localStorage.getItem("main.BACKGROUND_LIGHT") === "true"), // Lighter shade of the background, CHANGE THROUGH OPTIONS
   MODE_DARK: (localStorage.getItem("main.MODE_DARK") === "true"),
