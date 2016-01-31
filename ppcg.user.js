@@ -270,7 +270,7 @@ function getQuestion(tag, callback) {
     var url = quest['link'];
     var title = quest['title'];
 
-    document.cookie = (tag + cookieSuffix)+'='+url+' '+title+';max-age=86400';
+    document.cookie = (tag + cookieSuffix)+'='+url+' '+title.replace(/'/g,'&apos;')+';max-age=86400';
     callback([url, title]);
   });
 }
@@ -281,7 +281,7 @@ function addTag(tag) {
     qS('#question-of-the-day').innerHTML += 
       '<div class="qod-qitem"><span>'+
       '<a href="/questions/tagged/'+tag+'" class="post-tag user-tag" title="show questions tagged \''+tag+'\'" rel="tag">'+tag+
-      '</a></span><a href="'+a[0].replace(/'/g, '&apos;')+'">'+a[1]+'</a></div>';
+      '</a></span><a href="'+a[0]+'">'+a[1]+'</a></div>';
   });
 }
 
@@ -369,7 +369,6 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       //qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
 
     }
-    addQuestionOfTheDay();
   } else {
     qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.DISP_ICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\" style=\"font-size: 14px; color: #CF7720\">meta</span></td></tr></table>";
   }
@@ -472,6 +471,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   }
   $("body .container").prepend('<div style="position: absolute;width: inherit; height: '+(BGHEIGHT + 130)+'px; background: url(' + obj.BACKGROUND_IMAGE + '); background-size: '+obj.BACKGROUND_SIZE+'; background-attachment: fixed;"></div>');
   if (site == "main") {
+    addQuestionOfTheDay();
     $("#content").css('background', 'none');
     $("body > .container").css("box-shadow", "none");
     $(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
