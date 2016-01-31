@@ -238,9 +238,8 @@ if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
     
     '.monologue { margin-bottom: 0; padding-top: 0; }' +
     '.messages { background-color: #fff; padding: 8px 8px 8px 0px; border-radius: 0; border-top: none }' +
-
-    '.popup { border-radius: 2px; border: none; box-shadow: 0 0 8px #9C9C9C }' +
     
+    '.popup { border-radius: 2px; border: none; box-shadow: 0 0 8px #9C9C9C }' +
     '.popup .small-site-logo { right: initial; top: 38px }'
     
     'span.mention { padding: 0px 3px; background: rgba(193, 255, 185, 0.73) }' +
