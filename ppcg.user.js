@@ -312,19 +312,20 @@ function addOtherTags() {
   });
 }
 
-console.log('2');
 function addQuestionOfTheDay() {
   var questionOfTheDayHtml = '<div class="module" id="question-of-the-day"><h4 id="h-inferred-tags">Questions of the Day</h4></div>';
 
   // below the blog posts
   var favTags = qS('div.module:nth-child(2)');
-  favTags.insertAdjacentHTML('afterend', questionOfTheDayHtml);
+  if (favTags) {
+    favTags.insertAdjacentHTML('afterend', questionOfTheDayHtml);
 
-  addTag('code-golf');
-  addTag('code-challenge');//king-of-the-hill
-  addTag('math');//fastest-code
+    addTag('code-golf');
+    addTag('code-challenge');//king-of-the-hill
+    addTag('math');//fastest-code
 
-  addOtherTags();
+    addOtherTags();
+  }
 }
 
 if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
