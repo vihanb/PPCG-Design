@@ -124,7 +124,7 @@ var main = {
   HEADER_TEXT_COLOR: "#FFF",
   CURR_TAB_COLOR: "#62BA15",
   BULLETIN_BG_COLOR: "#fff8dc",
-  STATS_COLOR: "white",
+  STATS_COLOR: "#FAFAFA",
 
   TAG_COLOR: "#D4F493",
   TAG_HOVER: "#329300",
@@ -163,7 +163,7 @@ var meta = {
   HEADER_TEXT_COLOR: "#FFF",
   CURR_TAB_COLOR: "rgb(72,125,75)",
   BULLETIN_BG_COLOR: "#fff8dc",
-  STATS_COLOR: "white",
+  STATS_COLOR: "#FCFCFC",
   TAG_COLOR: "",
   TAG_BORDER_COLOR: "",
   BUTTON_COLOR: "#303030",
@@ -333,7 +333,6 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     var x = qS(".beta-title").parentElement;
     qS(".beta-title").parentElement.removeChild(qS(".beta-title"));
     x.innerHTML = "<table id=\"newlogo\"><tr><td><img style=\"margin-top: "+BGHEIGHT+"px;\" src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
-    document.head.innerHTML += "<style>#sidebar #beta-stats,#sidebar #promo-box{border:none;background:" + main.STATS_COLOR + ";}</style>";
     // Leaderboard
     if (!main.NO_LEADERBOARD && $('a.post-tag[href="/questions/tagged/code-golf"]')[0] && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
       var answers = [];
@@ -406,7 +405,6 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   }
 
   // style
-  $("#mainbar, .user-page #content").css('background', obj.STATS_COLOR);
   $("#mainbar").css('padding', '15px');
   document.head.innerHTML +=
     ("<style>@import url(" + FONT_URL + ");" +
@@ -424,6 +422,8 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
      "html,body{font-family:" + TEXT_FONT + "}" +
      "#hlogo{margin: 25px 0 0 0;}" +
      "#content{margin-top: 7px;}"+
+     ".container{box-shadow: none !important;}"+
+     '#content{background:$$STATS_COLOR !important;}'+
      "#hmenus > div.nav:not(.mainnavs) a{text-align:center; color: $$BG_COL;font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;background: $$BG_START;padding: 8px 12px;-webkit-transition: color 0.15s ease, background 0.15s ease;-moz-transition: color 0.15s ease, background 0.15s ease;-ms-transition: color 0.15s ease, background 0.15s ease;-o-transition: color 0.15s ease, background 0.15s ease;}"+
      "#hmenus > div.nav:not(.mainnavs) a:hover{color: $$BG_COL_HOVER;background: $$BG_REV;}" +
      "#sidebar > .module{margin-left: 12px;}" +
@@ -469,11 +469,9 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       });
     });
   }
-  $("body .container").prepend('<div style="position: absolute;width: inherit; height: '+(BGHEIGHT + 130)+'px; background: url(' + obj.BACKGROUND_IMAGE + '); background-size: '+obj.BACKGROUND_SIZE+'; background-attachment: fixed;"></div>');
+  $("body .container").prepend('<div style="position: absolute;width: inherit; z-index: -1; height: 200px; background: url(' + obj.BACKGROUND_IMAGE + '); background-size: '+obj.BACKGROUND_SIZE+'; background-attachment: fixed;"></div>');
   if (site == "main") {
     addQuestionOfTheDay();
-    $("#content").css('background', 'none');
-    $("body > .container").css("box-shadow", "none");
     $(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
     document.head.innerHTML += "<style>.question-hyperlink, .answer-hyperlink{color:#5DA261}.question-hyperlink:visited, .answer-hyperlink:visited,.started-link:visited{color:#254127}" +
       "#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover{color:#5DA261;border-bottom:2px solid #5DA261}" +
