@@ -236,6 +236,10 @@ if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
     '.message:hover .action-link, .message:hover .action-link .img.menu { background-color: #F3F3F3 !important }' +
     '.message:hover .action-link .img.menu { background-image: url(http://i.stack.imgur.com/3gBKh.png) !important; background-size: 16px 16px; background-position: 0px -1px !important; }' +
 
+    '.popup { border-radius: 2px; border: none; box-shadow: 0 0 8px #9C9C9C }' +
+    
+    '.popup .small-site-logo { right: initial; top: 38px }'
+    
     'span.mention { padding: 0px 3px; background: rgba(193, 255, 185, 0.73) }' +
     '</style>';
 }
