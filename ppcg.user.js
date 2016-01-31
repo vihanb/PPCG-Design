@@ -226,8 +226,8 @@ if ((window.location + "").search("//(?:meta.)?codegolf.stackexchange.com") >= 0
 
 
 
-var otherTags = ["code-challenge", "math", "string", "popularity-contest",
-                 "ascii-art", "number", "kolmogorov-complexity", "graphical-output",
+var otherTags = ["string", "popularity-contest", "ascii-art", "number",
+                 "kolmogorov-complexity", "graphical-output", "king-of-the-hill", "fastest-code",
                  "restricted-source", "arithmetic", "sequence", "game",
                  "tips", "geometry", "number-theory", "random", "primes",
                  "array-manipulation", "date", "image-processing", "graphs",
@@ -244,92 +244,87 @@ function getCookie(name) {
 
 
 function getValidQuestions(tag, onDone) {
-    var url = `https://api.stackexchange.com/2.2/search/advanced?order=desc&min=7&todate=1420070400&sort=votes&closed=False&tagged=${tag}&site=codegolf`;
-    httpGetAsync(url, function (ret) {
-        onDone(JSON.parse(ret)['items']);
-    });
+  var url = 'https://api.stackexchange.com/2.2/search/advanced?order=desc&key=DwnkTjZvdT0qLs*o8rNDWw((&min=7&todate=1420070400&sort=votes&closed=False&tagged='+tag+'&site=codegolf';
+  httpGetAsync(url, function (ret) {
+    onDone(JSON.parse(ret)['items']);
+  });
 }
 
 
 /* check the cookies for the question, or grab a new one. return format is [url, title] */
 function getQuestion(tag, callback) {
-    var cookieSuffix = '-tag-question';
-    // cookieSep is a space
-    var cookieVal = getCookie(tag + cookieSuffix);
-    if (cookieVal) {
-        var parts = cookieVal.split(/ (.+)?/);
-        var url = parts[0];
-        delete parts[0];
-        var title = parts.join(' ');
-        callback([url, title]);
-        return 0;
-    }
-    
-    getValidQuestions(tag, function (ret) {
-        var quest = ret[Math.floor(Math.random()*ret.length)];
-        var url = quest['link'];
-        var title = quest['title'];
-        
-        document.cookie = `${tag + cookieSuffix}=${url} ${title};max-age=86400;`;
-        callback([url, title]);
-    });
+  var cookieSuffix = '-tag-question';
+  // cookieSep is a space
+  var cookieVal = getCookie(tag + cookieSuffix);
+  if (cookieVal) {
+    var parts = cookieVal.split(/ (.+)?/);
+    var url = parts[0];
+    delete parts[0];
+    var title = parts.join(' ');
+    callback([url, title]);
+    return 0;
+  }
+
+  getValidQuestions(tag, function (ret) {
+    var quest = ret[Math.floor(Math.random()*ret.length)];
+    var url = quest['link'];
+    var title = quest['title'];
+
+    document.cookie = (tag + cookieSuffix)+'='+url+' '+title+';max-age=86400';
+    callback([url, title]);
+  });
 }
 
 
 function addTag(tag) {
-    getQuestion(tag, function (a) {
-        qS('#question-of-the-day').innerHTML += `
-<div id=""> 
-      <a href="/questions/tagged/${tag}" class="post-tag user-tag" title="show questions tagged '${tag}'" rel="tag">${tag}</a>
-   </div>
-<div class="favicon favicon-codegolf" title="Unix &amp; Linux Stack Exchange"></div>
-<a href="${a[0]}" style="font-weight: normal; font-size: 12px; white-space: normal; width: 90%; vertical-align: top; margin-left: 5px;">${a[1]}</a><br>`;
-    });
+  getQuestion(tag, function (a) {
+    qS('#question-of-the-day').innerHTML += 
+      '<div class="qod-qitem"><span>'+
+      '<a href="/questions/tagged/'+tag+'" class="post-tag user-tag" title="show questions tagged \''+tag+'\'" rel="tag">'+tag+
+      '</a></span><a href="'+a[0].replace(/'/g, '&apos;')+'">'+a[1]+'</a></div>';
+  });
 }
 
 function httpGetAsync(theUrl, callback){
-    // http://stackoverflow.com/a/4033310/4683264
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            callback(xmlHttp.responseText);
-        }
-    };
-    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
-    xmlHttp.send(null);
+  // http://stackoverflow.com/a/4033310/4683264
+  var xmlHttp = new XMLHttpRequest();
+  xmlHttp.onreadystatechange = function() {
+    if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+      callback(xmlHttp.responseText);
+    }
+  };
+  xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+  xmlHttp.send(null);
 }
 
 function addOtherTags() {
-    var cookieName = 'other-tags-today';
-    var tags = getCookie(cookieName);
-    if (tags) {tags = tags.split(' ');}
-    else {
-        tags = [otherTags[Math.floor(Math.random()*otherTags.length)],
-                otherTags[Math.floor(Math.random()*otherTags.length)]];
-        document.cookie = `${cookieName}=${tags[0]} ${tags[1]};max-age=86400;`;
-    }
-    
-    tags.forEach(function (a) {
-        addTag(a);
-    });
+  var cookieName = 'other-tags-today';
+  var tags = getCookie(cookieName);
+  if (tags) {tags = tags.split(' ');}
+  else {
+    tags = [otherTags[Math.floor(Math.random()*otherTags.length)],
+            otherTags[Math.floor(Math.random()*otherTags.length)]];
+    document.cookie = cookieName + "=" + tags[0] + " " + tags[1] + ";max-age=86400;";;
+  }
+
+  tags.forEach(function (a) {
+    addTag(a);
+  });
 }
 
 console.log('2');
 function addQuestionOfTheDay() {
-    var questionOfTheDayHtml = `
-<div class="module" id="question-of-the-day">
-   <h4 id="h-inferred-tags">Questions of the day</h4>
-</div>`;   
-    
-    // below the blog posts
-    var favTags = qS('div.module:nth-child(2)');
-    favTags.insertAdjacentHTML('afterend', questionOfTheDayHtml);
-    
-    addTag('code-golf');
-    addTag('king-of-the-hill');
-    addTag('fastest-code');
-    
-    addOtherTags();
+  var questionOfTheDayHtml = '<div class="module" id="question-of-the-day"><h4 id="h-inferred-tags">Questions of the Day</h4></div>';
+
+  // below the blog posts
+  var favTags = qS('div.module:nth-child(2)');
+  favTags.insertAdjacentHTML('afterend', questionOfTheDayHtml);
+
+  addTag('code-golf');
+  addTag('code-challenge');//king-of-the-hill
+  addTag('math');//fastest-code
+
+  addOtherTags();
 }
 
 if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
@@ -421,6 +416,10 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
      "#sidebar .module.community-bulletin{background:$$BULLETIN_BG_COLOR;}" +
      "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}" +
      ".yes-hover{cursor:pointer !important;}" +
+     '.qod-qitem { display: table }' +
+     '.qod-qitem > *{ display: table-cell; vertical-align:middle }' +
+     '.qod-qitem > *:not(.post-tag) { font-weight: normal; font-size: 12px; white-space: normal; padding-left: 5px; }' +
+     '.qod-qitem:not(:first-child) { margin-top: 5px; }'+
      ".LEADERBOARD {border-collapse: collapse} .LEADERBOARD td { padding: 6px 8px } .LEADERBOARD tr:nth-child(even) { background-color: #F1F1F1 } .LEADERBOARD thead { border-bottom: 1px solid #DDD }" +
      "html,body{font-family:" + TEXT_FONT + "}" +
      "#hlogo{margin: 25px 0 0 0;}" +
