@@ -124,7 +124,7 @@ var main = {
   HEADER_TEXT_COLOR: "#FFF",
   CURR_TAB_COLOR: "#62BA15",
   BULLETIN_BG_COLOR: "#fff8dc",
-  STATS_COLOR: "#FAFAFA",
+  STATS_COLOR: "white",
 
   TAG_COLOR: "#D4F493",
   TAG_HOVER: "#329300",
@@ -163,7 +163,7 @@ var meta = {
   HEADER_TEXT_COLOR: "#FFF",
   CURR_TAB_COLOR: "rgb(72,125,75)",
   BULLETIN_BG_COLOR: "#fff8dc",
-  STATS_COLOR: "#FAFAFA",
+  STATS_COLOR: "white",
   TAG_COLOR: "",
   TAG_BORDER_COLOR: "",
   BUTTON_COLOR: "#303030",
