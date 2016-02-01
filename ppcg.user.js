@@ -244,7 +244,7 @@ if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
     '.catchup-marker .messages { border-top: 1px solid #F2F2F2; }' +
     
     '.popup { border-radius: 2px; border: none; box-shadow: 0 0 8px #9C9C9C }' +
-    '.popup .small-site-logo { right: initial; top: 38px }'
+    '.popup .small-site-logo { right: initial; top: 38px }' +
     
     'span.mention { padding: 0px 3px; background: #D2FFCC !important }' +
     '</style>';
