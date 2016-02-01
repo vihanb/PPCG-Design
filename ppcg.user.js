@@ -107,6 +107,7 @@ var main = {
 
   // Set to empty string for no background image
   BACKGROUND_IMAGE: "//i.stack.imgur.com/vAWfF.png ",
+  PAGE404: "http://i.stack.imgur.com/ToEtE.png",
   BACKGROUND_SIZE: "650px 150px",
   BG_COL: "#175D2E",
   BG_COL_HOVER: "white",
@@ -151,6 +152,7 @@ var meta = {
 
   // Set to empty string for no background image
   BACKGROUND_IMAGE: "//i.stack.imgur.com/4535h.png",
+  PAGE404: "",
   BACKGROUND_SIZE: "650px 150px",
   BG_COL: "#474747",
   BG_COL_HOVER: "#474747",
@@ -199,7 +201,7 @@ if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
   $("#roomname").css("font-family", "'Lato Black'");
   $("#searchbox").css("padding-left", "4px !important");
 
-/*  $("body").append('<img id="CHATBOX" style="z-index: 1000; display:none; position: fixed;">');
+  /*  $("body").append('<img id="CHATBOX" style="z-index: 1000; display:none; position: fixed;">');
 
   $(document).on('mouseenter', 'li[id^="summary_"], li[id^="summary_"] *', function() {
     $("#CHATBOX").show();
@@ -235,17 +237,17 @@ if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
 
     '.message:hover .action-link, .message:hover .action-link .img.menu { background-color: #F3F3F3 !important }' +
     '.message:hover .action-link .img.menu { background-image: url(http://i.stack.imgur.com/3gBKh.png) !important; background-size: 16px 16px; background-position: 0px -1px !important; }' +
-    
+
     '.monologue { margin-bottom: 0; padding-top: 0; }' +
     '.monologue:first-child .messages { border-top: 1px solid #F2F2F2 }' +
     '.messages { background-color: #fff; padding: 8px 8px 8px 0px; border-radius: 0; border-top: none }' +
-    
+
     '.catchup-marker { border: none !important; margin-top: 10px }' +
     '.catchup-marker .messages { border-top: 1px solid #F2F2F2; }' +
-    
+
     '.popup { border-radius: 2px; border: none; box-shadow: 0 0 8px #9C9C9C }' +
     '.popup .small-site-logo { right: initial; top: 38px }' +
-    
+
     'span.mention { padding: 0px 3px; background: #D2FFCC !important }' +
     '</style>';
 }
@@ -393,6 +395,7 @@ function addQuestionOfTheDay() {
 }
 
 if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
+
   if (site == "main") {
     var x = qS(".beta-title").parentElement;
     qS(".beta-title").parentElement.removeChild(qS(".beta-title"));
@@ -550,6 +553,17 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       document.getElementById("footer").setAttribute("style", 'background: transparent url("'+obj.BACKGROUND_IMAGE+'") repeat fixed 0% 0% / '+obj.BACKGROUND_SIZE+';');
     }, 300);
   });
+  // identify 404
+  if (~document.title.indexOf("Page Not Found - Programming Puzzles & Code Golf")) {
+    console.log("404, PAGE NOT FOUND");
+    var TEXT = $("#mainbar-full > .leftcol > p")[0];
+    if (TEXT) {
+      TEXT.innerHTML = "We couldn't find the page you wanted. We did, however found this program";
+    }
+    $('#mainbar-full > .rightcol > img').attr('src', obj.PAGE404);
+  }
+
+  // votes
   if ((window.location + "").indexOf("codegolf.stackexchange.com") > -1) {
     /*=== SHOWS VOTE COUNTS ===*/
     void
