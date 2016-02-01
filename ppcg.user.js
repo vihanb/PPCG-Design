@@ -283,8 +283,7 @@ if ((window.location + "").search("//(?:meta.)?codegolf.stackexchange.com") >= 0
   });
 }
 
-
-
+/* These are the tag choices */
 var otherTags = ["string", "popularity-contest", "ascii-art", "number",
                  "kolmogorov-complexity", "graphical-output", "king-of-the-hill", "fastest-code",
                  "restricted-source", "arithmetic", "sequence", "game",
@@ -294,6 +293,7 @@ var otherTags = ["string", "popularity-contest", "ascii-art", "number",
                  "path-finding", "puzzle-solver", "underhanded", "source-layout",
                  "base-conversion"];
 
+/* Get a cookie (I wish it was a real cookie ;) */
 function getCookie(name) {
   // http://stackoverflow.com/a/15724300/4683264
   var value = "; " + document.cookie;
@@ -301,7 +301,7 @@ function getCookie(name) {
   if (parts.length == 2) return parts.pop().split(";").shift();
 }
 
-
+/* Get all questions that are taged, are >1yr old, and have a score >7 */
 function getValidQuestions(tag, onDone) {
   var url = 'https://api.stackexchange.com/2.2/search/advanced?order=desc&key=DwnkTjZvdT0qLs*o8rNDWw((&min=7&todate=1420070400&sort=votes&closed=False&tagged='+tag+'&site=codegolf';
   httpGetAsync(url, function (ret) {
@@ -310,15 +310,17 @@ function getValidQuestions(tag, onDone) {
 }
 
 
-/* check the cookies for the question, or grab a new one. return format is [url, title] */
+/* Check the cookies for the question, or grab a new one. return format is [url, title] */
 function getQuestion(tag, callback) {
+  // prevent overlap
   var cookieSuffix = '-tag-question';
-  // cookieSep is a space
+  // separator is a space
   var cookieVal = getCookie(tag + cookieSuffix);
   if (cookieVal) {
+    // parts splits at a space, so the format is [url, word1, word2, word3, ...]
     var parts = cookieVal.split(/ (.+)?/);
     var url = parts[0];
-    delete parts[0];
+    delete parts[0];// remove the url so we can join the title with a space
     var title = parts.join(' ');
     callback([url, title]);
     return 0;
@@ -334,7 +336,7 @@ function getQuestion(tag, callback) {
   });
 }
 
-
+/* Add a tag to the question of the day widgit */
 function addTag(tag) {
   getQuestion(tag, function (a) {
     qS('#question-of-the-day').innerHTML += 
@@ -344,6 +346,7 @@ function addTag(tag) {
   });
 }
 
+/* General purpose function, get a http request async */
 function httpGetAsync(theUrl, callback){
   // http://stackoverflow.com/a/4033310/4683264
   var xmlHttp = new XMLHttpRequest();
@@ -356,6 +359,7 @@ function httpGetAsync(theUrl, callback){
   xmlHttp.send(null);
 }
 
+/* Add the bottom 2 rotating tags to the question of the day widgit */
 function addOtherTags() {
   var cookieName = 'other-tags-today';
   var tags = getCookie(cookieName);
@@ -371,6 +375,7 @@ function addOtherTags() {
   });
 }
 
+/* Add the question of the day widgit */
 function addQuestionOfTheDay() {
   var questionOfTheDayHtml = '<div class="module" id="question-of-the-day"><h4 id="h-inferred-tags">Questions of the Day</h4></div>';
 
@@ -481,6 +486,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
      "html,body{font-family:" + TEXT_FONT + "}" +
      "#hlogo{margin: 25px 0 0 0;}" +
      "#content{margin-top: 7px;}"+
+     '#footer #footer-sites a, #footer th {color: #BFBFBF;}'+
      ".container{box-shadow: none !important;}"+
      '#content{background:$$STATS_COLOR !important;}'+
      "#hmenus > div.nav:not(.mainnavs) a{text-align:center; color: $$BG_COL;font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;background: $$BG_START;padding: 8px 12px;-webkit-transition: color 0.15s ease, background 0.15s ease;-moz-transition: color 0.15s ease, background 0.15s ease;-ms-transition: color 0.15s ease, background 0.15s ease;-o-transition: color 0.15s ease, background 0.15s ease;}"+
@@ -541,7 +547,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   }
   window.addEventListener("load", function() {
     setTimeout(function() {
-      document.getElementById("footer").style.backgroundColor = obj.BACKGROUND_COLOR
+      document.getElementById("footer").setAttribute("style", 'background: transparent url("'+obj.BACKGROUND_IMAGE+'") repeat fixed 0% 0% / '+obj.BACKGROUND_SIZE+';');
     }, 300);
   });
   if ((window.location + "").indexOf("codegolf.stackexchange.com") > -1) {
