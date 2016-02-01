@@ -481,6 +481,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
      "html,body{font-family:" + TEXT_FONT + "}" +
      "#hlogo{margin: 25px 0 0 0;}" +
      "#content{margin-top: 7px;}"+
+     '#footer #footer-sites a, #footer th {color: #BFBFBF;}'+
      ".container{box-shadow: none !important;}"+
      '#content{background:$$STATS_COLOR !important;}'+
      "#hmenus > div.nav:not(.mainnavs) a{text-align:center; color: $$BG_COL;font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;background: $$BG_START;padding: 8px 12px;-webkit-transition: color 0.15s ease, background 0.15s ease;-moz-transition: color 0.15s ease, background 0.15s ease;-ms-transition: color 0.15s ease, background 0.15s ease;-o-transition: color 0.15s ease, background 0.15s ease;}"+
@@ -541,7 +542,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   }
   window.addEventListener("load", function() {
     setTimeout(function() {
-      document.getElementById("footer").style.backgroundColor = obj.BACKGROUND_COLOR
+      document.getElementById("footer").setAttribute("style", 'background: transparent url("'+obj.BACKGROUND_IMAGE+'") repeat fixed 0% 0% / '+obj.BACKGROUND_SIZE+';');
     }, 300);
   });
   if ((window.location + "").indexOf("codegolf.stackexchange.com") > -1) {
