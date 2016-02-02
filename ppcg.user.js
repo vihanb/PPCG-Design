@@ -119,7 +119,7 @@ var main = {
   NO_LEADERBOARD: (localStorage.getItem("main.NO_LEADERBOARD") === "true"),
 
   // You can use RGB, hex, or color names
-  BACKGROUND_COLOR: "#EDFAEE",
+  BACKGROUND_COLOR: "#FAFAFA",
   HEADER_BG_COLOR: "transparent",
   HEADER_BG_IMAGE: "",
   HEADER_TEXT_COLOR: "#FFF",
@@ -163,7 +163,7 @@ var meta = {
   BG_REV: "white",
 
   // You can use RGB, hex, or color names
-  BACKGROUND_COLOR: "#F4F4F4",
+  BACKGROUND_COLOR: "#FAFAFA",
   HEADER_BG_COLOR: "transparent",
   HEADER_TEXT_COLOR: "#FFF",
   CURR_TAB_COLOR: "rgb(72,125,75)",
