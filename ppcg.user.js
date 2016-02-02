@@ -126,9 +126,6 @@ var main = {
   CURR_TAB_COLOR: "#62BA15",
   BULLETIN_BG_COLOR: "#fff8dc",
   STATS_COLOR: "#FAFAFA",
-    
-  // Border can be anything that works for `background:`
-  BORDER_COLOR: '#FFF',
 
   TAG_COLOR: "#D4F493",
   TAG_HOVER: "#329300",
@@ -172,9 +169,6 @@ var meta = {
   TAG_COLOR: "",
   TAG_BORDER_COLOR: "",
   BUTTON_COLOR: "#303030",
-    
-  // Border can be anything that works for `background:`
-  BORDER_COLOR: '#FFF',
 
   // Specify nothing to make these default color
   BOUNTY_COLOR: "rgb(72,125,75)",
@@ -183,8 +177,7 @@ var meta = {
 };
 
 var darktheme = {
-  BACKGROUND_COLOR: "#FFF",
-  BORDER_COLOR: 'transparent'
+  BACKGROUND_COLOR: "black"
 };
 
 var optionbox = { // Customizes option box
@@ -194,10 +187,7 @@ var optionbox = { // Customizes option box
 
 var BGHEIGHT = 0; // this + 130
 
-if (localStorage.getItem('main.MODE_DARK') == "true") {
-    main = $.extend(main, darktheme);
-    meta = $.extend(meta, darktheme);
-} 
+if (localStorage.getItem('main.MODE_DARK') == "true") main = $.extend(main, darktheme);
 
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
 document.head.innerHTML += '<style>.favicon-codegolf{background-position: initial !important; background-image: url("' + main.FAVICON + '"); background-size: 100% 100% !important;}' +
@@ -211,7 +201,7 @@ if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
   $("#roomname").css("font-family", "'Lato Black'");
   $("#searchbox").css("padding-left", "4px !important");
 
-/*  $("body").append('<img id="CHATBOX" style="z-index: 1000; display:none; position: fixed;">');
+  /*  $("body").append('<img id="CHATBOX" style="z-index: 1000; display:none; position: fixed;">');
 
   $(document).on('mouseenter', 'li[id^="summary_"], li[id^="summary_"] *', function() {
     $("#CHATBOX").show();
@@ -247,18 +237,18 @@ if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
 
     '.message:hover .action-link, .message:hover .action-link .img.menu { background-color: #F3F3F3 !important }' +
     '.message:hover .action-link .img.menu { background-image: url(http://i.stack.imgur.com/3gBKh.png) !important; background-size: 16px 16px; background-position: 0px -1px !important; }' +
-    
+
     '.monologue { margin-bottom: 0; padding-top: 0; }' +
     '.monologue:first-child .messages { border-top: 1px solid #F2F2F2 }' +
     '.messages { background-color: #fff; padding: 8px 8px 8px 0px; border-radius: 0; border-top: none }' +
-    
+
     '.catchup-marker { border: none !important; margin-top: 10px }' +
     '.catchup-marker .messages { border-top: 1px solid #F2F2F2; }' +
-    
+
     '.popup { border-radius: 2px; border: none; box-shadow: 0 0 8px #9C9C9C }' +
-    '.popup .small-site-logo { right: initial; top: 38px }'
-    
-    'span.mention { padding: 0px 3px; background: rgba(193, 255, 185, 0.73) }' +
+    '.popup .small-site-logo { right: initial; top: 38px }' +
+
+    'span.mention { padding: 0px 3px; background: #D2FFCC !important }' +
     '</style>';
 }
 if ((window.location + "").search("//(?:meta.)?codegolf.stackexchange.com") >= 0) {
@@ -295,8 +285,7 @@ if ((window.location + "").search("//(?:meta.)?codegolf.stackexchange.com") >= 0
   });
 }
 
-
-
+/* These are the tag choices */
 var otherTags = ["string", "popularity-contest", "ascii-art", "number",
                  "kolmogorov-complexity", "graphical-output", "king-of-the-hill", "fastest-code",
                  "restricted-source", "arithmetic", "sequence", "game",
@@ -306,6 +295,7 @@ var otherTags = ["string", "popularity-contest", "ascii-art", "number",
                  "path-finding", "puzzle-solver", "underhanded", "source-layout",
                  "base-conversion"];
 
+/* Get a cookie (I wish it was a real cookie ;) */
 function getCookie(name) {
   // http://stackoverflow.com/a/15724300/4683264
   var value = "; " + document.cookie;
@@ -313,7 +303,7 @@ function getCookie(name) {
   if (parts.length == 2) return parts.pop().split(";").shift();
 }
 
-
+/* Get all questions that are taged, are >1yr old, and have a score >7 */
 function getValidQuestions(tag, onDone) {
   var url = 'https://api.stackexchange.com/2.2/search/advanced?order=desc&key=DwnkTjZvdT0qLs*o8rNDWw((&min=7&todate=1420070400&sort=votes&closed=False&tagged='+tag+'&site=codegolf';
   httpGetAsync(url, function (ret) {
@@ -322,15 +312,17 @@ function getValidQuestions(tag, onDone) {
 }
 
 
-/* check the cookies for the question, or grab a new one. return format is [url, title] */
+/* Check the cookies for the question, or grab a new one. return format is [url, title] */
 function getQuestion(tag, callback) {
+  // prevent overlap
   var cookieSuffix = '-tag-question';
-  // cookieSep is a space
+  // separator is a space
   var cookieVal = getCookie(tag + cookieSuffix);
   if (cookieVal) {
+    // parts splits at a space, so the format is [url, word1, word2, word3, ...]
     var parts = cookieVal.split(/ (.+)?/);
     var url = parts[0];
-    delete parts[0];
+    delete parts[0];// remove the url so we can join the title with a space
     var title = parts.join(' ');
     callback([url, title]);
     return 0;
@@ -346,7 +338,7 @@ function getQuestion(tag, callback) {
   });
 }
 
-
+/* Add a tag to the question of the day widgit */
 function addTag(tag) {
   getQuestion(tag, function (a) {
     qS('#question-of-the-day').innerHTML += 
@@ -356,6 +348,7 @@ function addTag(tag) {
   });
 }
 
+/* General purpose function, get a http request async */
 function httpGetAsync(theUrl, callback){
   // http://stackoverflow.com/a/4033310/4683264
   var xmlHttp = new XMLHttpRequest();
@@ -368,6 +361,7 @@ function httpGetAsync(theUrl, callback){
   xmlHttp.send(null);
 }
 
+/* Add the bottom 2 rotating tags to the question of the day widgit */
 function addOtherTags() {
   var cookieName = 'other-tags-today';
   var tags = getCookie(cookieName);
@@ -383,6 +377,7 @@ function addOtherTags() {
   });
 }
 
+/* Add the question of the day widgit */
 function addQuestionOfTheDay() {
   var questionOfTheDayHtml = '<div class="module" id="question-of-the-day"><h4 id="h-inferred-tags">Questions of the Day</h4></div>';
 
@@ -400,10 +395,11 @@ function addQuestionOfTheDay() {
 }
 
 if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
+
   if (site == "main") {
     var x = qS(".beta-title").parentElement;
     qS(".beta-title").parentElement.removeChild(qS(".beta-title"));
-    x.innerHTML = "<table id=\"newlogo\"><tr><td><img style=\"margin-top: "+BGHEIGHT+"px;\" src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";      
+    x.innerHTML = "<table id=\"newlogo\"><tr><td><img style=\"margin-top: "+BGHEIGHT+"px;\" src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
     // Leaderboard
     if (!main.NO_LEADERBOARD && $('a.post-tag[href="/questions/tagged/code-golf"]')[0] && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
       var answers = [];
@@ -474,16 +470,11 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       }
     });
   }
-    
-  // Wrap content with a div
-  $("#content").wrap('<div id="content-wrapper">');
 
   // style
   $("#mainbar").css('padding', '15px');
   document.head.innerHTML +=
     ("<style>@import url(" + FONT_URL + ");" +
-     'body {background: transparent url("'+obj.BACKGROUND_IMAGE+'") repeat fixed 0% 0% / '+obj.BACKGROUND_SIZE+';}'+
-     '#content-wrapper {background: '+obj.BORDER_COLOR+';}'+
      ".envelope-on,.envelope-off,.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.star-on,.star-off,.comment-up-off,.comment-up-on,.comment-flag,.edited-yes,.feed-icon,.vote-accepted-off,.vote-accepted-on,.vote-accepted-bounty,.badge-earned-check,.delete-tag,.grippie,.expander-arrow-hide,.expander-arrow-show,.expander-arrow-small-hide,.expander-arrow-small-show,.anonymous-gravatar,.badge1,.badge2,.badge3,.gp-share,.fb-share,.twitter-share,#notify-containerspan.notify-close,.migrated.to,.migrated.from{background-image:url(\"$$SPRITE_SHEET\");background-size: initial;}" +
      ".youarehere{color:$$CURR_TAB_COLOR !important;border-bottom:2px solid $$CURR_TAB_COLOR !important;}" +
      (obj.BOUNTY_COLOR ? ".bounty-indicator-tab{background:$$BOUNTY_BG_COLOR;color:$$BOUNTY_COLOR !important;}" : "") +
@@ -515,8 +506,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
      "#header{background:$$HEADER_BG_COLOR;}#header *, #hlogo a{color:$$HEADER_TEXT_COLOR;}" +
      "a.post-tag{border-radius: 0;text-align:center;font-family:"+MONOSPACE_FONT+";font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border:none; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; border-bottom: 2px solid $$TAG_SHADOW_COLOR}" +
      "a.post-tag:hover{border-bottom-color: $$TAG_HOVER_SHADOW_COLOR;background: $$TAG_HOVER; color: white}" +
-     "div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}"+
-     "#content{background-color:"+obj.BACKGROUND_COLOR+" !important;}" +
+     "div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}" +
      "#newlogo{top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}" +
      "#newlogo, #hlogo a{font-family:" + HEADER_FONT + ";}"+
      "</style>").replace(/\$\$(\w+)/g, function(_, x) {
@@ -547,7 +537,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       });
     });
   }
-//  $("body .container").prepend('<div style="position: absolute;width: inherit; z-index: 0; height: 130px; background: url(' + obj.BACKGROUND_IMAGE + '); background-size: '+obj.BACKGROUND_SIZE+'; background-attachment: fixed;"></div>');
+  $("body .container").prepend('<div style="position: absolute;width: inherit; z-index: 0; height: 130px; background: url(' + obj.BACKGROUND_IMAGE + '); background-size: '+obj.BACKGROUND_SIZE+'; background-attachment: fixed;"></div>');
   if (site == "main") {
     addQuestionOfTheDay();
     $(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
