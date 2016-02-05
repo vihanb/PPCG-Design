@@ -11,26 +11,26 @@
 // @updateURL   https://rawgit.com/vihanb/PPCG-Design/master/ppcg.user.js
 // ==/UserScript==
 function qS(x) {
-  return document.querySelector(x)
+  return document.querySelector(x);
 }
 
 function unicodes(x) {
   return (x.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\n|./g) || []).map(function(c) {
-    return c[1] ? (c.charCodeAt(0) & 1023) * 1024 + (c.charCodeAt(1) & 1023) + 65536 : c.charCodeAt(0)
-  })
+    return c[1] ? (c.charCodeAt(0) & 1023) * 1024 + (c.charCodeAt(1) & 1023) + 65536 : c.charCodeAt(0);
+  });
 }
 
 function chars(x) {
-  return unicodes(x).length
+  return unicodes(x).length;
 }
 
 function fchars(x) {
   var y = chars(x);
-  return y + " char" + (y == 1 ? "" : "s")
+  return y + " char" + (y == 1 ? "" : "s");
 }
 
 function bf(x, y) {
-  return x + " " + y + " byte" + (x == 1 ? "" : "s")
+  return x + " " + y + " byte" + (x == 1 ? "" : "s");
 }
 
 function bytes(x, y) { // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
@@ -42,7 +42,7 @@ function bytes(x, y) { // Takes in a length of text and piece of header text, an
   if (PARSE_HEXDUMPS) {
     var a = "";
     x.replace(/[\da-f]{6,8}:? ((?:[\da-f][\da-f] ?){10,})[^\n]*\n?/gi, function(_, z) {
-      a += z.replace(/\s/g, '')
+    	a += z.replace(/\s/g, '');
     });
     if (a) return bf(a.length / 2, "hex");
     if (/^[\da-f\s-]+$/i.test(x.replace(/\n/g, ''))) return bf(x.replace(/[\s-]/g, '').length / 2, "hex");
@@ -51,11 +51,10 @@ function bytes(x, y) { // Takes in a length of text and piece of header text, an
   if (/iso.?8859.7/i.test(y) || ISO_8859_7.test(y)) return bf(chars(x), "ISO-8859-7");
   if (/utf.?16/i.test(y) || UTF_16.test(y)) return bf(x.length * 2, "UTF-16");
   if (custom.test(y)) return bf(chars(x), y.match(custom)[0]);
-  // Else, fallback to UTF-8
   return bf(unicodes(x).map(function(c) {
-    return c >> 16 ? 4 : c >> 11 ? 3 : c >> 7 ? 2 : 1
+    return c >> 16 ? 4 : c >> 11 ? 3 : c >> 7 ? 2 : 1;
   }).reduce(function(a, b) {
-    return a + b
+    return a + b;
   }, 0), "UTF-8");
 }
 
@@ -97,7 +96,6 @@ var FONT_URL = "//fonts.googleapis.com/css?family=Lato:700|Open+Sans|Inconsolata
 // Colors
 var MOD_FLAIR = "#F0C800"; // Mod diamond
 var MOD_FLAIR_HOVER = "#FFE32E";
-
 /** ~~~~~~~~~~~~~~~~ MAIN SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
 
 var main = {
@@ -113,7 +111,7 @@ var main = {
   BG_COL_HOVER: "white",
   BG_START: "white",
   BG_REV: "#329300",
-
+  
   BACKGROUND_LIGHT: (localStorage.getItem("main.BACKGROUND_LIGHT") === "true"), // Lighter shade of the background, CHANGE THROUGH OPTIONS
   MODE_DARK: (localStorage.getItem("main.MODE_DARK") === "true"),
   NO_LEADERBOARD: (localStorage.getItem("main.NO_LEADERBOARD") === "true"),
@@ -151,7 +149,7 @@ var meta = {
   SEARCH_TEXT: "Search meta.codegolf.SE",
 
   // Set to empty string for no background image
-  BACKGROUND_IMAGE: "//i.stack.imgur.com/4535h.png",
+  BACKGROUND_IMAGE: "//i.stack.imgur.com/4535h.png ",
   PAGE404: "",
   BACKGROUND_SIZE: "650px 150px",
   BG_COL: "#474747",
@@ -177,7 +175,16 @@ var meta = {
 };
 
 var darktheme = {
-  BACKGROUND_COLOR: "black"
+  BACKGROUND_COLOR: "red",
+  BACKGROUND_IMAGE: "//i.stack.imgur.com/vAWfF.png ",
+  BULLETIN_TITLE: "#000000",
+  BULLETIN_BG_COLOR: "rgb(158,158,158)",
+  META_LINK_COLOR:"rgb(34,36,38)"
+};
+
+var lightbg = {
+  BACKGROUND_COLOR: "red",
+  BACKGROUND_IMAGE: "//i.stack.imgur.com/t8GhU.png"
 };
 
 var optionbox = { // Customizes option box
@@ -188,7 +195,10 @@ var optionbox = { // Customizes option box
 var BGHEIGHT = 0; // this + 130
 
 if (localStorage.getItem('main.MODE_DARK') == "true") main = $.extend(main, darktheme);
-
+if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true"){
+	main = $.extend(main, lightbg);
+	document.body.style.backgroundRepeat="repeat";
+}
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
 document.head.innerHTML += '<style>.favicon-codegolf{background-position: initial !important; background-image: url("' + main.FAVICON + '"); background-size: 100% 100% !important;}' +
   '.favicon-codegolfmeta{background-position: initial !important; background-image: url("' + meta.FAVICON + '"); background-size: 100% 100% !important;}</style>';
@@ -311,7 +321,10 @@ function getValidQuestions(tag, onDone) {
   });
 }
 
-
+//x=document.getElementsByClassName("community-bulletin")[0].getElementsByClassName('question-hyperlink')
+//for (var i=0;i<x.length;i++){
+//	x[i].style.color=META_LINK_COLOR
+//}
 /* Check the cookies for the question, or grab a new one. return format is [url, title] */
 function getQuestion(tag, callback) {
   // prevent overlap
@@ -369,7 +382,7 @@ function addOtherTags() {
   else {
     tags = [otherTags[Math.floor(Math.random()*otherTags.length)],
             otherTags[Math.floor(Math.random()*otherTags.length)]];
-    document.cookie = cookieName + "=" + tags[0] + " " + tags[1] + ";max-age=86400;";;
+    document.cookie = cookieName + "=" + tags[0] + " " + tags[1] + ";max-age=86400;";
   }
 
   tags.forEach(function (a) {
@@ -479,6 +492,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
      ".youarehere{color:$$CURR_TAB_COLOR !important;border-bottom:2px solid $$CURR_TAB_COLOR !important;}" +
      (obj.BOUNTY_COLOR ? ".bounty-indicator-tab{background:$$BOUNTY_BG_COLOR;color:$$BOUNTY_COLOR !important;}" : "") +
      "#sidebar .module.community-bulletin{background:$$BULLETIN_BG_COLOR;}" +
+     ".bulletin-title{color:$$BULLETIN_TITLE;}" +
      "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}" +
      ".yes-hover{cursor:pointer !important;}" +
      '.qod-qitem { display: table }' +
@@ -541,7 +555,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   if (site == "main") {
     addQuestionOfTheDay();
     $(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
-    document.head.innerHTML += "<style>.question-hyperlink, .answer-hyperlink{color:#5DA261}.question-hyperlink:visited, .answer-hyperlink:visited,.started-link:visited{color:#254127}" +
+    document.head.innerHTML += "<style>.question-hyperlink, .answer-hyperlink{color:rgb(62,107,64)}.question-hyperlink:visited, .answer-hyperlink:visited,.started-link:visited{color:rgb(30,51,31)}" +
       "#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover{color:#5DA261;border-bottom:2px solid #5DA261}" +
       "a:hover,.question-hyperlink:hover,.answer-hyperlink:hover,.started-link:hover{color:#487D4B}" +
       "a{color:#5DA261}" +
