@@ -227,6 +227,10 @@ if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
     '@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic&subset=latin,greek);'+
     'body { font-family: "Open Sans" }' +
 
+    '#container { padding-left: 0px }' +
+    '#main { width: 72.4%; }' +
+    '#sidebar { background-color: #F4F4F4; box-shadow: 0px 0px 3px #BBB inset; }' +
+    
     '.button { cursor: pointer; background: #96db62; border: none; border-bottom: 1px solid rgb(106, 194, 65) }' +
     '.button:hover { background: #51cc47; border-bottom-color: #449656; }' +
 
@@ -238,12 +242,20 @@ if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
     '.message:hover .action-link, .message:hover .action-link .img.menu { background-color: #F3F3F3 !important }' +
     '.message:hover .action-link .img.menu { background-image: url(http://i.stack.imgur.com/3gBKh.png) !important; background-size: 16px 16px; background-position: 0px -1px !important; }' +
 
-    '.monologue { margin-bottom: 0; padding-top: 0; }' +
+    // All hail display: flex, our lord and savior from the tyranny for CSS positioning
+    '.monologue { margin-bottom: 0; display: flex; border: 1px solid #f2f2f2; border-top: none; border-left: none; border-right: none; padding: 5px 0px; }'+
     '.monologue:first-child .messages { border-top: 1px solid #F2F2F2 }' +
-    '.messages { background-color: #fff; padding: 8px 8px 8px 0px; border-radius: 0; border-top: none }' +
+    '.messages { background-color: #fff; padding: 8px 8px 8px 0px; border-radius: 0; border: none }' +
+    '.message .flash { right: -50px !important; }' +
+    
+    '.monologue .signature > * { display: initial !important; text-align: center }' + 
+    '.monologue .signature > .tiny-signature { display: none !important; }' + 
+    '.monologue .signature > .username { display: block !important; padding-top: 4px; }' + 
+    '.monologue .signature > .avatar { display: block !important; text-align: center; width: 100%; }' + 
+    '.monologue .signature > .flair { width: 100%; display: inline-block !important; }' + 
+    '.monologue > * { float: none }' +
 
-    '.catchup-marker { border: none !important; margin-top: 10px }' +
-    '.catchup-marker .messages { border-top: 1px solid #F2F2F2; }' +
+    '.catchup-marker { margin-top: 10px; border-top: 1px solid #F2F2F2 !important; }' +
 
     '.popup { border-radius: 2px; border: none; box-shadow: 0 0 8px #9C9C9C }' +
     '.popup .small-site-logo { right: initial; top: 38px }' +
