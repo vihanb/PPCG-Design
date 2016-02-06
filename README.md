@@ -14,6 +14,8 @@ If you'd like to become a collaborator, feel free to tell me in [chat](http://ch
 
 You can run this userscript by installing [Tampermonkey](https://tampermonkey.net), a Userscript extension that supports *tons* of browser and probably yours. Just go [here](https://github.com/vihanb/PPCG-Design/blob/master/ppcg.user.js), and either A. Click "raw" and it should prompt you to install it, or B. Copy + Paste the code into the "Add New Script" area.
 
+For firefox users, [Greasemonkey](https://github.com/greasemonkey/greasemonkey) may work also.  
+
 ### Parts
 
  - `sprites.svg` contains *all* the icons, etc. If you're using Adobe Illustrator, make sure ("responsive") is turned off before saving
