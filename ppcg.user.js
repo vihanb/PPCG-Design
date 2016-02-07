@@ -234,8 +234,8 @@ if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
   });//*/// Doesn't work :(
 
   document.head.innerHTML += '<style>'+
-    '@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic&subset=latin,greek);'+
-    'body { font-family: "Open Sans" }' +
+    '@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic|Open+Sans:400,400italic,700,700italic&subset=latin,greek);'+
+    'body { font-family: "Open Sans"; font-size: 12px; }' +
 
     '.button { cursor: pointer; background: #96db62; border: none; border-bottom: 1px solid rgb(106, 194, 65) }' +
     '.button:hover { background: #51cc47; border-bottom-color: #449656; }' +
