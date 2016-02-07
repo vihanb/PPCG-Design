@@ -42,7 +42,7 @@ function bytes(x, y) { // Takes in a length of text and piece of header text, an
   if (PARSE_HEXDUMPS) {
     var a = "";
     x.replace(/[\da-f]{6,8}:? ((?:[\da-f][\da-f] ?){10,})[^\n]*\n?/gi, function(_, z) {
-    	a += z.replace(/\s/g, '');
+      a += z.replace(/\s/g, '');
     });
     if (a) return bf(a.length / 2, "hex");
     if (/^[\da-f\s-]+$/i.test(x.replace(/\n/g, ''))) return bf(x.replace(/[\s-]/g, '').length / 2, "hex");
@@ -111,7 +111,7 @@ var main = {
   BG_COL_HOVER: "white",
   BG_START: "white",
   BG_REV: "#329300",
-  
+
   BACKGROUND_LIGHT: (localStorage.getItem("main.BACKGROUND_LIGHT") === "true"), // Lighter shade of the background, CHANGE THROUGH OPTIONS
   MODE_DARK: (localStorage.getItem("main.MODE_DARK") === "true"),
   NO_LEADERBOARD: (localStorage.getItem("main.NO_LEADERBOARD") === "true"),
@@ -196,8 +196,8 @@ var BGHEIGHT = 0; // this + 130
 
 if (localStorage.getItem('main.MODE_DARK') == "true") main = $.extend(main, darktheme);
 if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true"){
-	main = $.extend(main, lightbg);
-	document.body.style.backgroundRepeat="repeat";
+  main = $.extend(main, lightbg);
+  document.body.style.backgroundRepeat="repeat";
 }
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
 document.head.innerHTML += '<style>.favicon-codegolf{background-position: initial !important; background-image: url("' + main.FAVICON + '"); background-size: 100% 100% !important;}' +
@@ -458,29 +458,44 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       var tiolinks = $(this).find('a[href*="tryitonline.net"]');
       if (tiolinks[0]) {
         // They are tryitonline links
-        tiolinks.each(function() {
+        var counter = 0;
+        function run($this) {
           var parts = {};
-          var _parts = $(this).attr('href').split("#")[1].split("&").map(function(i) {
+          var _parts = $this.attr('href').split("#")[1].split("&").map(function(i) {
             return [i.split("=")[0],i.split("=")[1]]
           }).forEach(function(l){
             parts[l[0]] = l[1];
           });
 
-          var code = parts["code"] || "";
-          var input = parts["input"] || "";
-          var url = $(this).attr('href').match(/https?:\/\/[^\/]+/)[0];
+          var code = encodeURIComponent(atob(  parts["code"] || "" ));
+          var input = encodeURIComponent(atob(  parts["input"] || "" ));
+          var url = $this.attr('href').match(/https?:\/\/[^\/]+/)[0];
           if (url && code) { // Was able to get data
             var r = new XMLHttpRequest();
-            r.open("POST", "http://crossorigin.me/" + url + "/cgi-bin/backend");
+            var running = false;
+            var uuid = '';
+            var output = "";
+            r.open("POST", url + "/cgi-bin/backend");
+            running = true;
             r.onreadystatechange = function() {
-              console.log(r, "code=" + code + "&input=" + input);
-              if (r.readyState === 4 && r.status === 200) { // all good
-                console.log(r.responseText);
+              if (running && r.responseText.length > 32) {
+                uuid = r.responseText.substr(0,32); 
+              }
+              if (r.responseText.length < 100033) {
+                output = r.responseText.substr(33);
+              }
+              if (r.readyState === 4) {
+                output = r.responseText.substr(33);
+                running = false;
+                $this.after('<span style="padding-left: 5px; font-size: 10px;">Try it online response: <pre id="tiouuid-'+uuid+'"></pre></span>');
+                $("#tiouuid-"+uuid).text(output);
+                if (counter + 1 < tiolinks.length) run(tiolinks.eq(counter++));
               }
             };
             r.send("code=" + code + "&input=" + input);
           }
-        });
+        };
+        run(tiolinks.eq(counter++));
       }
     });
   }
