@@ -411,7 +411,7 @@ function addQuestionOfTheDay() {
 }
 
 if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
-
+  document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
   if (site == "main") {
     var x = qS(".beta-title").parentElement;
     qS(".beta-title").parentElement.removeChild(qS(".beta-title"));
@@ -469,8 +469,8 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
             parts[l[0]] = l[1];
           });
 
-          var code = encodeURIComponent(atob(  parts["code"] || "" ));
-          var input = encodeURIComponent(atob(  parts["input"] || "" ));
+          var code = encodeURIComponent(atob(  parts["code"].replace(/\s/g, "") || "" ));
+          var input = encodeURIComponent(atob(  parts["input"].replace(/\s/g, "") || "" ));
           var url = $this.attr('href').match(/https?:\/\/[^\/]+/)[0];
           if (url && code) { // Was able to get data
             var r = new XMLHttpRequest();
