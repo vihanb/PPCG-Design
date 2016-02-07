@@ -469,33 +469,35 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
             parts[l[0]] = l[1];
           });
 
-          var code = encodeURIComponent(atob(  parts["code"].replace(/\s/g, "") || "" ));
-          var input = encodeURIComponent(atob(  parts["input"].replace(/\s/g, "") || "" ));
-          var url = $this.attr('href').match(/https?:\/\/[^\/]+/)[0];
-          if (url && code) { // Was able to get data
-            var r = new XMLHttpRequest();
-            var running = false;
-            var uuid = '';
-            var output = "";
-            r.open("POST", url + "/cgi-bin/backend");
-            running = true;
-            r.onreadystatechange = function() {
-              if (running && r.responseText.length > 32) {
-                uuid = r.responseText.substr(0,32); 
-              }
-              if (r.responseText.length < 100033) {
-                output = r.responseText.substr(33);
-              }
-              if (r.readyState === 4) {
-                output = r.responseText.substr(33);
-                running = false;
-                $this.after('<span style="padding-left: 5px; font-size: 10px;">Try it online result: <pre id="tiouuid-'+uuid+'"></pre></span>');
-                $("#tiouuid-"+uuid).text(output);
-                if (counter + 1 < tiolinks.length) run(tiolinks.eq(counter++));
-              }
-            };
-            r.send("code=" + code + "&input=" + input);
-          }
+          try {
+            var code = encodeURIComponent(atob(  (parts["code"] || "").replace(/\s+/g, "") ));
+            var input = encodeURIComponent(atob(  (parts["input"] || "").replace(/\s/g, "") ));
+            var url = $this.attr('href').match(/https?:\/\/[^\/]+/)[0];
+            if (url && code) { // Was able to get data
+              var r = new XMLHttpRequest();
+              var running = false;
+              var uuid = '';
+              var output = "";
+              r.open("POST", url + "/cgi-bin/backend");
+              running = true;
+              r.onreadystatechange = function() {
+                if (running && r.responseText.length > 32) {
+                  uuid = r.responseText.substr(0,32); 
+                }
+                if (r.responseText.length < 100033) {
+                  output = r.responseText.substr(33);
+                }
+                if (r.readyState === 4) {
+                  output = r.responseText.substr(33);
+                  running = false;
+                  $this.after('<span style="padding-left: 5px; font-size: 10px;">Try it online result: <pre id="tiouuid-'+uuid+'"></pre></span>');
+                  $("#tiouuid-"+uuid).text(output);
+                  if (counter + 1 < tiolinks.length) run(tiolinks.eq(counter++));
+                }
+              };
+              r.send("code=" + code + "&input=" + input);
+            }
+          } catch(e) { console.log("Bad TIO™ Permalink."); }
         };
         run(tiolinks.eq(counter++));
       }
