@@ -208,7 +208,8 @@ if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
     "background": "url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Speaker_Icon.svg/200px-Speaker_Icon.svg.png)",
     "background-size": "16px 16px"
   });
-  $("#roomname").css("font-family", "'Lato Black'");
+  $("#roomname").css("font-family", "'Lato'");
+  $("#roomname").css("font-weight", "800");
   $("#searchbox").css("padding-left", "4px !important");
 
   /*  $("body").append('<img id="CHATBOX" style="z-index: 1000; display:none; position: fixed;">');
@@ -452,7 +453,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.DISP_ICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\" style=\"font-size: 14px; color: #CF7720\">meta</span></td></tr></table>";
   }
   // tio.net (WIP) support
-  if (false && window.location.pathname.indexOf("/questions/") === 0) { // question
+  if (window.location.pathname.indexOf("/questions/") === 0) { // question
     $(".answer").each(function() {
       var tiolinks = $(this).find('a[href*="tryitonline.net"]');
       if (tiolinks[0]) {
