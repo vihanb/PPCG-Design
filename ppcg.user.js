@@ -115,6 +115,7 @@ var main = {
   BACKGROUND_LIGHT: (localStorage.getItem("main.BACKGROUND_LIGHT") === "true"), // Lighter shade of the background, CHANGE THROUGH OPTIONS
   MODE_DARK: (localStorage.getItem("main.MODE_DARK") === "true"),
   NO_LEADERBOARD: (localStorage.getItem("main.NO_LEADERBOARD") === "true"),
+  NO_AUTOTIO: (localStorage.getItem("main.NO_AUTOTIO") === "true"),
 
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#FAFAFA",
@@ -276,7 +277,8 @@ if ((window.location + "").search("//(?:meta.)?codegolf.stackexchange.com") >= 0
                     '<div style="width:50%;height:100%;float:left;">' +
                     '<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on"><label for="light_bg_on">Lighter Background?</label><br>' +
                     '<input class="OPT_Bool" data-var="main.MODE_DARK" type="checkbox" id="dark_theme_on"><label for="dark_theme_on">Dark Theme? (WIP)</label><br>' +
-                    '<input class="OPT_Bool" data-var="main.NO_LEADERBOARD" type="checkbox" id="noleader"><label for="noleader">Disable Auto Leaderboard?</label>' +
+                    '<input class="OPT_Bool" data-var="main.NO_LEADERBOARD" type="checkbox" id="noleader"><label for="noleader">Disable Auto Leaderboard?</label><br>' +
+                    '<input class="OPT_Bool" data-var="main.NO_AUTOTIO" type="checkbox" id="notio"><label for="notio">Disable Auto-TryItOnline™ execution?</label>' +
                     '</div><div style="width:50%;height:100%;float:right;">' +
                     '' +
                     '</div></div>For changes to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
@@ -453,7 +455,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.DISP_ICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\" style=\"font-size: 14px; color: #CF7720\">meta</span></td></tr></table>";
   }
   // tio.net (WIP) support
-  if (window.location.pathname.indexOf("/questions/") === 0) { // question
+  if (!main.NO_AUTOTIO && window.location.pathname.indexOf("/questions/") === 0) { // question
     $(".answer").each(function() {
       var tiolinks = $(this).find('a[href*="tryitonline.net"]');
       if (tiolinks[0]) {
@@ -487,7 +489,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
               if (r.readyState === 4) {
                 output = r.responseText.substr(33);
                 running = false;
-                $this.after('<span style="padding-left: 5px; font-size: 10px;">Try it online response: <pre id="tiouuid-'+uuid+'"></pre></span>');
+                $this.after('<span style="padding-left: 5px; font-size: 10px;">Try it online result: <pre id="tiouuid-'+uuid+'"></pre></span>');
                 $("#tiouuid-"+uuid).text(output);
                 if (counter + 1 < tiolinks.length) run(tiolinks.eq(counter++));
               }
