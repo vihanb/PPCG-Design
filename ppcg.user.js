@@ -104,7 +104,7 @@ var main = {
   SEARCH_TEXT: "Search codegolf.SE",
 
   // Set to empty string for no background image
-  BACKGROUND_IMAGE: "//i.stack.imgur.com/vAWfF.png ",
+  BACKGROUND_IMAGE: "//i.stack.imgur.com/SBniv.png",
   PAGE404: "http://i.stack.imgur.com/ToEtE.png",
   BACKGROUND_SIZE: "650px 150px",
   BG_COL: "#175D2E",
@@ -129,8 +129,8 @@ var main = {
   TAG_COLOR: "#D4F493",
   TAG_HOVER: "#329300",
 
-  TAG_SHADOW_COLOR: "#abc577",
-  TAG_HOVER_SHADOW_COLOR: "#256c00",
+  TAG_SHADOW_COLOR: "#ACDD77",
+  TAG_HOVER_SHADOW_COLOR: "#256C00",
 
   BUTTON_COLOR: "#6DAB71",
   BUTTON_HOVER: "#5DA261",
