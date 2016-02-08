@@ -521,7 +521,6 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
      '.qod-qitem:not(:first-child) { margin-top: 5px; }'+
      ".LEADERBOARD {border-collapse: collapse} .LEADERBOARD td { padding: 6px 8px } .LEADERBOARD tr:nth-child(even) { background-color: #F1F1F1 } .LEADERBOARD thead { border-bottom: 1px solid #DDD }" +
      "html,body{font-family:" + TEXT_FONT + "}" +
-     "#hlogo{margin: 25px 0 0 0;}" +
      "#content{margin-top: 7px;}"+
      '#footer #footer-sites a, #footer th {color: #BFBFBF;}'+
      ".container{box-shadow: none !important;}"+
