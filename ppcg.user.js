@@ -495,6 +495,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
                   if (counter + 1 < tiolinks.length) run(tiolinks.eq(counter++));
                 }
               };
+              r.responseType = "text/plain;charset=UTF-8";
               r.send("code=" + code + "&input=" + input);
             }
           } catch(e) { console.log("Bad TIO™ Permalink."); }
