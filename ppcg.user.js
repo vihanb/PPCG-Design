@@ -395,7 +395,7 @@ function addOtherTags() {
 
 /* Add the question of the day widgit */
 function addQuestionOfTheDay() {
-  var questionOfTheDayHtml = '<div class="module" id="question-of-the-day"><h4 id="h-inferred-tags">Questions of the Day</h4></div>';
+  var questionOfTheDayHtml = '<div class="module" id="question-of-the-day"><h4 id="h-inferred-tags">Challenges of the Day</h4></div>';
 
   // below the blog posts
   var favTags = qS('div.module:nth-child(2)');
@@ -644,5 +644,6 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       } + ")();", e.appendChild(s), s.parentNode.removeChild(s)
     }(document);
   }
-  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox.">Propose Question</a></li>');
+  $("#nav-askquestion").text("Post Challenge");
+  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox.">Propose Challenge</a></li>');
 }
