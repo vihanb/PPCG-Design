@@ -427,7 +427,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
           var j = +((i.body.match(/(?:<h\d>|<p><strong>).+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/) || [])[1] || (i.body.match(/^\s*(?:<h\d>|<p><strong>).*?(\d+)\D*?<\/(?:h\d|strong)>/) || [])[1]);
           i.body = i.body.replace(RegExp(",?\\s*" + j + ".*"), "");
           // Taken (and modified) from http://codegolf.stackexchange.com/a/69936/40695
-          var e = ((copyvalue.match(/<(h\d|strong)>(.+?)<\/\1>/) || [])[2] || "Unknown Language").replace(/<.*?>/g, "").replace(/^([A-Za-z]+)\s+\d+$/, "$1").replace(/([\–\|\/\-:\—,]\s*\d+\s*(b[l]?y[te]{2}s?|char[a-z]*|codels?)\s*)+/g, "").replace(/(,| [-&(–—5]| [0-7]\d)(?! W|...\)).*/g, "").replace(/2 |:/g, "").replace(/(Ver(sion)?.?\s*)\d{2,}w\d{2,}a/g, "");
+          var e = ((copyvalue.match(/<(h\d|strong)>(.+?)<\/\1>/) || [])[2] || "Unknown Language").replace(/<.*?>/g, "").replace(/^([A-Za-z]+)\s+\d+$/, "$1").replace(/([\–\|\/\-:\—,]\s*\d+\s*(b[l]?y[te]{2}s?|Lab ?View|char[a-z]*|codels?)\s*)+/g, "").replace(/(,| [-&(–—5]| [0-7]\d)(?! W|...\)).*/g, "").replace(/2 |:/g, "").replace(/(Ver(sion)?.?\s*)\d{2,}w\d{2,}a/g, "");
           return [j, i, copyvalue, e];
         });
         var lv = 0;
@@ -435,12 +435,15 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
           return ("" + a[0]) != "NaN";
         }).sort(function(a, b) {
           return a[0] - b[0];
-        }).map(function(l, i, a) {
+        });
+        var generatedanswertable = answers.map(function(l, i, a) {
           if ((a[i - 1] || [NaN])[0] !== l[0]) lv = (i || 0) + 1;
           return '<tr><td>' + lv + '</td><td><a href="'+l[1].owner.link+'">'+l[1].owner.display_name+'</a></td><td>' + (l[3] /*(l[2].match(/(?:<h\d>|<p><strong>)(.+?)[, -]\s*(?:(?:\d*\.\d+|\d+)(?:\s*%)?(?:\s*[+*\/\-]\s*(?:\d*\.\d+|\d+)(?:\s*%)?)+\s*=\s*)?(?:-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/)||[])[1]||(l[2].match(/\s*(?:<h\d>|<p><strong>)(\s*<a [^ >]+.+?<\/a>|(?:[#A-Za-z_\s\.\u00FF-\uFFFF!?]|(?:(?=\d+[^\d\n]+\d+\D*(?:<\/|$|\n))\d)|(?:(?=-\s?[A-Za-z_\u00FF-\uFFFF!?]).)|(?:(?=.+(,)),))+)/)||[0,"Lang N/A"])[1]*/ ).trim() + "</td><td>" + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
         });
+        var tryitonlineattempt = $(answers[0][2]).find('a[href*=".tryitonline.net"]').attr('href');
+        $("#answers").prepend('<div style="border: 1px solid #e0e0e0; border-left: none; border-right: none; margin: 15px 0px; padding: 15px;"> <b>The Current Winner: </b> is <a href="'+answers[0][1].owner.link+'">'+answers[0][1].owner.display_name+'&apos;s</a> '+answers[0][3]+' <a href="'+answers[0][1].link+'">answer</a> at '+answers[0][0]+' bytes ' + (tryitonlineattempt ? ' &#8213 <a href="'+tryitonlineattempt+'">TryItOnline&trade;</a>!' : '') + '</div>');
         $(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>' +
-                                         '<div id="USER_BOARD" style="display:none"><table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Author</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>' + answers.join("\n") + '</tbody></table> </div>');
+                                         '<div id="USER_BOARD" style="display:none"><table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Author</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>' + generatedanswertable.join("\n") + '</tbody></table> </div>');
         $("#USER_BOARD_TEXT").click(function() {
           $("#USER_BOARD").slideToggle(50, function() {
             $("#USER_BOARD_TEXT").text(function() {
