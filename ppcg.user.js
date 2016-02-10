@@ -268,6 +268,7 @@ if ((window.location + "").search("//(?:meta.)?codegolf.stackexchange.com") >= 0
   var obj = site == "meta" ? meta : main;
 
   $("#search input").attr("placeholder", obj.SEARCH_TEXT);
+  $(".bulletin-title:contains('Featured on Meta')").html('<a href="//meta.codegolf.stackexchange.com" class="bulletin-title" style="color: inherit !important"> Meta </a>');
 
   // Options Menu
   $(".topbar-wrapper > .network-items").append('<a id="USER_Opt" class="topbar-icon yes-hover" style="z-index:1;width: 36px; background-image: url(' + main.SPRITE_SHEET + '); background-position: 0px 0px;"></a>');
