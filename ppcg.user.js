@@ -129,7 +129,7 @@ var main = {
   TAG_COLOR: "#D4F493",
   TAG_HOVER: "#329300",
 
-  TAG_SHADOW_COLOR: "#ACDD77",
+  TAG_SHADOW_COLOR: "#BACD56",
   TAG_HOVER_SHADOW_COLOR: "#256C00",
 
   BUTTON_COLOR: "#6DAB71",
@@ -646,5 +646,5 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     }(document);
   }
   $("#nav-askquestion").text("Post Challenge");
-  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox.">Propose Challenge</a></li>');
+  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox.">Porpise Challenge</a></li>');
 }
