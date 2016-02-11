@@ -413,6 +413,12 @@ function addQuestionOfTheDay() {
 }
 
 if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
+  if (site == main) {
+    $("#nav-askquestion").text("Post Challenge");
+  } else {
+    $("#nav-askquestion").text("Ask Question");
+  }
+  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox.">Porpise Challenge</a></li>');
   document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
   if (site == "main") {
     var x = qS(".beta-title").parentElement;
@@ -650,11 +656,4 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       } + ")();", e.appendChild(s), s.parentNode.removeChild(s)
     }(document);
   }
-  if (site == $main){
-    $("#nav-askquestion").text("Post Challenge");
-  }
-  else{
-    $("#nav-askquestion").text("Ask Question");
-  }
-  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox.">Porpise Challenge</a></li>');
 }
