@@ -349,6 +349,7 @@ function getQuestion(tag, callback) {
     var quest = ret[Math.floor(Math.random()*ret.length)];
     var url = quest['link'];
     var title = quest['title'];
+    console.log(title);
 
     document.cookie = (tag + cookieSuffix)+'='+url+' '+title.replace(/'/g,'&apos;')+';max-age=86400';
     callback([url, title]);
