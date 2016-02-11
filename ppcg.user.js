@@ -649,6 +649,11 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       } + ")();", e.appendChild(s), s.parentNode.removeChild(s)
     }(document);
   }
-  $("#nav-askquestion").text("Post Challenge");
+  if (site == $main){
+    $("#nav-askquestion").text("Post Challenge");
+  }
+  else{
+    $("#nav-askquestion").text("Ask Question");
+  }
   $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox.">Porpise Challenge</a></li>');
 }
