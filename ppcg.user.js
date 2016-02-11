@@ -268,6 +268,11 @@ if ((window.location + "").search("//(?:meta.)?codegolf.stackexchange.com") >= 0
   var obj = site == "meta" ? meta : main;
 
   $("#search input").attr("placeholder", obj.SEARCH_TEXT);
+  if (site == main) {
+    $("#nav-askquestion").text("Post Challenge");
+  } else {
+    $("#nav-askquestion").text("Ask Question");
+  }
   $(".bulletin-title:contains('Featured on Meta')").html('<a href="//meta.codegolf.stackexchange.com" class="bulletin-title" style="color: inherit !important"> Meta </a>');
 
   // Options Menu
@@ -413,11 +418,6 @@ function addQuestionOfTheDay() {
 }
 
 if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
-  if (site == main) {
-    $("#nav-askquestion").text("Post Challenge");
-  } else {
-    $("#nav-askquestion").text("Ask Question");
-  }
   $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox.">Porpise Challenge</a></li>');
   document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
   if (site == "main") {
