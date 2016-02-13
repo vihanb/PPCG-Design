@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.6.0
+// @version     3.6.1
 // @description A script to self-graduate PPCG
 // @match       *://codegolf.stackexchange.com/*
 // @match       *://*.codegolf.stackexchange.com/*
