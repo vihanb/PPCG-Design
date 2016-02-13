@@ -260,7 +260,7 @@ if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
     '.popup { border-radius: 2px; border: none; box-shadow: 0 0 8px #9C9C9C }' +
     '.popup .small-site-logo { right: initial; top: 38px }' +
 
-    '#sidebar { background: #fbfbfb; box-shadow: 5px 0px 5px -3px #dcdcdc inset; } ' +
+    '#sidebar { background: #fbfbfb; box-shadow: 5px 0px 5px -3px #dcdcdc inset; padding-left: 3px } ' +
 
     'span.mention { padding: 0px 3px; background: #D2FFCC !important }' +
     '</style>';
