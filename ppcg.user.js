@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.5.0
+// @version     3.6.0
 // @description A script to self-graduate PPCG
 // @match       *://codegolf.stackexchange.com/*
 // @match       *://*.codegolf.stackexchange.com/*
@@ -260,7 +260,11 @@ if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
     '.popup { border-radius: 2px; border: none; box-shadow: 0 0 8px #9C9C9C }' +
     '.popup .small-site-logo { right: initial; top: 38px }' +
 
-    '#sidebar { background: #fbfbfb; box-shadow: 5px 0px 5px -3px #dcdcdc inset; padding-left: 3px } ' +
+    '#sidebar { background: #fbfbfb; box-shadow: 5px 0px 5px -3px #EEE inset; padding-left: 3px } ' +
+
+    'input[type=text], #input, #chat-body input#searchbox { border-radius: 2px; border: 1px solid #c2c2c2; padding: 3px 2px !important; box-shadow: none; outline: none; -webkit-transition: box-shadow 0.30s ease-in-out; -moz-transition: box-shadow 0.30s ease-in-out; -ms-transition: box-shadow 0.30s ease-in-out; -o-transition: box-shadow 0.30s ease-in-out; transition: box-shadow 0.30s ease-in-out }' +
+    'input[type=text]:focus, #input:focus, #chat-body input#searchbox:focus { outline: none; box-shadow: 0px 0px 4px #3AE; border: 1px solid #70d2ff; }' +
+    '#input:hover { box-shadow: 0px 0px 6px #50c8ff; }' +
 
     'span.mention { padding: 0px 3px; background: #D2FFCC !important }' +
     '</style>';
