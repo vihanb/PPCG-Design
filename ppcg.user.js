@@ -104,7 +104,7 @@ var main = {
   SEARCH_TEXT: "Search codegolf.SE",
 
   // Set to empty string for no background image
-  BACKGROUND_IMAGE: "//i.stack.imgur.com/SBniv.png",
+  BACKGROUND_IMAGE: "//i.stack.imgur.com/4Y7TE.png",
   PAGE404: "http://i.stack.imgur.com/ToEtE.png",
   BACKGROUND_SIZE: "650px 150px",
   BG_COL: "#175D2E",
