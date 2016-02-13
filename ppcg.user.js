@@ -260,6 +260,8 @@ if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
     '.popup { border-radius: 2px; border: none; box-shadow: 0 0 8px #9C9C9C }' +
     '.popup .small-site-logo { right: initial; top: 38px }' +
 
+    '#sidebar { background: #fbfbfb; box-shadow: 5px 0px 5px -3px #dcdcdc inset; } ' +
+
     'span.mention { padding: 0px 3px; background: #D2FFCC !important }' +
     '</style>';
 }
@@ -364,7 +366,7 @@ function getQuestion(tag, callback) {
 /* Add a tag to the question of the day widgit */
 function addTag(tag) {
   getQuestion(tag, function (a) {
-    qS('#question-of-the-day').innerHTML += 
+    qS('#question-of-the-day').innerHTML +=
       '<div class="qod-qitem"><span>'+
       '<a href="/questions/tagged/'+tag+'" class="post-tag user-tag" title="show questions tagged \''+tag+'\'" rel="tag">'+tag+
       '</a></span><a href="'+a[0]+'">'+a[1]+'</a></div>';
@@ -380,7 +382,7 @@ function httpGetAsync(theUrl, callback){
       callback(xmlHttp.responseText);
     }
   };
-  xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+  xmlHttp.open("GET", theUrl, true); // true for asynchronous
   xmlHttp.send(null);
 }
 
@@ -494,7 +496,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
                 running = true;
                 r.onreadystatechange = function() {
                   if (running && r.responseText.length > 32) {
-                    uuid = r.responseText.substr(0,32); 
+                    uuid = r.responseText.substr(0,32);
                   }
                   if (r.responseText.length < 100033) {
                     output = r.responseText.substr(33);
