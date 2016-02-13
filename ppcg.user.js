@@ -250,6 +250,9 @@ if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
     '.message:hover .action-link, .message:hover .action-link .img.menu { background-color: #F3F3F3 !important }' +
     '.message:hover .action-link .img.menu { background-image: url(http://i.stack.imgur.com/3gBKh.png) !important; background-size: 16px 16px; background-position: 0px -1px !important; }' +
 
+    '.vote-count-container.stars .img { background-image: url(http://i.stack.imgur.com/DhUx0.png) !important; background-size: 10px 10px; background-position: initial !important; }' +
+    '.vote-count-container.stars.user-star .img { background-image: url(http://i.stack.imgur.com/lbBdl.png) !important; }' +
+
     '.monologue { margin-bottom: 0; padding-top: 0; }' +
     '.monologue:first-child .messages { border-top: 1px solid #F2F2F2 }' +
     '.messages { background-color: #fff; padding: 8px 8px 8px 0px; border-radius: 0; border-top: none }' +
