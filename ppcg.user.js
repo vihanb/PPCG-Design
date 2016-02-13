@@ -277,7 +277,7 @@ if ((window.location + "").search("//(?:meta.)?codegolf.stackexchange.com") >= 0
   var obj = site == "meta" ? meta : main;
 
   $("#search input").attr("placeholder", obj.SEARCH_TEXT);
-  if (site == main) {
+  if (site == "main") {
     $("#nav-askquestion").text("Post Challenge");
   } else {
     $("#nav-askquestion").text("Ask Question");
