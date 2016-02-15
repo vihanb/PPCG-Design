@@ -578,20 +578,8 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   } catch (e) {}
   if (PARSE_CODEBLOCKS) {
     $(".answer").each(function() {
-      var h = "";
       // Find the first header or strong element (some old posts use **this** for header) and set h to its text
-      $(this).find("h1").each(function() {
-        if (!h) h = $(this).text();
-      });
-      $(this).find("h2").each(function() {
-        if (!h) h = $(this).text();
-      });
-      $(this).find("h3").each(function() {
-        if (!h) h = $(this).text();
-      });
-      $(this).find("strong").each(function() {
-        if (!h) h = $(this).text();
-      });
+      var h = $(this).find("h1, h2, h3, strong").first().text();
       $(this).find("pre code").each(function() {
         var t = $(this).text().trim().replace(/\r\n/g, "\n");
         $(this).parent().before('<div style="padding-bottom:4px;font-size:11px;font-family:' + TEXT_FONT + '">' + bytes(t, h) + ", " + fchars(t) + "</div>");
