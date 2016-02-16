@@ -434,7 +434,10 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     qS(".beta-title").parentElement.removeChild(qS(".beta-title"));
     x.innerHTML = "<table id=\"newlogo\"><tr><td><img style=\"margin-top: "+BGHEIGHT+"px;\" src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
     // Leaderboard
-    if (!main.NO_LEADERBOARD && $('a.post-tag[href="/questions/tagged/code-golf"]')[0] && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
+    if (!main.NO_LEADERBOARD &&
+        $('a.post-tag[href="/questions/tagged/code-golf"]')[0]
+        !$('a.post-tag[href="/questions/tagged/tips"]')[0]
+        && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
       var answers = [];
       loadAnswers(function(json) {
         answers = json.map(function(i, l, a) {
