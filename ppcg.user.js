@@ -313,118 +313,11 @@ if ((window.location + "").search("//(?:meta.)?codegolf.stackexchange.com") >= 0
   });
 }
 
-/* These are the tag choices */
-var otherTags = ["string", "popularity-contest", "ascii-art", "number",
-                 "kolmogorov-complexity", "graphical-output", "king-of-the-hill", "fastest-code",
-                 "restricted-source", "arithmetic", "sequence", "game",
-                 "tips", "geometry", "number-theory", "random", "primes",
-                 "array-manipulation", "date", "image-processing", "graphs",
-                 "sorting", "interpreter", "optimization", "parsing",
-                 "path-finding", "puzzle-solver", "underhanded", "source-layout",
-                 "base-conversion"];
-
-/* Get a cookie (I wish it was a real cookie ;) */
-function getCookie(name) {
-  // http://stackoverflow.com/a/15724300/4683264
-  var value = "; " + document.cookie;
-  var parts = value.split("; " + name + "=");
-  if (parts.length == 2) return parts.pop().split(";").shift();
-}
-
-/* Get all questions that are taged, are >1yr old, and have a score >7 */
-function getValidQuestions(tag, onDone) {
-  var url = 'https://api.stackexchange.com/2.2/search/advanced?order=desc&key=DwnkTjZvdT0qLs*o8rNDWw((&min=7&todate=1420070400&sort=votes&closed=False&tagged='+tag+'&site=codegolf';
-  httpGetAsync(url, function (ret) {
-    onDone(JSON.parse(ret)['items']);
-  });
-}
 
 //x=document.getElementsByClassName("community-bulletin")[0].getElementsByClassName('question-hyperlink')
 //for (var i=0;i<x.length;i++){
 //	x[i].style.color=META_LINK_COLOR
 //}
-/* Check the cookies for the question, or grab a new one. return format is [url, title] */
-function getQuestion(tag, callback) {
-  // prevent overlap
-  var cookieSuffix = '-tag-question';
-  // separator is a space
-  var cookieVal = getCookie(tag + cookieSuffix);
-  if (cookieVal) {
-    // parts splits at a space, so the format is [url, word1, word2, word3, ...]
-    var parts = cookieVal.split(/ (.+)?/);
-    var url = parts[0];
-    delete parts[0];// remove the url so we can join the title with a space
-    var title = parts.join(' ');
-    callback([url, title]);
-    return 0;
-  }
-
-  getValidQuestions(tag, function (ret) {
-    var quest = ret[Math.floor(Math.random()*ret.length)];
-    var url = quest['link'];
-    var title = quest['title'];
-    console.log(title);
-
-    document.cookie = (tag + cookieSuffix)+'='+url+' '+title.replace(/'/g,'&apos;')+';max-age=86400';
-    callback([url, title]);
-  });
-}
-
-/* Add a tag to the question of the day widgit */
-function addTag(tag) {
-  getQuestion(tag, function (a) {
-    qS('#question-of-the-day').innerHTML +=
-      '<div class="qod-qitem"><span>'+
-      '<a href="/questions/tagged/'+tag+'" class="post-tag user-tag" title="show questions tagged \''+tag+'\'" rel="tag">'+tag+
-      '</a></span><a href="'+a[0]+'">'+a[1]+'</a></div>';
-  });
-}
-
-/* General purpose function, get a http request async */
-function httpGetAsync(theUrl, callback){
-  // http://stackoverflow.com/a/4033310/4683264
-  var xmlHttp = new XMLHttpRequest();
-  xmlHttp.onreadystatechange = function() {
-    if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-      callback(xmlHttp.responseText);
-    }
-  };
-  xmlHttp.open("GET", theUrl, true); // true for asynchronous
-  xmlHttp.send(null);
-}
-
-/* Add the bottom 2 rotating tags to the question of the day widgit */
-function addOtherTags() {
-  var cookieName = 'other-tags-today';
-  var tags = getCookie(cookieName);
-  if (tags) {tags = tags.split(' ');}
-  else {
-    tags = [otherTags[Math.floor(Math.random()*otherTags.length)],
-            otherTags[Math.floor(Math.random()*otherTags.length)]];
-    document.cookie = cookieName + "=" + tags[0] + " " + tags[1] + ";max-age=86400;";
-  }
-
-  tags.forEach(function (a) {
-    addTag(a);
-  });
-}
-
-/* Add the question of the day widgit */
-function addQuestionOfTheDay() {
-  var questionOfTheDayHtml = '<div class="module" id="question-of-the-day"><h4 id="h-inferred-tags">Challenges of the Day</h4></div>';
-
-  // below the blog posts
-  var favTags = qS('div.module:nth-child(2)');
-  if (favTags) {
-    favTags.insertAdjacentHTML('afterend', questionOfTheDayHtml);
-
-    addTag('code-golf');
-    addTag('code-challenge');//king-of-the-hill
-    addTag('math');//fastest-code
-
-    addOtherTags();
-  }
-}
 
 if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox.">Porpoise Challenge</a></li>');
@@ -588,7 +481,6 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   }
   $("body .container").prepend('<div style="position: absolute;width: inherit; z-index: 0; height: 130px; background: url(' + obj.BACKGROUND_IMAGE + '); background-size: '+obj.BACKGROUND_SIZE+'; background-attachment: fixed;"></div>');
   if (site == "main") {
-    addQuestionOfTheDay();
     $(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
     document.head.innerHTML += "<style>.question-hyperlink, .answer-hyperlink{color:rgb(62,107,64)}.question-hyperlink:visited, .answer-hyperlink:visited,.started-link:visited{color:rgb(30,51,31)}" +
       "#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover{color:#5DA261;border-bottom:2px solid #5DA261}" +
