@@ -588,7 +588,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
   }
   $("body .container").prepend('<div style="position: absolute;width: inherit; z-index: 0; height: 130px; background: url(' + obj.BACKGROUND_IMAGE + '); background-size: '+obj.BACKGROUND_SIZE+'; background-attachment: fixed;"></div>');
   if (site == "main") {
-    addQuestionOfTheDay();
+    // addQuestionOfTheDay(); // Disabling because of cookie bugs
     $(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
     document.head.innerHTML += "<style>.question-hyperlink, .answer-hyperlink{color:rgb(62,107,64)}.question-hyperlink:visited, .answer-hyperlink:visited,.started-link:visited{color:rgb(30,51,31)}" +
       "#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover{color:#5DA261;border-bottom:2px solid #5DA261}" +
