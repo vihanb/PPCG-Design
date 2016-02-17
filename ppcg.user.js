@@ -436,7 +436,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
     // Leaderboard
     if (!main.NO_LEADERBOARD &&
         $('a.post-tag[href="/questions/tagged/code-golf"]')[0]
-        !$('a.post-tag[href="/questions/tagged/tips"]')[0]
+        && !$('a.post-tag[href="/questions/tagged/tips"]')[0]
         && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
       var answers = [];
       loadAnswers(function(json) {
