@@ -370,7 +370,7 @@ function getQuestion(tag, callback) {
   });
 }
 
-/* Add a tag to the question of the day widgit */
+/* Add a tag to the question of the day widget */
 function addTag(tag) {
   getQuestion(tag, function (a) {
     qS('#question-of-the-day').innerHTML +=
@@ -393,7 +393,7 @@ function httpGetAsync(theUrl, callback){
   xmlHttp.send(null);
 }
 
-/* Add the bottom 2 rotating tags to the question of the day widgit */
+/* Add the bottom 2 rotating tags to the question of the day widget */
 function addOtherTags() {
   var cookieName = 'other-tags-today';
   var tags = getCookie(cookieName);
@@ -409,7 +409,7 @@ function addOtherTags() {
   });
 }
 
-/* Add the question of the day widgit */
+/* Add the question of the day widget */
 function addQuestionOfTheDay() {
   var questionOfTheDayHtml = '<div class="module" id="question-of-the-day"><h4 id="h-inferred-tags">Challenges of the Day</h4></div>';
 
@@ -465,7 +465,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
           return '<tr><td>' + lv + '</td><td><a href="'+l[1].owner.link+'">'+l[1].owner.display_name+'</a></td><td>' + (l[3] /*(l[2].match(/(?:<h\d>|<p><strong>)(.+?)[, -]\s*(?:(?:\d*\.\d+|\d+)(?:\s*%)?(?:\s*[+*\/\-]\s*(?:\d*\.\d+|\d+)(?:\s*%)?)+\s*=\s*)?(?:-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/)||[])[1]||(l[2].match(/\s*(?:<h\d>|<p><strong>)(\s*<a [^ >]+.+?<\/a>|(?:[#A-Za-z_\s\.\u00FF-\uFFFF!?]|(?:(?=\d+[^\d\n]+\d+\D*(?:<\/|$|\n))\d)|(?:(?=-\s?[A-Za-z_\u00FF-\uFFFF!?]).)|(?:(?=.+(,)),))+)/)||[0,"Lang N/A"])[1]*/ ).trim() + "</td><td>" + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
         });
         var tryitonlineattempt = $(answers[0][2]).find('a[href*=".tryitonline.net"]').attr('href');
-        $("#answers").prepend('<div style="border: 1px solid #e0e0e0; border-left: none; border-right: none; margin: 15px 0px; padding: 15px;"> <b>The Current Winner: </b> is <a href="'+answers[0][1].owner.link+'">'+answers[0][1].owner.display_name+'&apos;s</a> '+answers[0][3]+' <a href="'+answers[0][1].link+'">answer</a> at '+answers[0][0]+' bytes ' + (tryitonlineattempt ? ' &#8213 <a href="'+tryitonlineattempt+'">TryItOnline&trade;</a>!' : '') + '</div>');
+        $("#answers").prepend('<div style="border: 1px solid #e0e0e0; border-left: none; border-right: none; margin: 15px 0px; padding: 15px;"> <b>The current winner</b> is <a href="'+answers[0][1].owner.link+'">'+answers[0][1].owner.display_name+'&apos;s</a> '+answers[0][3]+' <a href="'+answers[0][1].link+'">answer</a> at '+answers[0][0]+' bytes ' + (tryitonlineattempt ? ' &#8213 <a href="'+tryitonlineattempt+'">TryItOnline&trade;</a>!' : '') + '</div>');
         $(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>' +
                                          '<div id="USER_BOARD" style="display:none"><table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Author</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>' + generatedanswertable.join("\n") + '</tbody></table> </div>');
         $("#USER_BOARD_TEXT").click(function() {
@@ -561,7 +561,8 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
      "#sidebar > .module{margin-left: 12px;}" +
      "input[type=submit], input[type=button], button, .button, a.button, a.button:visited, .btn { box-shadow: none; border: 1px solid $$BUTTON_COLOR; background-color: $$BUTTON_COLOR }" +
      ".module.community-bulletin{border: none}" +
-     "input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover { border: 1px solid $$BUTTON_HOVER; background-color: $$BUTTON_HOVER }" +
+     "input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover," +
+     "input[type=submit]:focus, input[type=button]:focus, button:focus, .button:focus, a.button:focus, a.button:visited:focus, .btn:focus{ box-shadow: none; border: 1px solid $$BUTTON_HOVER; background-color: $$BUTTON_HOVER }" +
      ".mod-flair,.started .mod-flair{ color: " + MOD_FLAIR + " !important }.mod-flair:hover,.started .mod-flair:hover{color:" + MOD_FLAIR_HOVER + "}" +
      "#hmenus > div.nav.mainnavs{position: relative; top: 50%; -ms-transform: translateY(-50%);-webkit-transform: translateY(-50%);-moz-transform: translateY(-50%);-o-transform: translateY(-50%); transform: translateY(-50%);}" +
      "div.nav.askquestion li{display:initial;}"+
