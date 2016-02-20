@@ -3,7 +3,6 @@
 // @namespace   https://github.com/vihanb/PPCG-Design
 // @version     3.6.1
 // @description A script to self-graduate PPCG
-// @match       *://codegolf.stackexchange.com/*
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://chat.stackexchange.com/*
 // @author      PPCG Community
@@ -45,7 +44,7 @@ function bytes(x, y) { // Takes in a length of text and piece of header text, an
       a += z.replace(/\s/g, '');
     });
     if (a) return bf(a.length / 2, "hex");
-    if (/^[\da-f\s-]+$/i.test(x.replace(/\n/g, ''))) return bf(x.replace(/[\s-]/g, '').length / 2, "hex");
+    if (/^[\da-f\s-]+$/i.test(x.replace("\n", ''))) return bf(x.replace(/[\s-]/g, '').length / 2, "hex");
   }
   if (/iso.?8859.1/i.test(y) || ISO_8859_1.test(y)) return bf(chars(x), "ISO-8859-1");
   if (/iso.?8859.7/i.test(y) || ISO_8859_7.test(y)) return bf(chars(x), "ISO-8859-7");
@@ -203,7 +202,7 @@ if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true"){
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
 document.head.innerHTML += '<style>.favicon-codegolf{background-position: initial !important; background-image: url("' + main.FAVICON + '"); background-size: 100% 100% !important;}' +
   '.favicon-codegolfmeta{background-position: initial !important; background-image: url("' + meta.FAVICON + '"); background-size: 100% 100% !important;}</style>';
-if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
+if (window.location.hostname === "chat.stackexchange.com") {
   $("body").css("background", "white");
   $("#sound").css({
     "background": "url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Speaker_Icon.svg/200px-Speaker_Icon.svg.png)",
@@ -272,46 +271,6 @@ if ((window.location + "").search("//chat.stackexchange.com") >= 0) {
     'span.mention { padding: 0px 3px; background: #D2FFCC !important }' +
     '</style>';
 }
-if ((window.location + "").search("//(?:meta.)?codegolf.stackexchange.com") >= 0) {
-  var site = /^https?:\/\/meta/.test(window.location) ? "meta" : "main";
-  var obj = site == "meta" ? meta : main;
-
-  $("#search input").attr("placeholder", obj.SEARCH_TEXT);
-  if (site == "main") {
-    $("#nav-askquestion").text("Post Challenge");
-  } else {
-    $("#nav-askquestion").text("Ask Question");
-  }
-  $(".bulletin-title:contains('Featured on Meta')").html('<a href="//meta.codegolf.stackexchange.com" class="bulletin-title" style="color: inherit !important"> Meta </a>');
-
-  // Options Menu
-  $(".topbar-wrapper > .network-items").append('<a id="USER_Opt" class="topbar-icon yes-hover" style="z-index:1;width: 36px; background-image: url(' + main.SPRITE_SHEET + '); background-position: 0px 0px;"></a>');
-  $("body").prepend('<div id="USER_OptMenu" style="display: none; width: inherit; height: inherit;"><div id="USER_Backblur" style="position:absolute;z-index:2;width:100%;height:100%;background:rgba(0,0,0,0.5)"></div>' +
-                    '<div style="position:absolute;z-index:3;width:40%;height:40%;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:' + optionbox.BACKGROUND_COLOR + ';padding:1em;">' +
-                    '<h1>Userscript Options</h1><div>' +
-                    '<div style="width:50%;height:100%;float:left;">' +
-                    '<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on"><label for="light_bg_on">Lighter Background?</label><br>' +
-                    '<input class="OPT_Bool" data-var="main.MODE_DARK" type="checkbox" id="dark_theme_on"><label for="dark_theme_on">Dark Theme? (WIP)</label><br>' +
-                    '<input class="OPT_Bool" data-var="main.NO_LEADERBOARD" type="checkbox" id="noleader"><label for="noleader">Disable Auto Leaderboard?</label><br>' +
-                    '<input class="OPT_Bool" data-var="main.NO_AUTOTIO" type="checkbox" id="notio"><label for="notio">Disable Auto-TryItOnline™ execution?</label>' +
-                    '</div><div style="width:50%;height:100%;float:right;">' +
-                    '' +
-                    '</div></div>For changes to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
-  $("#USER_Opt").click(function() {
-    $("#USER_OptMenu").fadeIn(50);
-  });
-  $("#USER_Backblur").click(function() {
-    $("#USER_OptMenu").fadeOut(50);
-  });
-  $(".OPT_Bool").each(function() {
-    $(this).prop("checked", eval(localStorage.getItem($(this).data('var'))) || eval($(this).data('var')));
-  });
-  $(".OPT_Bool").change(function() {
-    localStorage.setItem($(this).data('var'), $(this).is(':checked'));
-    $(this).prop('checked', eval(localStorage.getItem($(this).data('var'))));
-    console.log(localStorage.getItem('main.BACKGROUND_LIGHT'));
-  });
-}
 
 /* These are the tag choices */
 var otherTags = ["string", "popularity-contest", "ascii-art", "number",
@@ -365,12 +324,12 @@ function getQuestion(tag, callback) {
     var title = quest['title'];
     console.log(title);
 
-    document.cookie = (tag + cookieSuffix)+'='+url+' '+title.replace(/'/g,'&apos;')+';max-age=86400';
+    document.cookie = (tag + cookieSuffix)+'='+url+' '+title.replace("'",'&apos;')+';max-age=86400';
     callback([url, title]);
   });
 }
 
-/* Add a tag to the question of the day widgit */
+/* Add a tag to the question of the day widget */
 function addTag(tag) {
   getQuestion(tag, function (a) {
     qS('#question-of-the-day').innerHTML +=
@@ -393,7 +352,7 @@ function httpGetAsync(theUrl, callback){
   xmlHttp.send(null);
 }
 
-/* Add the bottom 2 rotating tags to the question of the day widgit */
+/* Add the bottom 2 rotating tags to the question of the day widget */
 function addOtherTags() {
   var cookieName = 'other-tags-today';
   var tags = getCookie(cookieName);
@@ -409,7 +368,7 @@ function addOtherTags() {
   });
 }
 
-/* Add the question of the day widgit */
+/* Add the question of the day widget */
 function addQuestionOfTheDay() {
   var questionOfTheDayHtml = '<div class="module" id="question-of-the-day"><h4 id="h-inferred-tags">Challenges of the Day</h4></div>';
 
@@ -426,7 +385,46 @@ function addQuestionOfTheDay() {
   }
 }
 
-if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
+if (location.hostname.slice(-26) === "codegolf.stackexchange.com") {
+  var site = location.hostname.slice(0,4) === "meta" ? "meta" : "main";
+  var obj = site == "meta" ? meta : main;
+
+  $("#search input").attr("placeholder", obj.SEARCH_TEXT);
+  if (site == "main") {
+    $("#nav-askquestion").text("Post Challenge");
+  } else {
+    $("#nav-askquestion").text("Ask Question");
+  }
+  $(".bulletin-title:contains('Featured on Meta')").html('<a href="//meta.codegolf.stackexchange.com" class="bulletin-title" style="color: inherit !important"> Meta </a>');
+
+  // Options Menu
+  $(".topbar-wrapper > .network-items").append('<a id="USER_Opt" class="topbar-icon yes-hover" style="z-index:1;width: 36px; background-image: url(' + main.SPRITE_SHEET + '); background-position: 0px 0px;"></a>');
+  $("body").prepend('<div id="USER_OptMenu" style="display: none; width: inherit; height: inherit;"><div id="USER_Backblur" style="position:absolute;z-index:2;width:100%;height:100%;background:rgba(0,0,0,0.5)"></div>' +
+                    '<div style="position:absolute;z-index:3;width:40%;height:40%;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:' + optionbox.BACKGROUND_COLOR + ';padding:1em;">' +
+                    '<h1>Userscript Options</h1><div>' +
+                    '<div style="width:50%;height:100%;float:left;">' +
+                    '<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on"><label for="light_bg_on">Lighter Background?</label><br>' +
+                    '<input class="OPT_Bool" data-var="main.MODE_DARK" type="checkbox" id="dark_theme_on"><label for="dark_theme_on">Dark Theme? (WIP)</label><br>' +
+                    '<input class="OPT_Bool" data-var="main.NO_LEADERBOARD" type="checkbox" id="noleader"><label for="noleader">Disable Auto Leaderboard?</label><br>' +
+                    '<input class="OPT_Bool" data-var="main.NO_AUTOTIO" type="checkbox" id="notio"><label for="notio">Disable Auto-TryItOnline™ execution?</label>' +
+                    '</div><div style="width:50%;height:100%;float:right;">' +
+                    '' +
+                    '</div></div>For changes to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
+  $("#USER_Opt").click(function() {
+    $("#USER_OptMenu").fadeIn(50);
+  });
+  $("#USER_Backblur").click(function() {
+    $("#USER_OptMenu").fadeOut(50);
+  });
+  $(".OPT_Bool").each(function() {
+    $(this).prop("checked", localStorage.getItem($(this).data('var')) === 'true' || $(this).data('var') === 'true');
+  });
+  $(".OPT_Bool").change(function() {
+    localStorage.setItem($(this).data('var'), $(this).is(':checked'));
+    $(this).prop('checked', $(this).is(':checked'));
+    console.log(localStorage.getItem('main.BACKGROUND_LIGHT'));
+  });
+  
   $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox.">Porpoise Challenge</a></li>');
   document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
   if (site == "main") {
@@ -456,7 +454,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
         });
         var lv = 0;
         answers = answers.filter(function(a) {
-          return ("" + a[0]) != "NaN";
+          return !isNaN(a[0]);
         }).sort(function(a, b) {
           return a[0] - b[0];
         });
@@ -465,7 +463,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
           return '<tr><td>' + lv + '</td><td><a href="'+l[1].owner.link+'">'+l[1].owner.display_name+'</a></td><td>' + (l[3] /*(l[2].match(/(?:<h\d>|<p><strong>)(.+?)[, -]\s*(?:(?:\d*\.\d+|\d+)(?:\s*%)?(?:\s*[+*\/\-]\s*(?:\d*\.\d+|\d+)(?:\s*%)?)+\s*=\s*)?(?:-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/)||[])[1]||(l[2].match(/\s*(?:<h\d>|<p><strong>)(\s*<a [^ >]+.+?<\/a>|(?:[#A-Za-z_\s\.\u00FF-\uFFFF!?]|(?:(?=\d+[^\d\n]+\d+\D*(?:<\/|$|\n))\d)|(?:(?=-\s?[A-Za-z_\u00FF-\uFFFF!?]).)|(?:(?=.+(,)),))+)/)||[0,"Lang N/A"])[1]*/ ).trim() + "</td><td>" + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
         });
         var tryitonlineattempt = $(answers[0][2]).find('a[href*=".tryitonline.net"]').attr('href');
-        $("#answers").prepend('<div style="border: 1px solid #e0e0e0; border-left: none; border-right: none; margin: 15px 0px; padding: 15px;"> <b>The Current Winner: </b> is <a href="'+answers[0][1].owner.link+'">'+answers[0][1].owner.display_name+'&apos;s</a> '+answers[0][3]+' <a href="'+answers[0][1].link+'">answer</a> at '+answers[0][0]+' bytes ' + (tryitonlineattempt ? ' &#8213 <a href="'+tryitonlineattempt+'">TryItOnline&trade;</a>!' : '') + '</div>');
+        $("#answers").prepend('<div style="border: 1px solid #e0e0e0; border-left: none; border-right: none; margin: 15px 0px; padding: 15px;"> <b>The current winner</b> is <a href="'+answers[0][1].owner.link+'">'+answers[0][1].owner.display_name+'&apos;s</a> '+answers[0][3]+' <a href="'+answers[0][1].link+'">answer</a> at '+answers[0][0]+' bytes ' + (tryitonlineattempt ? ' &#8213 <a href="'+tryitonlineattempt+'">TryItOnline&trade;</a>!' : '') + '</div>');
         $(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>' +
                                          '<div id="USER_BOARD" style="display:none"><table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Author</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>' + generatedanswertable.join("\n") + '</tbody></table> </div>');
         $("#USER_BOARD_TEXT").click(function() {
@@ -561,7 +559,8 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
      "#sidebar > .module{margin-left: 12px;}" +
      "input[type=submit], input[type=button], button, .button, a.button, a.button:visited, .btn { box-shadow: none; border: 1px solid $$BUTTON_COLOR; background-color: $$BUTTON_COLOR }" +
      ".module.community-bulletin{border: none}" +
-     "input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover { border: 1px solid $$BUTTON_HOVER; background-color: $$BUTTON_HOVER }" +
+     "input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover," +
+     "input[type=submit]:focus, input[type=button]:focus, button:focus, .button:focus, a.button:focus, a.button:visited:focus, .btn:focus{ box-shadow: none; border: 1px solid $$BUTTON_HOVER; background-color: $$BUTTON_HOVER }" +
      ".mod-flair,.started .mod-flair{ color: " + MOD_FLAIR + " !important }.mod-flair:hover,.started .mod-flair:hover{color:" + MOD_FLAIR_HOVER + "}" +
      "#hmenus > div.nav.mainnavs{position: relative; top: 50%; -ms-transform: translateY(-50%);-webkit-transform: translateY(-50%);-moz-transform: translateY(-50%);-o-transform: translateY(-50%); transform: translateY(-50%);}" +
      "div.nav.askquestion li{display:initial;}"+
@@ -584,7 +583,7 @@ if (/^https?:\/\/(?:meta.)?codegolf.stackexchange.com/.test(window.location)) {
       // Find the first header or strong element (some old posts use **this** for header) and set h to its text
       var h = $(this).find("h1, h2, h3, strong").first().text();
       $(this).find("pre code").each(function() {
-        var t = $(this).text().trim().replace(/\r\n/g, "\n");
+        var t = $(this).text().trim().replace("\r\n", "\n");
         $(this).parent().before('<div style="padding-bottom:4px;font-size:11px;font-family:' + TEXT_FONT + '">' + bytes(t, h) + ", " + fchars(t) + "</div>");
       });
     });
