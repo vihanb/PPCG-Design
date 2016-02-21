@@ -205,10 +205,10 @@ document.head.innerHTML += '<style>.favicon-codegolf{background-position: initia
 $('.small-site-logo').each(function(i, el){
   console.log($(el).attr('title'))
   if($(el).attr('title') === 'Programming Puzzles & Code Golf') {
-    $('link[rel="shortcut icon"]').attr('href', main.FAVICON)
     $(el).attr('src', main.FAVICON)
   }
 })
+$('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').attr('href', main.FAVICON)
 
 if (window.location.hostname === "chat.stackexchange.com") {
   $("body").css("background", "white");
