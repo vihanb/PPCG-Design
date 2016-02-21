@@ -202,13 +202,22 @@ if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true"){
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
 document.head.innerHTML += '<style>.favicon-codegolf{background-position: initial !important; background-image: url("' + main.FAVICON + '"); background-size: 100% 100% !important;}' +
   '.favicon-codegolfmeta{background-position: initial !important; background-image: url("' + meta.FAVICON + '"); background-size: 100% 100% !important;}</style>';
-$('.small-site-logo').each(function(i, el){
-  console.log($(el).attr('title'))
-  if($(el).attr('title') === 'Programming Puzzles & Code Golf') {
-    $(el).attr('src', main.FAVICON)
+$(".small-site-logo").each(function(i, el){
+  console.log($(el).attr("title"))
+  if($(el).attr("title") === "Programming Puzzles & Code Golf") {
+    $(el).attr("src", main.FAVICON)
   }
 })
-$('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').attr('href', main.FAVICON)
+if($('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').attr('href', main.FAVICON).length) {
+  $('#input_area').css('background', '//i.stack.imgur.com/4535h.png')
+  if (localStorage.getItem('main.MODE_DARK') == "true") $("#input_area").css("background", "url(//i.stack.imgur.com/vAWfF.png)")
+  if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true") $("#input_area").css("background", "url(//i.stack.imgur.com/t8GhU.png)")
+  document.head.innerHTML +=
+    ("<style>"+
+     "a.post-tag{border-radius: 0;text-align:center;font-family:"+MONOSPACE_FONT+";font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border:none; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; border-bottom: 2px solid $$TAG_SHADOW_COLOR}" +
+     "a.post-tag:hover{border-bottom-color: $$TAG_HOVER_SHADOW_COLOR;background: $$TAG_HOVER; color: white}"+
+     "</style>")
+}
 
 if (window.location.hostname === "chat.stackexchange.com") {
   $("body").css("background", "white");
