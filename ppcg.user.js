@@ -44,7 +44,7 @@ function bytes(x, y) { // Takes in a length of text and piece of header text, an
       a += z.replace(/\s/g, '');
     });
     if (a) return bf(a.length / 2, "hex");
-    if (/^[\da-f\s-]+$/i.test(x.replace("\n", ''))) return bf(x.replace(/[\s-]/g, '').length / 2, "hex");
+    if (/^[\da-f\s-]+$/i.test(x.replace(/\n/g, ''))) return bf(x.replace(/[\s-]/g, '').length / 2, "hex");
   }
   if (/iso.?8859.1/i.test(y) || ISO_8859_1.test(y)) return bf(chars(x), "ISO-8859-1");
   if (/iso.?8859.7/i.test(y) || ISO_8859_7.test(y)) return bf(chars(x), "ISO-8859-7");
@@ -341,7 +341,7 @@ function getQuestion(tag, callback) {
     var title = quest['title'];
     console.log(title);
 
-    document.cookie = (tag + cookieSuffix)+'='+url+' '+title.replace("'",'&apos;')+';max-age=86400';
+    document.cookie = (tag + cookieSuffix)+'='+url+' '+title.replace(/'/g,'&apos;')+';max-age=86400';
     callback([url, title]);
   });
 }
@@ -628,7 +628,7 @@ if (location.hostname.slice(-26) === "codegolf.stackexchange.com") {
     console.log("404, PAGE NOT FOUND");
     var TEXT = $("#mainbar-full > .leftcol > p")[0];
     if (TEXT) {
-      TEXT.innerHTML = "We couldn't find the page you wanted. We did, however found this program";
+      TEXT.textContent = "We couldn't find the page you wanted. We did, however found this program.";
     }
     $('#mainbar-full > .rightcol > img').attr('src', obj.PAGE404);
   }
