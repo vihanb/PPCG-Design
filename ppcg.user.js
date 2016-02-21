@@ -407,6 +407,7 @@ if (location.hostname.slice(-26) === "codegolf.stackexchange.com") {
   var obj = site == "meta" ? meta : main;
 
   $("#search input").attr("placeholder", obj.SEARCH_TEXT);
+  $("#search input").queue("expand", function(){});
   if (site == "main") {
     $("#nav-askquestion").text("Post Challenge");
   } else {
