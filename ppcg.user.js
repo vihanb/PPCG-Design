@@ -202,10 +202,13 @@ if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true"){
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
 document.head.innerHTML += '<style>.favicon-codegolf{background-position: initial !important; background-image: url("' + main.FAVICON + '"); background-size: 100% 100% !important;}' +
   '.favicon-codegolfmeta{background-position: initial !important; background-image: url("' + meta.FAVICON + '"); background-size: 100% 100% !important;}</style>';
-if($('#siterooms img').attr('title') === 'Programming Puzzles & Code Golf') {
-  $('.small-site-logo').attr('src', main.FAVICON)
-  $('link:first').attr('href', main.FAVICON)
-}
+$('.small-site-logo').each(function(i, el){
+  console.log($(el).attr('title'))
+  if($(el).attr('title') === 'Programming Puzzles & Code Golf') {
+    $('link[rel="shortcut icon"]').attr('href', main.FAVICON)
+    $(el).attr('src', main.FAVICON)
+  }
+})
 
 if (window.location.hostname === "chat.stackexchange.com") {
   $("body").css("background", "white");
