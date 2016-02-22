@@ -203,11 +203,16 @@ if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true"){
 document.head.innerHTML += '<style>.favicon-codegolf{background-position: initial !important; background-image: url("' + main.FAVICON + '"); background-size: 100% 100% !important;}' +
   '.favicon-codegolfmeta{background-position: initial !important; background-image: url("' + meta.FAVICON + '"); background-size: 100% 100% !important;}</style>';
 $(".small-site-logo").each(function(i, el){
-  console.log($(el).attr("title"))
   if($(el).attr("title") === "Programming Puzzles & Code Golf") {
     $(el).attr("src", main.FAVICON)
   }
 })
+
+var site = /\/\/meta/.test(window.location.href) ? "meta" : /\/\/codegolf/.test(window.location.href) ? "main" : ""
+if (site != "") {
+  $('.network-items').append('<a id="toggleSite" class="topbar-icon yes-hover" style="z-index: 1; width: 36px; background-size: 19px 19px; background-position: 8px 7px; background-image: url(//i.imgur.com/n246U22.png)" href="' + (site == "meta" ? "//" : "//meta.") + 'codegolf.stackexchange.com"></a>')
+}
+
 if($('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').attr('href', main.FAVICON).length) {
   $('#input_area').css('background', '//i.stack.imgur.com/4535h.png')
   if (localStorage.getItem('main.MODE_DARK') == "true") $("#input_area").css("background", "url(//i.stack.imgur.com/vAWfF.png)")
