@@ -213,15 +213,18 @@ if (site != "") {
   $('.network-items').append('<a id="toggleSite" class="topbar-icon yes-hover" style="z-index: 1; width: 36px; background-size: 19px 19px; background-position: 8px 7px; background-image: url(//i.imgur.com/n246U22.png)" href="' + (site == "meta" ? "//" : "//meta.") + 'codegolf.stackexchange.com"></a>')
 }
 
-if($('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').attr('href', main.FAVICON).length) {
-  $('#input_area').css('background', '//i.stack.imgur.com/4535h.png')
-  if (localStorage.getItem('main.MODE_DARK') == "true") $("#input_area").css("background", "url(//i.stack.imgur.com/vAWfF.png)")
-  if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true") $("#input_area").css("background", "url(//i.stack.imgur.com/t8GhU.png)")
+var match = $('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').attr('href', main.FAVICON)
+if(match.length) {
+  $("#input-area").css("background", "url(" + main.BACKGROUND_IMAGE + ")")
+  if (localStorage.getItem('main.MODE_DARK') == "true") $("#input-area").css("background", "url(" + darktheme.BACKGROUND_IMAGE + ")")
+  if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true") $("#input-area").css("background", "url(" + lightbg.BACKGROUND_IMAGE + ")")
   document.head.innerHTML +=
     ("<style>"+
      "a.post-tag{border-radius: 0;text-align:center;font-family:"+MONOSPACE_FONT+";font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border:none; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; border-bottom: 2px solid $$TAG_SHADOW_COLOR}" +
      "a.post-tag:hover{border-bottom-color: $$TAG_HOVER_SHADOW_COLOR;background: $$TAG_HOVER; color: white}"+
-     "</style>")
+     "</style>").replace(/\$\$(\w+)/g, function(_, x) {
+      return eval("main." + x);
+    });
 }
 
 if (window.location.hostname === "chat.stackexchange.com") {
