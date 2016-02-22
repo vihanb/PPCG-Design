@@ -97,6 +97,7 @@ var MOD_FLAIR = "#F0C800"; // Mod diamond
 var MOD_FLAIR_HOVER = "#FFE32E";
 /** ~~~~~~~~~~~~~~~~ MAIN SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
 
+
 var main = {
   FAVICON: "//i.stack.imgur.com/oHkfe.png",
   SPRITE_SHEET: "//cdn.rawgit.com/vihanb/PPCG-Design/master/assets/sprites.svg",
@@ -110,12 +111,13 @@ var main = {
   BG_COL_HOVER: "white",
   BG_START: "white",
   BG_REV: "#329300",
-
+  
+  
   BACKGROUND_LIGHT: (localStorage.getItem("main.BACKGROUND_LIGHT") === "true"), // Lighter shade of the background, CHANGE THROUGH OPTIONS
   MODE_DARK: (localStorage.getItem("main.MODE_DARK") === "true"),
   NO_LEADERBOARD: (localStorage.getItem("main.NO_LEADERBOARD") === "true"),
   NO_AUTOTIO: (localStorage.getItem("main.NO_AUTOTIO") === "true"),
-
+  PROPOSE :  (localStorage.getItem("main.PROPOSE") === "true")?"Propose":"Porpoise",
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#FAFAFA",
   HEADER_BG_COLOR: "transparent",
@@ -238,7 +240,6 @@ if (window.location.hostname === "chat.stackexchange.com") {
   $("#searchbox").css("padding-left", "4px !important");
 
   /*  $("body").append('<img id="CHATBOX" style="z-index: 1000; display:none; position: fixed;">');
-
   $(document).on('mouseenter', 'li[id^="summary_"], li[id^="summary_"] *', function() {
     $("#CHATBOX").show();
     var src = $(this).find('a[href*=".png"],a[href*=".jpeg"],a[href*=".jpg"],a[href*=".gif"],a[href*=".svg"]').attr('href');
@@ -254,7 +255,6 @@ if (window.location.hostname === "chat.stackexchange.com") {
     });
     }
   });
-
   $(document).on('mouseleave', 'li[id^="summary_"]', function() {
     $("#CHATBOX").hide();
   });//*/// Doesn't work :(
@@ -431,6 +431,7 @@ if (location.hostname.slice(-26) === "codegolf.stackexchange.com") {
                     '<div style="width:50%;height:100%;float:left;">' +
                     '<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on"><label for="light_bg_on">Lighter Background?</label><br>' +
                     '<input class="OPT_Bool" data-var="main.MODE_DARK" type="checkbox" id="dark_theme_on"><label for="dark_theme_on">Dark Theme? (WIP)</label><br>' +
+                    '<input class="OPT_Bool" data-var="main.PROPOSE" type="checkbox" id="propose"><label for="propose">Use propose instead of porpoise?</label><br>' + 
                     '<input class="OPT_Bool" data-var="main.NO_LEADERBOARD" type="checkbox" id="noleader"><label for="noleader">Disable Auto Leaderboard?</label><br>' +
                     '<input class="OPT_Bool" data-var="main.NO_AUTOTIO" type="checkbox" id="notio"><label for="notio">Disable Auto-TryItOnline™ execution?</label>' +
                     '</div><div style="width:50%;height:100%;float:right;">' +
@@ -451,7 +452,7 @@ if (location.hostname.slice(-26) === "codegolf.stackexchange.com") {
     console.log(localStorage.getItem('main.BACKGROUND_LIGHT'));
   });
   
-  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox.">Porpoise Challenge</a></li>');
+  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox.">'+ main.PROPOSE +  ' Challenge</a></li>');
   document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
   $('#wmd-preview').after('<div>Before you post, take some time to read through the <a href="http://meta.codegolf.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>');
   if (site == "main") {
