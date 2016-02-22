@@ -6,7 +6,7 @@ A userscript to redesign and add features to the PPCG website.
 
 @Doᴡɴɢᴏᴀᴛ, @ETHproductions, @PhiNotPi, @Cᴏɴᴏʀ O'Bʀɪᴇɴ, @mınxomaτ, @JAtkin, @GamrCorps, @El'endia Starman, and @ՊՓԼՃՐՊՃՈԲՍԼ.
 
-Wither help from: @RikerW, @Calvin's Hobbies, and @issacg
+With help from: @RikerW, @Calvin's Hobbies, and @isaacg
 
 If you'd like to become a collaborator, feel free to tell me in [chat](http://chat.stackexchange.com/rooms/33840/ppcg-graduation-design-discussion) (@Doᴡɴɢᴏᴀᴛ)
 
