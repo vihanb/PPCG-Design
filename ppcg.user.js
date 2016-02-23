@@ -670,7 +670,7 @@ if (site === "main" || site === "meta") {
     });
   }
   $("body .container").prepend('<div style="position: absolute;width: inherit; z-index: 0; height: 130px; background: url(' + obj.BACKGROUND_IMAGE + '); background-size: '+obj.BACKGROUND_SIZE+'; background-attachment: fixed;"></div>');
-  addQuestionOfTheDay(); // Disabling because of cookie bugs
+  //addQuestionOfTheDay(); // Disabling because of cookie bugs
   $(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
   document.head.innerHTML += 
     ("<style>" +
