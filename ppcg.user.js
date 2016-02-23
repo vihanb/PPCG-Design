@@ -93,8 +93,8 @@ var PARSE_CODEBLOCKS = true; // set to false to not parse code block lengths
 var PARSE_HEXDUMPS = true; // set to false to not parse hexdump lengths
 
 // Fonts
-var HEADER_FONT = '"Lato", "Open Sans", "Arial", sans-serif'; // Header text
-var TEXT_FONT = '"Open Sans", "Lato", "Helvetica Neue", "Arial", sans-serif'; // Everything else besides code
+var HEADER_FONT = 'Lato, "Open Sans", Arial, sans-serif'; // Header text
+var TEXT_FONT = '"Open Sans", Lato, "Helvetica Neue", Arial, sans-serif'; // Everything else besides code
 var MONOSPACE_FONT = "Inconsolata, monospace"; // Monospace font & Tag font
 var FONT_URL = "//fonts.googleapis.com/css?family=Lato:700|Open+Sans|Inconsolata"; // import any webfonts here
 
@@ -431,23 +431,33 @@ if (site === "main" || site === "meta") {
                     '</div><div style="width:50%;height:100%;float:right;">' +
                     '' +
                     '</div></div>For changes to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
-  $("#USER_Opt").click(function() {
-    $("#USER_OptMenu").fadeIn(50);
+  $("#USER_Opt, #USER_Backblur").click(function() {
+    $("#USER_OptMenu").fadeToggle(50);
   });
-  $("#USER_Backblur").click(function() {
-    $("#USER_OptMenu").fadeOut(50);
-  });
-  $(".OPT_Bool").each(function() {
-    $(this).prop("checked", localStorage.getItem($(this).data('var')) === 'true' || $(this).data('var') === 'true');
+  $(".OPT_Bool").prop("checked", function() {
+    return localStorage.getItem($(this).data('var')) === 'true';
   });
   $(".OPT_Bool").change(function() {
     localStorage.setItem($(this).data('var'), $(this).is(':checked'));
-    $(this).prop('checked', $(this).is(':checked'));
     console.log(localStorage.getItem('main.BACKGROUND_LIGHT'));
   });
-  $('.network-items').append('<a id="toggleSite" class="topbar-icon yes-hover" style="z-index: 1; width: 36px; background-size: 19px 19px; background-position: 8px 7px; background-image: url(//i.imgur.com/n246U22.png)" href="' + (site == "meta" ? "//" : "//meta.") + 'codegolf.stackexchange.com"></a>')
-
-  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox.">'+ main.PROPOSE +  ' Challenge</a></li>');
+  $('<a>')
+    .addClass('topbar-icon yes-hover')
+    .css({
+      'z-index': 1,
+      'width': '36px',
+      'background-size': '19px 19px',
+      'background-position': '8px 7px',
+      'background-image': 'url(//i.imgur.com/n246U22.png)'
+    })
+    .attr({
+      id: 'toggleSite',
+      href: (site === "meta" ? "//" : "//meta.") + 'codegolf.stackexchange.com',
+      title: 'Switch to ' + (site === 'meta' ? 'main' : 'meta')
+    })
+    .appendTo('.network-items');
+  
+  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandboxz">'+ main.PROPOSE + ' Challenge</a></li>');
   document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
   $('#wmd-preview').after('<div>Before you post, take some time to read through the <a href="http://meta.codegolf.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>');
   if (site == "main") {
@@ -456,8 +466,8 @@ if (site === "main" || site === "meta") {
     x.innerHTML = "<table id=\"newlogo\"><tr><td><img style=\"margin-top: "+BGHEIGHT+"px;\" src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
     // Leaderboard
     if (!main.NO_LEADERBOARD &&
-        $('a.post-tag[href="/questions/tagged/code-golf"]')[0]
-        && !$('a.post-tag[href="/questions/tagged/tips"]')[0]
+        $('.post-taglist .post-tag[href$="code-golf"]')[0]
+        && !$('.post-taglist .post-tag[href$="tips"]')[0]
         && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
       var answers = [];
       loadAnswers(function(json) {
