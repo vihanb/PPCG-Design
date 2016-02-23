@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.6.2
+// @version     3.6.3
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://chat.stackexchange.com/*
@@ -123,7 +123,7 @@ var main = {
   MODE_DARK: (localStorage.getItem("main.MODE_DARK") === "true"),
   NO_LEADERBOARD: (localStorage.getItem("main.NO_LEADERBOARD") === "true"),
   NO_AUTOTIO: (localStorage.getItem("main.NO_AUTOTIO") === "true"),
-  PROPOSE :  (localStorage.getItem("main.PROPOSE") === "true")?"Propose":"Porpoise",
+  PROPOSE: (localStorage.getItem("main.PROPOSE") === "true")?"Propose Challenge":(localStorage.getItem("main.ALT_PROPOSE") === "true")?"Post in Sandbox":"Porpoise Challenge",
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#FAFAFA",
   HEADER_BG_COLOR: "transparent",
@@ -132,6 +132,14 @@ var main = {
   CURR_TAB_COLOR: "#62BA15",
   BULLETIN_BG_COLOR: "#fff8dc",
   STATS_COLOR: "#FAFAFA",
+  LINK_COLOR: "rgb(60, 100, 60)",
+  VISITED_LINK_COLOR: "rgb(30,50,30)",
+  HOVER_LINK_COLOR: "rgb(45,75,45)",
+  POST_QUESTION_COLOR: "rgba(140,180,140,0.75)",
+  POST_QUESTION_CORNER_RADIUS: "5px",
+  TEXT_COLOR: "black",
+  CODE_COLOR: "black",
+  CODE_BACKGROUND: "#EEE",
 
   TAG_COLOR: "#D4F493",
   TAG_HOVER: "#329300",
@@ -157,7 +165,7 @@ var meta = {
   SEARCH_TEXT: "Search meta.codegolf.SE",
 
   // Set to empty string for no background image
-  BACKGROUND_IMAGE: "//i.stack.imgur.com/4535h.png ",
+  BACKGROUND_IMAGE: "//i.stack.imgur.com/4535h.png",
   PAGE404: "",
   BACKGROUND_SIZE: "650px 150px",
   BG_COL: "#474747",
@@ -175,6 +183,11 @@ var meta = {
   TAG_COLOR: "",
   TAG_BORDER_COLOR: "",
   BUTTON_COLOR: "#303030",
+  POST_QUESTION_COLOR: "rgba(255, 255, 255, 0.75)",
+  POST_QUESTION_CORNER_RADIUS: "5px",
+  TEXT_COLOR: "black",
+  CODE_COLOR: "black",
+  CODE_BACKGROUND: "#EEE",
 
   // Specify nothing to make these default color
   BOUNTY_COLOR: "rgb(72,125,75)",
@@ -184,10 +197,37 @@ var meta = {
 
 var darktheme = {
   BACKGROUND_COLOR: "red",
-  BACKGROUND_IMAGE: "//i.stack.imgur.com/vAWfF.png ",
+  BACKGROUND_IMAGE: "//i.stack.imgur.com/vAWfF.png",
+  STATS_COLOR: "#364",
   BULLETIN_TITLE: "#000000",
-  BULLETIN_BG_COLOR: "rgb(158,158,158)",
-  META_LINK_COLOR:"rgb(34,36,38)"
+  BULLETIN_BG_COLOR: "rgb(136,170,131)",
+  META_LINK_COLOR:"rgb(34,36,38)",
+  POST_QUESTION_COLOR: "rgba(134,180,140,0.75)",
+  POST_QUESTION_RADIUS: "5px",
+  LINK_COLOR: "rgb(160, 213, 162)",
+  VISITED_LINK_COLOR: "rgb(110,150,110)",
+  RIGHTBAR_BG: "#B0D4AB",
+  RIGHTBAR_BORDER: "none",
+  TEXT_COLOR: "#D6ECCB",
+  CODE_COLOR: "#264730",
+  CODE_BACKGROUND: "#BDB"
+};
+
+var metadark = {
+  STATS_COLOR: "#555",
+  BULLETIN_TITLE: "#000000",
+  BULLETIN_BG_COLOR: "#AAA",
+  META_LINK_COLOR:"rgb(34,36,38)",
+  POST_QUESTION_COLOR: "rgba(150,150,150,0.75)",
+  POST_QUESTION_RADIUS: "5px",
+  LINK_COLOR: "#DDD",
+  VISITED_LINK_COLOR: "#BBB",
+  HOVER_LINK_COLOR: "#CCC",
+  RIGHTBAR_BG: "#B0D4AB",
+  RIGHTBAR_BORDER: "none",
+  TEXT_COLOR: "#DDD",
+  CODE_COLOR: "#222",
+  CODE_BACKGROUND: "#CCC"
 };
 
 var lightbg = {
@@ -202,7 +242,10 @@ var optionbox = { // Customizes option box
 
 var BGHEIGHT = 0; // this + 130
 
-if (localStorage.getItem('main.MODE_DARK') == "true") main = $.extend(main, darktheme);
+if (localStorage.getItem('main.MODE_DARK') == "true") {
+  main = $.extend(main, darktheme);
+  meta = $.extend(meta, metadark);
+}
 if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true"){
   main = $.extend(main, lightbg);
   document.body.style.backgroundRepeat="repeat";
@@ -426,6 +469,7 @@ if (site === "main" || site === "meta") {
                     '<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on"><label for="light_bg_on">Lighter Background?</label><br>' +
                     '<input class="OPT_Bool" data-var="main.MODE_DARK" type="checkbox" id="dark_theme_on"><label for="dark_theme_on">Dark Theme? (WIP)</label><br>' +
                     '<input class="OPT_Bool" data-var="main.PROPOSE" type="checkbox" id="propose"><label for="propose">Use propose instead of porpoise?</label><br>' + 
+                    '<input class="OPT_Bool" data-var="main.ALT_PROPOSE" type="checkbox" id="propose"><label for="propose">Use \'Post in Sandbox\' instead of porpoise?</label><br>' + 
                     '<input class="OPT_Bool" data-var="main.NO_LEADERBOARD" type="checkbox" id="noleader"><label for="noleader">Disable Auto Leaderboard?</label><br>' +
                     '<input class="OPT_Bool" data-var="main.NO_AUTOTIO" type="checkbox" id="notio"><label for="notio">Disable Auto-TryItOnline™ execution?</label>' +
                     '</div><div style="width:50%;height:100%;float:right;">' +
@@ -457,7 +501,7 @@ if (site === "main" || site === "meta") {
     })
     .appendTo('.network-items');
   
-  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandboxz">'+ main.PROPOSE + ' Challenge</a></li>');
+  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandboxz">'+ main.PROPOSE + '</a></li>');
   document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
   $('#wmd-preview').after('<div>Before you post, take some time to read through the <a href="http://meta.codegolf.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>');
   if (site == "main") {
@@ -570,8 +614,11 @@ if (site === "main" || site === "meta") {
   $("#mainbar").css('padding', '15px');
   document.head.innerHTML +=
     ("<style>@import url(" + FONT_URL + ");" +
+     "h1,h2,h3,h4,h5,h6,span,ul,p{color:$$TEXT_COLOR}" +
+     "code,pre{color:$$CODE_COLOR;background-color:$$CODE_BACKGROUND}" +
      ".envelope-on,.envelope-off,.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.star-on,.star-off,.comment-up-off,.comment-up-on,.comment-flag,.edited-yes,.feed-icon,.vote-accepted-off,.vote-accepted-on,.vote-accepted-bounty,.badge-earned-check,.delete-tag,.grippie,.expander-arrow-hide,.expander-arrow-show,.expander-arrow-small-hide,.expander-arrow-small-show,.anonymous-gravatar,.badge1,.badge2,.badge3,.gp-share,.fb-share,.twitter-share,#notify-containerspan.notify-close,.migrated.to,.migrated.from{background-image:url(\"$$SPRITE_SHEET\");background-size: initial;}" +
      ".youarehere{color:$$CURR_TAB_COLOR !important;border-bottom:2px solid $$CURR_TAB_COLOR !important;}" +
+     "#sidebar #beta-stats, #sidebar #promo-box{background:$$RIGHTBAR_BG;border:$$RIGHTBAR_BORDER}" +
      (obj.BOUNTY_COLOR ? ".bounty-indicator-tab{background:$$BOUNTY_BG_COLOR;color:$$BOUNTY_COLOR !important;}" : "") +
      "#sidebar .module.community-bulletin{background:$$BULLETIN_BG_COLOR;}" +
      ".bulletin-title{color:$$BULLETIN_TITLE;}" +
@@ -586,7 +633,7 @@ if (site === "main" || site === "meta") {
      "#content{margin-top: 7px;}"+
      '#footer #footer-sites a, #footer th {color: #BFBFBF;}'+
      ".container{box-shadow: none !important;}"+
-     '#content{background:$$STATS_COLOR !important;}'+
+     'body,#content{background:$$STATS_COLOR !important;}'+
      "#hmenus > div.nav:not(.mainnavs) a{text-align:center; color: $$BG_COL;font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;background: $$BG_START;padding: 8px 12px;-webkit-transition: color 0.15s ease, background 0.15s ease;-moz-transition: color 0.15s ease, background 0.15s ease;-ms-transition: color 0.15s ease, background 0.15s ease;-o-transition: color 0.15s ease, background 0.15s ease;}"+
      "#hmenus > div.nav:not(.mainnavs) a:hover{color: $$BG_COL_HOVER;background: $$BG_REV;}" +
      "#sidebar > .module{margin-left: 12px;}" +
@@ -598,7 +645,8 @@ if (site === "main" || site === "meta") {
      "#hmenus > div.nav.mainnavs{position: relative; top: 50%; -ms-transform: translateY(-50%);-webkit-transform: translateY(-50%);-moz-transform: translateY(-50%);-o-transform: translateY(-50%); transform: translateY(-50%);}" +
      "div.nav.askquestion li{display:initial;}"+
      "#hmenus{top: 50%;-ms-transform: translateY(-50%);-webkit-transform: translateY(-50%);-moz-transform: translateY(-50%);-o-transform: translateY(-50%);transform: translateY(-50%);}" +
-     "#hmenus > div.nav.askquestion li:not(:first-child) > a { margin-top: 5px; }"+
+     "#hmenus > div.nav.askquestion li:not(:first-child) > a { margin-top: 5px; }" +
+     "#hmenus > div.nav:not(.mainnavs) a{border-radius: $$POST_QUESTION_RADIUS;background:$$POST_QUESTION_COLOR}" +
      "#header{background:$$HEADER_BG_COLOR;}#header *, #hlogo a{color:$$HEADER_TEXT_COLOR;}" +
      "a.post-tag{border-radius: 0;text-align:center;font-family:"+MONOSPACE_FONT+";font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border:none; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; border-bottom: 2px solid $$TAG_SHADOW_COLOR}" +
      "a.post-tag:hover{border-bottom-color: $$TAG_HOVER_SHADOW_COLOR;background: $$TAG_HOVER; color: white}" +
@@ -622,16 +670,18 @@ if (site === "main" || site === "meta") {
     });
   }
   $("body .container").prepend('<div style="position: absolute;width: inherit; z-index: 0; height: 130px; background: url(' + obj.BACKGROUND_IMAGE + '); background-size: '+obj.BACKGROUND_SIZE+'; background-attachment: fixed;"></div>');
-  if (site == "main") {
-    // addQuestionOfTheDay(); // Disabling because of cookie bugs
-    $(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
-    document.head.innerHTML += "<style>.question-hyperlink, .answer-hyperlink{color:rgb(62,107,64)}.question-hyperlink:visited, .answer-hyperlink:visited,.started-link:visited{color:rgb(30,51,31)}" +
-      "#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover{color:#5DA261;border-bottom:2px solid #5DA261}" +
-      "a:hover,.question-hyperlink:hover,.answer-hyperlink:hover,.started-link:hover{color:#487D4B}" +
-      "a{color:#5DA261}" +
-      "</style>"; //workaround for several links
-    $(".started a:not(.started-link)").css('color', '#487D4B');
-  }
+  //addQuestionOfTheDay(); // Disabling because of cookie bugs
+  $(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
+  document.head.innerHTML += 
+    ("<style>" +
+     //".question-hyperlink, .answer-hyperlink, #hot-network-questions a{color:$$LINK_COLOR}.question-hyperlink:visited, .answer-hyperlink:visited,.started-link:visited, #hot-network-questions a:visited{color:$$VISITED_LINK_COLOR}" +
+     "#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover{color:#5DA261;border-bottom:2px solid #5DA261}" +
+     //"a:hover,.question-hyperlink:hover,.answer-hyperlink:hover,.started-link:hover{color:#487D4B}" +
+     "a{color:$$LINK_COLOR}a:visited{color:$$VISITED_LINK_COLOR}a:hover{color:$$HOVER_LINK_COLOR}" +
+     "</style>").replace(/\$\$(\w+)/g, function(_, x) {
+    return eval(site + "." + x);
+  }); //workaround for several links
+  $(".started a:not(.started-link)").css('color', '#487D4B');
   window.addEventListener("load", function() {
     setTimeout(function() {
       document.getElementById("footer").setAttribute("style", 'background: transparent url("'+obj.BACKGROUND_IMAGE+'") repeat fixed 0% 0% / '+obj.BACKGROUND_SIZE+';');
