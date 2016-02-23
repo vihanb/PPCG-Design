@@ -10,6 +10,11 @@
 // @updateURL   https://rawgit.com/vihanb/PPCG-Design/master/ppcg.user.js
 // ==/UserScript==
 
+var site = window.location.hostname.slice(0, 4); // main, meta, or chat
+if(site === 'code') { // from codegolf.stackexchange.com
+    site = 'main';
+}
+
 function qS(x) {
   return document.querySelector(x);
 }
@@ -219,12 +224,10 @@ if(match.length) {
     ("<style>"+
      "a.post-tag{border-radius: 0;text-align:center;font-family:"+MONOSPACE_FONT+";font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border:none; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; border-bottom: 2px solid $$TAG_SHADOW_COLOR}" +
      "a.post-tag:hover{border-bottom-color: $$TAG_HOVER_SHADOW_COLOR;background: $$TAG_HOVER; color: white}"+
-     "</style>").replace(/\$\$(\w+)/g, function(_, x) {
-      return eval("main." + x);
-    });
+     "</style>").replace(/\$\$(\w+)/g, main[RegExp.$1]);
 }
 
-if (window.location.hostname === "chat.stackexchange.com") {
+if (site === "chat") {
   $("body").css("background", "white");
   $("#sound").css({
     "background": "url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Speaker_Icon.svg/200px-Speaker_Icon.svg.png)",
@@ -233,7 +236,7 @@ if (window.location.hostname === "chat.stackexchange.com") {
   $("#roomname").css("font-family", "'Lato'");
   $("#roomname").css("font-weight", "800");
   $("#searchbox").css("padding-left", "4px !important");
-  document.getElementById('main').getElementsByTagName("table")[0].getElementsByTagName('td')[3].innerHTML='<a style="color:#22AA22" href="http://codegolf.stackexchange.com" title="Programming Puzzles &amp; Code Golf">Programming Puzzles & Code Golf</a>'
+  $('#footer-logo a').text('Programming Puzzles & Code Golf').css('color','#2A2');
   
   /*  $("body").append('<img id="CHATBOX" style="z-index: 1000; display:none; position: fixed;">');
   $(document).on('mouseenter', 'li[id^="summary_"], li[id^="summary_"] *', function() {
@@ -406,17 +409,12 @@ function addQuestionOfTheDay() {
   }
 }
 
-if (location.hostname.slice(-26) === "codegolf.stackexchange.com") {
-  var site = location.hostname.slice(0,4) === "meta" ? "meta" : "main";
+if (site === "main" || site === "meta") {
   var obj = site == "meta" ? meta : main;
 
   $("#search input").attr("placeholder", obj.SEARCH_TEXT);
   $("#search input").queue("expand", function(){});
-  if (site == "main") {
-    $("#nav-askquestion").text("Post Challenge");
-  } else {
-    $("#nav-askquestion").text("Ask Question");
-  }
+  $("#nav-askquestion").text(site === "main" ? "Post Challenge" : "Ask Question");
   $(".bulletin-title:contains('Featured on Meta')").html('<a href="//meta.codegolf.stackexchange.com" class="bulletin-title" style="color: inherit !important"> Meta </a>');
 
   // Options Menu
@@ -447,10 +445,7 @@ if (location.hostname.slice(-26) === "codegolf.stackexchange.com") {
     $(this).prop('checked', $(this).is(':checked'));
     console.log(localStorage.getItem('main.BACKGROUND_LIGHT'));
   });
-  var site = /\/\/meta/.test(window.location.href) ? "meta" : /\/\/codegolf/.test(window.location.href) ? "main" : ""
-  if (site != "") {
-	  $('.network-items').append('<a id="toggleSite" class="topbar-icon yes-hover" style="z-index: 1; width: 36px; background-size: 19px 19px; background-position: 8px 7px; background-image: url(//i.imgur.com/n246U22.png)" href="' + (site == "meta" ? "//" : "//meta.") + 'codegolf.stackexchange.com"></a>')
-  }
+  $('.network-items').append('<a id="toggleSite" class="topbar-icon yes-hover" style="z-index: 1; width: 36px; background-size: 19px 19px; background-position: 8px 7px; background-image: url(//i.imgur.com/n246U22.png)" href="' + (site == "meta" ? "//" : "//meta.") + 'codegolf.stackexchange.com"></a>')
 
   $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox.">'+ main.PROPOSE +  ' Challenge</a></li>');
   document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
@@ -643,7 +638,7 @@ if (location.hostname.slice(-26) === "codegolf.stackexchange.com") {
   }
 
   // votes
-  if ((window.location + "").indexOf("codegolf.stackexchange.com") > -1) {
+  if (site === "main" || site === "meta") {
     /*=== SHOWS VOTE COUNTS ===*/
     try {
       void
@@ -655,7 +650,7 @@ if (location.hostname.slice(-26) === "codegolf.stackexchange.com") {
         var s = t.createElement("script");
         s["textContent" in s ? "textContent" : "text"] = "(" + function() {
           var t = location.protocol + "//api.stackexchange.com/2.0/posts/",
-              e = "?filter=!)q3b*aB43Xc&key=DwnkTjZvdT0qLs*o8rNDWw((&site=" + location.host,
+              e = "?filter=!)q3b*aB43Xc&key=DwnkTjZvdT0qLs*o8rNDWw((&site=" + location.hostname,
               o = 1,
               n = StackExchange.helpers,
               s = $.fn.click;
