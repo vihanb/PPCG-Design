@@ -503,8 +503,8 @@ if (site === "main" || site === "meta") {
   
   $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandboxz">'+ main.PROPOSE + '</a></li>');
   document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
-  $('#wmd-preview').after('<div>Before you post, take some time to read through the <a href="http://meta.codegolf.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>');
   if (site == "main") {
+    $('#wmd-preview').after('<div>Before you post, take some time to read through the <a href="http://meta.codegolf.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>');
     qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
     // Leaderboard
     if (!main.NO_LEADERBOARD &&
