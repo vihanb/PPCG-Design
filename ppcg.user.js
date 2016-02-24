@@ -15,8 +15,6 @@ if(site === 'code') { // from codegolf.stackexchange.com
     site = 'main';
 }
 
-if($.cookie("RUN_IN_CHAT") !== "true" && site === "chat") return;
-
 function qS(x) {
   return document.querySelector(x);
 }
@@ -103,9 +101,8 @@ var FONT_URL = "//fonts.googleapis.com/css?family=Lato:700|Open+Sans|Inconsolata
 // Colors
 var MOD_FLAIR = "#F0C800"; // Mod diamond
 var MOD_FLAIR_HOVER = "#FFE32E";
-
-
 /** ~~~~~~~~~~~~~~~~ MAIN SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
+
 
 var main = {
   FAVICON: "//i.stack.imgur.com/oHkfe.png",
@@ -126,8 +123,7 @@ var main = {
   MODE_DARK: (localStorage.getItem("main.MODE_DARK") === "true"),
   NO_LEADERBOARD: (localStorage.getItem("main.NO_LEADERBOARD") === "true"),
   NO_AUTOTIO: (localStorage.getItem("main.NO_AUTOTIO") === "true"),
-  PROPOSE: (localStorage.getItem("main.PROPOSE") === "true")?"Propose Challenge":(localStorage.getItem("main.ALT_PROPOSE") === "true")?"Post in Sandbox":"Porpoise Challenge",
-  
+  PROPOSE: 'Propose',
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#FAFAFA",
   HEADER_BG_COLOR: "transparent",
@@ -136,8 +132,8 @@ var main = {
   CURR_TAB_COLOR: "#62BA15",
   BULLETIN_BG_COLOR: "#fff8dc",
   STATS_COLOR: "#FAFAFA",
-  LINK_COLOR: "rgb(140, 180, 140)",
-  VISITED_LINK_COLOR: "rgb(80,100,80)",
+  LINK_COLOR: "rgb(60, 100, 60)",
+  VISITED_LINK_COLOR: "rgb(30,50,30)",
   HOVER_LINK_COLOR: "rgb(45,75,45)",
   POST_QUESTION_COLOR: "rgba(140,180,140,0.75)",
   POST_QUESTION_CORNER_RADIUS: "5px",
@@ -259,15 +255,14 @@ document.head.innerHTML += '<style>.favicon-codegolf{background-position: initia
   '.favicon-codegolfmeta{background-position: initial !important; background-image: url("' + meta.FAVICON + '"); background-size: 100% 100% !important;}</style>';
 $(".small-site-logo").each(function(i, el){
   if($(el).attr("title") === "Programming Puzzles & Code Golf") {
-    $(el).attr("src", main.FAVICON)
+    $(el).attr("src", main.FAVICON);
   }
-})
-var match = $('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').attr('href', main.FAVICON)
+});
+var match = $('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').attr('href', main.FAVICON);
 if(match.length) {
-  $("#input-area").css("background", "url(" + "http://i.stack.imgur.com/oqoGQ.png" + ")");
-  $("#input-area").css("background-size", " 600px 400px")
-  if (localStorage.getItem('main.MODE_DARK') == "true") $("#input-area").css("background", "url(" + darktheme.BACKGROUND_IMAGE + ")")
-  if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true") $("#input-area").css("background", "url(" + lightbg.BACKGROUND_IMAGE + ")")
+  $("#input-area").css("background", "url(" + main.BACKGROUND_IMAGE + ")");
+  if (localStorage.getItem('main.MODE_DARK') == "true") $("#input-area").css("background", "url(" + darktheme.BACKGROUND_IMAGE + ")");
+  if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true") $("#input-area").css("background", "url(" + lightbg.BACKGROUND_IMAGE + ")");
   document.head.innerHTML +=
     ("<style>"+
      "a.post-tag{border-radius: 0;text-align:center;font-family:"+MONOSPACE_FONT+";font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border:none; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; border-bottom: 2px solid $$TAG_SHADOW_COLOR}" +
@@ -310,8 +305,6 @@ if (site === "chat") {
     '@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic|Open+Sans:400,400italic,700,700italic&subset=latin,greek);'+
     'body { font-family: "Open Sans"; font-size: 12px; }' +
 
-	 '#input-area a { color: #366fb3; }' +
-	  
     '.button { cursor: pointer; background: #96db62; border: none; border-bottom: 1px solid rgb(106, 194, 65) }' +
     '.button:hover { background: #51cc47; border-bottom-color: #449656; }' +
 
@@ -475,14 +468,22 @@ if (site === "main" || site === "meta") {
                     '<div style="width:50%;height:100%;float:left;">' +
                     '<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on"><label for="light_bg_on">Lighter Background?</label><br>' +
                     '<input class="OPT_Bool" data-var="main.MODE_DARK" type="checkbox" id="dark_theme_on"><label for="dark_theme_on">Dark Theme? (WIP)</label><br>' +
-                    '<input class="OPT_Bool" data-var="main.PROPOSE" type="checkbox" id="propose"><label for="propose">Use propose instead of porpoise?</label><br>' + 
-                    '<input class="OPT_Bool" data-var="main.ALT_PROPOSE" type="checkbox" id="propose"><label for="propose">Use \'Post in Sandbox\' instead of porpoise?</label><br>' + 
+                    '<p>What text to use for the propose challenge button?</p>' +
+                    '<select id="proposechoice">' + 
+                    '<option value="Propose">Propose</option>' + 
+                    '<option value="Porpoise">Porpoise</option>' + 
+                    '<option value="Propoise">Propoise</option>' + 
+                    '<option value="Post question to sandbox">Post question to sandbox</option>' + 
+                    '</select><br/>' + 
                     '<input class="OPT_Bool" data-var="main.NO_LEADERBOARD" type="checkbox" id="noleader"><label for="noleader">Disable Auto Leaderboard?</label><br>' +
                     '<input class="OPT_Bool" data-var="main.NO_AUTOTIO" type="checkbox" id="notio"><label for="notio">Disable Auto-TryItOnline™ execution?</label>' +
-                    '<br><input class="OPT_Bool" type="checkbox" id="chat_design_on" onclick="$.cookie(\'RUN_IN_CHAT\',this.checked,{domain:\'stackexchange.com\'})"><label for="chat_design_on">Make design modifications in chat?</label><br>' +
                     '</div><div style="width:50%;height:100%;float:right;">' +
                     '' +
                     '</div></div>For changes to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
+  $('#proposechoice').change(function () {
+    var str = $(this).find('option:selected').val();
+    main.PROPOSE=str;
+  });
   $("#USER_Opt, #USER_Backblur").click(function() {
     $("#USER_OptMenu").fadeToggle(50);
   });
@@ -509,18 +510,14 @@ if (site === "main" || site === "meta") {
     })
     .appendTo('.network-items');
   
-  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandboxz">'+ main.PROPOSE + '</a></li>');
+  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandboxz">'+ main.PROPOSE + ' challenge</a></li>');
   document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
   
-  var answerafter='<div>Before you post, take some time to read through the <a href="http://meta.codegolf.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>'
+  var answerafter='<div>Before you post, take some time to read through the <a href="http://meta.codegolf.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>';
   if (site == "main") {
-    
     qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
     // Leaderboard
-    if (!main.NO_LEADERBOARD &&
-        $('.post-taglist .post-tag[href$="code-golf"]')[0]
-        && !$('.post-taglist .post-tag[href$="tips"]')[0]
-        && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
+    if (!main.NO_LEADERBOARD && $('.post-taglist .post-tag[href$="code-golf"]')[0] && !$('.post-taglist .post-tag[href$="tips"]')[0] && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
       var answers = [];
       loadAnswers(function(json) {
         answers = json.map(function(i, l, a) {
@@ -563,9 +560,9 @@ if (site === "main" || site === "meta") {
 
     }
   } else {
-  	answerafter=''
+  	answerafter='';
     qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.DISP_ICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\" style=\"font-size: 14px; color: #CF7720\">meta</span></td></tr></table>";
-  	if (/sandbox/.test(window.location.href)===true){answerafter='<div>Try reading through <a href="http://meta.codegolf.stackexchange.com/questions/8047/things-to-avoid-when-writing-challenges/">the things to avoid when writing challenges</a> before you post.</div>'}
+  	if (/sandbox/.test(window.location.href)===true){answerafter='<div>Try reading through <a href="http://meta.codegolf.stackexchange.com/questions/8047/things-to-avoid-when-writing-challenges/">the things to avoid when writing challenges</a> before you post.</div>';}
   }
   $('#wmd-preview').after(answerafter);
   // tio.net (WIP) support
@@ -575,7 +572,7 @@ if (site === "main" || site === "meta") {
       if (tiolinks[0]) {
         // They are tryitonline links
         var counter = 0;
-        function run($this) {
+        function run ($this) {
           var parts = {};
           if ($this.attr('href').split("#")[1]) {
             var _parts = $this.attr('href').split("#")[1].split("&").map(function(i) {
@@ -635,7 +632,7 @@ if (site === "main" || site === "meta") {
      ".bulletin-title{color:$$BULLETIN_TITLE;}" +
      "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}" +
      ".yes-hover{cursor:pointer !important;}" +
-     '.qod-qitem { display: table }' +
+     '.qod-qitem { display: table }' +s + 
      '.qod-qitem > *{ display: table-cell; vertical-align:middle }' +
      '.qod-qitem > *:not(.post-tag) { font-weight: normal; font-size: 12px; white-space: normal; padding-left: 5px; }' +
      '.qod-qitem:not(:first-child) { margin-top: 5px; }'+
@@ -757,9 +754,7 @@ if (site === "main" || site === "meta") {
         } + ")();", e.appendChild(s), s.parentNode.removeChild(s)
       }(document);
     } catch(e) {
-      console.log("An error occured loading vote distribution viewer thing:", e);
+      console.log("An error occured loading vote distribution viewer thing whatever it's called. ");
     }
   }
 }
-
-
