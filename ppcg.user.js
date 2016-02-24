@@ -480,7 +480,7 @@ if (site === "main" || site === "meta") {
                     '<option value="Propose">Propose</option>' + 
                     '<option value="Porpoise">Porpoise</option>' + 
                     '<option value="Propoise">Propoise</option>' + 
-                    '<option value="Post question to sandbox">Post question to sandbox</option>' + 
+                    '<option value="Post a sandbox">Post question to sandbox</option>' + 
                     '</select><br/>' + 
                     '<input class="OPT_Bool" data-var="main.NO_LEADERBOARD" type="checkbox" id="noleader"><label for="noleader">Disable Auto Leaderboard?</label><br>' +
                     '<input class="OPT_Bool" data-var="main.NO_AUTOTIO" type="checkbox" id="notio"><label for="notio">Disable Auto-TryItOnline™ execution?</label>' +
