@@ -718,6 +718,8 @@ if (site === "main" || site === "meta") {
 
   // votes
   if (site === "main" || site === "meta") {
+    // Brings Calvin back
+    document.body.innerHTML = document.body.innerHTML.replace(/Helka Homba/g, "Calvin's Hobbies"); 
     /*=== SHOWS VOTE COUNTS ===*/
     try {
       void
