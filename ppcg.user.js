@@ -15,7 +15,7 @@ if(site === 'code') { // from codegolf.stackexchange.com
     site = 'main';
 }
 
-if(($.cookie("RUN_IN_CHAT") !== "true") && site === "chat") return;
+if($.cookie("RUN_IN_CHAT") !== "true" && site === "chat") return;
 
 function qS(x) {
   return document.querySelector(x);
@@ -264,7 +264,8 @@ $(".small-site-logo").each(function(i, el){
 })
 var match = $('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').attr('href', main.FAVICON)
 if(match.length) {
-  $("#input-area").css("background", "url(" + main.BACKGROUND_IMAGE + ")")
+  $("#input-area").css("background", "url(" + "http://i.stack.imgur.com/oqoGQ.png" + ")");
+  $("#input-area").css("background-size", " 600px 400px")
   if (localStorage.getItem('main.MODE_DARK') == "true") $("#input-area").css("background", "url(" + darktheme.BACKGROUND_IMAGE + ")")
   if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true") $("#input-area").css("background", "url(" + lightbg.BACKGROUND_IMAGE + ")")
   document.head.innerHTML +=
@@ -309,6 +310,8 @@ if (site === "chat") {
     '@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic|Open+Sans:400,400italic,700,700italic&subset=latin,greek);'+
     'body { font-family: "Open Sans"; font-size: 12px; }' +
 
+	 '#input-area a { color: #366fb3; }' +
+	  
     '.button { cursor: pointer; background: #96db62; border: none; border-bottom: 1px solid rgb(106, 194, 65) }' +
     '.button:hover { background: #51cc47; border-bottom-color: #449656; }' +
 
@@ -685,7 +688,7 @@ if (site === "main" || site === "meta") {
      //".question-hyperlink, .answer-hyperlink, #hot-network-questions a{color:$$LINK_COLOR}.question-hyperlink:visited, .answer-hyperlink:visited,.started-link:visited, #hot-network-questions a:visited{color:$$VISITED_LINK_COLOR}" +
      "#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover{color:#5DA261;border-bottom:2px solid #5DA261}" +
      //"a:hover,.question-hyperlink:hover,.answer-hyperlink:hover,.started-link:hover{color:#487D4B}" +
-     "a{color:$$LINK_COLOR}a:visited{color:$$VISITED_LINK_COLOR}a:hover{color:$$HOVER_LINK_COLOR}" +
+     "a:not(#input-area a){color:$$LINK_COLOR}a:visited{color:$$VISITED_LINK_COLOR}a:hover{color:$$HOVER_LINK_COLOR}" +
      "</style>").replace(/\$\$(\w+)/g, function(_, x) {
     return eval(site + "." + x);
   }); //workaround for several links
@@ -758,3 +761,5 @@ if (site === "main" || site === "meta") {
     }
   }
 }
+
+
