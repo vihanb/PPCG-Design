@@ -503,8 +503,10 @@ if (site === "main" || site === "meta") {
   
   $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandboxz">'+ main.PROPOSE + '</a></li>');
   document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
+  
+  var answerafter='<div>Before you post, take some time to read through the <a href="http://meta.codegolf.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>'
   if (site == "main") {
-    $('#wmd-preview').after('<div>Before you post, take some time to read through the <a href="http://meta.codegolf.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>');
+    
     qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
     // Leaderboard
     if (!main.NO_LEADERBOARD &&
@@ -553,8 +555,11 @@ if (site === "main" || site === "meta") {
 
     }
   } else {
+  	answerafter=''
     qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.DISP_ICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\" style=\"font-size: 14px; color: #CF7720\">meta</span></td></tr></table>";
+  	if (/sandbox/.test(window.location.href)===true){answerafter='<div>Try reading through <a href="http://meta.codegolf.stackexchange.com/questions/8047/things-to-avoid-when-writing-challenges/">the things to avoid when writing challenges</a> before you post.</div>'}
   }
+  $('#wmd-preview').after(answerafter);
   // tio.net (WIP) support
   if (!main.NO_AUTOTIO && window.location.pathname.indexOf("/questions/") === 0) { // question
     $(".answer").each(function() {
