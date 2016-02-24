@@ -476,7 +476,7 @@ if (site === "main" || site === "meta") {
                     '<input class="OPT_Bool" data-var="main.ALT_PROPOSE" type="checkbox" id="propose"><label for="propose">Use \'Post in Sandbox\' instead of porpoise?</label><br>' + 
                     '<input class="OPT_Bool" data-var="main.NO_LEADERBOARD" type="checkbox" id="noleader"><label for="noleader">Disable Auto Leaderboard?</label><br>' +
                     '<input class="OPT_Bool" data-var="main.NO_AUTOTIO" type="checkbox" id="notio"><label for="notio">Disable Auto-TryItOnline™ execution?</label>' +
-                    '<input class="OPT_Bool" type="checkbox" id="light_bg_on" onclick="$.cookie(\'RUN_IN_CHAT\',this.checked,{domain:\'stackexchange.com\'})"><label for="light_bg_on">Make design modifications in chat?</label><br>' +
+                    '<br><input class="OPT_Bool" type="checkbox" id="light_bg_on" onclick="$.cookie(\'RUN_IN_CHAT\',this.checked,{domain:\'stackexchange.com\'})"><label for="light_bg_on">Make design modifications in chat?</label><br>' +
                     '</div><div style="width:50%;height:100%;float:right;">' +
                     '' +
                     '</div></div>For changes to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
