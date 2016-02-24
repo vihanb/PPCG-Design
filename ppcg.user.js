@@ -688,7 +688,7 @@ if (site === "main" || site === "meta") {
      //".question-hyperlink, .answer-hyperlink, #hot-network-questions a{color:$$LINK_COLOR}.question-hyperlink:visited, .answer-hyperlink:visited,.started-link:visited, #hot-network-questions a:visited{color:$$VISITED_LINK_COLOR}" +
      "#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover{color:#5DA261;border-bottom:2px solid #5DA261}" +
      //"a:hover,.question-hyperlink:hover,.answer-hyperlink:hover,.started-link:hover{color:#487D4B}" +
-     "a:not(#input-area a){color:$$LINK_COLOR}a:visited{color:$$VISITED_LINK_COLOR}a:hover{color:$$HOVER_LINK_COLOR}" +
+     "a{color:$$LINK_COLOR}a:visited{color:$$VISITED_LINK_COLOR}a:hover{color:$$HOVER_LINK_COLOR}" +
      "</style>").replace(/\$\$(\w+)/g, function(_, x) {
     return eval(site + "." + x);
   }); //workaround for several links
