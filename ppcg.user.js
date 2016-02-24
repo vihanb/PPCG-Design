@@ -126,7 +126,7 @@ var main = {
   MODE_DARK: (localStorage.getItem("main.MODE_DARK") === "true"),
   NO_LEADERBOARD: (localStorage.getItem("main.NO_LEADERBOARD") === "true"),
   NO_AUTOTIO: (localStorage.getItem("main.NO_AUTOTIO") === "true"),
-  PROPOSE: (localStorage.getItem("main.PROPOSE") === "true")?"Propose Challenge":(localStorage.getItem("main.ALT_PROPOSE") === "true")?"Post in Sandbox":"Porpoise Challenge",
+  PROPOSE: "Propose",
   
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#FAFAFA",
@@ -475,14 +475,22 @@ if (site === "main" || site === "meta") {
                     '<div style="width:50%;height:100%;float:left;">' +
                     '<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on"><label for="light_bg_on">Lighter Background?</label><br>' +
                     '<input class="OPT_Bool" data-var="main.MODE_DARK" type="checkbox" id="dark_theme_on"><label for="dark_theme_on">Dark Theme? (WIP)</label><br>' +
-                    '<input class="OPT_Bool" data-var="main.PROPOSE" type="checkbox" id="propose"><label for="propose">Use propose instead of porpoise?</label><br>' + 
-                    '<input class="OPT_Bool" data-var="main.ALT_PROPOSE" type="checkbox" id="propose"><label for="propose">Use \'Post in Sandbox\' instead of porpoise?</label><br>' + 
+                    '<p>What text to use for the propose challenge button?</p>' +
+                    '<select id="proposechoice">' + 
+                    '<option value="Propose">Propose</option>' + 
+                    '<option value="Porpoise">Porpoise</option>' + 
+                    '<option value="Propoise">Propoise</option>' + 
+                    '<option value="Post question to sandbox">Post question to sandbox</option>' + 
+                    '</select><br/>' + 
                     '<input class="OPT_Bool" data-var="main.NO_LEADERBOARD" type="checkbox" id="noleader"><label for="noleader">Disable Auto Leaderboard?</label><br>' +
                     '<input class="OPT_Bool" data-var="main.NO_AUTOTIO" type="checkbox" id="notio"><label for="notio">Disable Auto-TryItOnline™ execution?</label>' +
-                    '<br><input class="OPT_Bool" type="checkbox" id="chat_design_on" onclick="$.cookie(\'RUN_IN_CHAT\',this.checked,{domain:\'stackexchange.com\'})"><label for="chat_design_on">Make design modifications in chat?</label><br>' +
                     '</div><div style="width:50%;height:100%;float:right;">' +
                     '' +
                     '</div></div>For changes to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
+  $('#proposechoice').change(function () {
+    var str = $(this).find('option:selected').val();
+    main.PROPOSE=str;
+  });
   $("#USER_Opt, #USER_Backblur").click(function() {
     $("#USER_OptMenu").fadeToggle(50);
   });
