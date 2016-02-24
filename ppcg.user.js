@@ -15,6 +15,8 @@ if(site === 'code') { // from codegolf.stackexchange.com
     site = 'main';
 }
 
+if(($.cookie("RUN_IN_CHAT") !== "true") && site === "chat") return;
+
 function qS(x) {
   return document.querySelector(x);
 }
@@ -101,8 +103,9 @@ var FONT_URL = "//fonts.googleapis.com/css?family=Lato:700|Open+Sans|Inconsolata
 // Colors
 var MOD_FLAIR = "#F0C800"; // Mod diamond
 var MOD_FLAIR_HOVER = "#FFE32E";
-/** ~~~~~~~~~~~~~~~~ MAIN SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
 
+
+/** ~~~~~~~~~~~~~~~~ MAIN SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
 
 var main = {
   FAVICON: "//i.stack.imgur.com/oHkfe.png",
@@ -124,6 +127,7 @@ var main = {
   NO_LEADERBOARD: (localStorage.getItem("main.NO_LEADERBOARD") === "true"),
   NO_AUTOTIO: (localStorage.getItem("main.NO_AUTOTIO") === "true"),
   PROPOSE: (localStorage.getItem("main.PROPOSE") === "true")?"Propose Challenge":(localStorage.getItem("main.ALT_PROPOSE") === "true")?"Post in Sandbox":"Porpoise Challenge",
+  
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#FAFAFA",
   HEADER_BG_COLOR: "transparent",
@@ -472,6 +476,7 @@ if (site === "main" || site === "meta") {
                     '<input class="OPT_Bool" data-var="main.ALT_PROPOSE" type="checkbox" id="propose"><label for="propose">Use \'Post in Sandbox\' instead of porpoise?</label><br>' + 
                     '<input class="OPT_Bool" data-var="main.NO_LEADERBOARD" type="checkbox" id="noleader"><label for="noleader">Disable Auto Leaderboard?</label><br>' +
                     '<input class="OPT_Bool" data-var="main.NO_AUTOTIO" type="checkbox" id="notio"><label for="notio">Disable Auto-TryItOnline™ execution?</label>' +
+                    '<input class="OPT_Bool" type="checkbox" id="light_bg_on" onclick="$.cookie(\'RUN_IN_CHAT\',this.checked,{domain:\'stackexchange.com\'})"><label for="light_bg_on">Make design modifications in chat?</label><br>' +
                     '</div><div style="width:50%;height:100%;float:right;">' +
                     '' +
                     '</div></div>For changes to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
@@ -749,7 +754,7 @@ if (site === "main" || site === "meta") {
         } + ")();", e.appendChild(s), s.parentNode.removeChild(s)
       }(document);
     } catch(e) {
-      console.log("An error occured loading vote distribution viewer thing whatever it's called. ");
+      console.log("An error occured loading vote distribution viewer thing:", e);
     }
   }
 }
