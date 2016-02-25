@@ -261,7 +261,8 @@ $(".small-site-logo").each(function(i, el){
 });
 var match = $('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').attr('href', main.FAVICON);
 if(match.length) {
-  $("#input-area").css("background", "url(" + main.BACKGROUND_IMAGE + ")");
+  $("#input-area").css("background", "url(" + "http://i.stack.imgur.com/oqoGQ.png" + ")");
+  $("#input-area").css("background-size", "600px 400px");
   if (localStorage.getItem('main.MODE_DARK') == "true") $("#input-area").css("background", "url(" + darktheme.BACKGROUND_IMAGE + ")");
   if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true") $("#input-area").css("background", "url(" + lightbg.BACKGROUND_IMAGE + ")");
   document.head.innerHTML +=
@@ -330,6 +331,8 @@ if (site === "chat") {
     '.popup { border-radius: 2px; border: none; box-shadow: 0 0 8px #9C9C9C }' +
     '.popup .small-site-logo { right: initial; top: 38px }' +
 
+    '#footer-legal a { color: #366fb3 !important }' +
+    
     '#sidebar { background: #fbfbfb; box-shadow: 5px 0px 5px -3px #EEE inset; padding-left: 3px } ' +
 
     'input[type=text], #input, #chat-body input#searchbox { border-radius: 2px; border: 1px solid #c2c2c2; padding: 3px 2px !important; box-shadow: none; outline: none; -webkit-transition: box-shadow 0.30s ease-in-out; -moz-transition: box-shadow 0.30s ease-in-out; -ms-transition: box-shadow 0.30s ease-in-out; -o-transition: box-shadow 0.30s ease-in-out; transition: box-shadow 0.30s ease-in-out }' +
