@@ -11,10 +11,24 @@
 // ==/UserScript==
 
 var site = window.location.hostname.slice(0, 4); // main, meta, or chat
+
+var reps = [
+  // ["Propose", "Porpoise"], // >:D
+  ["Helka Homba", "Calvin's Hobbies"],
+  ["Helka", "Calvin"],
+  ["Code Review", "the evil code reviewers"]
+];
+
 if(site === 'code') { // from codegolf.stackexchange.com
-    site = 'main';
+  site = 'main';
 }
 if(($.cookie("RUN_IN_CHAT") !== "true") && site === "chat") return;
+
+function execreps() {
+  reps.forEach(function (r) {
+    document.body.innerHTML = document.body.innerHTML.replace(RegExp(r[0], "gi"), r[1]);
+  });
+}
 
 function qS(x) {
   return document.querySelector(x);
@@ -118,8 +132,8 @@ var main = {
   BG_COL_HOVER: "white",
   BG_START: "white",
   BG_REV: "#329300",
-  
-  
+
+
   BACKGROUND_LIGHT: (localStorage.getItem("main.BACKGROUND_LIGHT") === "true"), // Lighter shade of the background, CHANGE THROUGH OPTIONS
   MODE_DARK: (localStorage.getItem("main.MODE_DARK") === "true"),
   NO_LEADERBOARD: (localStorage.getItem("main.NO_LEADERBOARD") === "true"),
@@ -282,7 +296,7 @@ if (site === "chat") {
   $("#roomname").css("font-weight", "800");
   $("#searchbox").css("padding-left", "4px !important");
   $('#footer-logo a').text('Programming Puzzles & Code Golf').css('color','#2A2');
-  
+
   /*  $("body").append('<img id="CHATBOX" style="z-index: 1000; display:none; position: fixed;">');
   $(document).on('mouseenter', 'li[id^="summary_"], li[id^="summary_"] *', function() {
     $("#CHATBOX").show();
@@ -332,7 +346,7 @@ if (site === "chat") {
     '.popup .small-site-logo { right: initial; top: 38px }' +
 
     '#footer-legal a { color: #366fb3 !important }' +
-    
+
     '#sidebar { background: #fbfbfb; box-shadow: 5px 0px 5px -3px #EEE inset; padding-left: 3px } ' +
 
     'input[type=text], #input, #chat-body input#searchbox { border-radius: 2px; border: 1px solid #c2c2c2; padding: 3px 2px !important; box-shadow: none; outline: none; -webkit-transition: box-shadow 0.30s ease-in-out; -moz-transition: box-shadow 0.30s ease-in-out; -ms-transition: box-shadow 0.30s ease-in-out; -o-transition: box-shadow 0.30s ease-in-out; transition: box-shadow 0.30s ease-in-out }' +
@@ -457,6 +471,7 @@ function addQuestionOfTheDay() {
 }
 
 if (site === "main" || site === "meta") {
+  execreps();
   var obj = site == "meta" ? meta : main;
 
   $("#search input").attr("placeholder", obj.SEARCH_TEXT);
@@ -501,22 +516,22 @@ if (site === "main" || site === "meta") {
   $('<a>')
     .addClass('topbar-icon yes-hover')
     .css({
-      'z-index': 1,
-      'width': '36px',
-      'background-size': '19px 19px',
-      'background-position': '8px 7px',
-      'background-image': 'url(//i.imgur.com/n246U22.png)'
-    })
+    'z-index': 1,
+    'width': '36px',
+    'background-size': '19px 19px',
+    'background-position': '8px 7px',
+    'background-image': 'url(//i.imgur.com/n246U22.png)'
+  })
     .attr({
-      id: 'toggleSite',
-      href: (site === "meta" ? "//" : "//meta.") + 'codegolf.stackexchange.com',
-      title: 'Switch to ' + (site === 'meta' ? 'main' : 'meta')
-    })
+    id: 'toggleSite',
+    href: (site === "meta" ? "//" : "//meta.") + 'codegolf.stackexchange.com',
+    title: 'Switch to ' + (site === 'meta' ? 'main' : 'meta')
+  })
     .appendTo('.network-items');
-  
+
   $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandboxz">'+ main.PROPOSE + ' Challenge</a></li>');
   document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
-  
+
   var answerafter='<div>Before you post, take some time to read through the <a href="http://meta.codegolf.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>';
   if (site == "main") {
     qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
@@ -564,9 +579,9 @@ if (site === "main" || site === "meta") {
 
     }
   } else {
-  	answerafter='';
+    answerafter='';
     qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.DISP_ICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\" style=\"font-size: 14px; color: #CF7720\">meta</span></td></tr></table>";
-  	if (/sandbox/.test(window.location.href)===true){answerafter='<div>Try reading through <a href="http://meta.codegolf.stackexchange.com/questions/8047/things-to-avoid-when-writing-challenges/">the things to avoid when writing challenges</a> before you post.</div>';}
+    if (/sandbox/.test(window.location.href)===true){answerafter='<div>Try reading through <a href="http://meta.codegolf.stackexchange.com/questions/8047/things-to-avoid-when-writing-challenges/">the things to avoid when writing challenges</a> before you post.</div>';}
   }
   $('#wmd-preview').after(answerafter);
   // tio.net (WIP) support
