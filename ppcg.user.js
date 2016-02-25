@@ -634,7 +634,7 @@ if (site === "main" || site === "meta") {
      ".bulletin-title{color:$$BULLETIN_TITLE;}" +
      "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}" +
      ".yes-hover{cursor:pointer !important;}" +
-     '.qod-qitem { display: table }' +s + 
+     '.qod-qitem { display: table }' +
      '.qod-qitem > *{ display: table-cell; vertical-align:middle }' +
      '.qod-qitem > *:not(.post-tag) { font-weight: normal; font-size: 12px; white-space: normal; padding-left: 5px; }' +
      '.qod-qitem:not(:first-child) { margin-top: 5px; }'+
