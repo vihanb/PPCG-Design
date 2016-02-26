@@ -11,6 +11,9 @@
 // ==/UserScript==
 
 var site = window.location.hostname.slice(0, 4); // main, meta, or chat
+if(site === 'code') { // from codegolf.stackexchange.com
+  site = 'main';
+}
 
 var reps = [
   // ["Propose", "Porpoise"], // >:D
@@ -20,9 +23,6 @@ var reps = [
   ["Code Review", "the evil code reviewers"]
 ];
 
-if(site === 'code') { // from codegolf.stackexchange.com
-  site = 'main';
-}
 if(($.cookie("RUN_IN_CHAT") !== "true") && site === "chat") return;
 
 function execreps() {
@@ -582,7 +582,9 @@ if (site === "main" || site === "meta") {
   } else {
     answerafter='';
     qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.DISP_ICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\" style=\"font-size: 14px; color: #CF7720\">meta</span></td></tr></table>";
-    if (/sandbox/.test(window.location.href)===true){answerafter='<div>Try reading through <a href="http://meta.codegolf.stackexchange.com/questions/8047/things-to-avoid-when-writing-challenges/">the things to avoid when writing challenges</a> before you post.</div>';}
+    if (window.location.href.indexOf('/2140/') > 0){ // If on sandbox
+      answerafter='<div>Try reading through <a href="http://meta.codegolf.stackexchange.com/q/8047">the things to avoid when writing challenges</a> before you post.</div>';
+    }
   }
   $('#wmd-preview').after(answerafter);
   // tio.net (WIP) support
@@ -721,7 +723,7 @@ if (site === "main" || site === "meta") {
     console.log("404, PAGE NOT FOUND");
     var TEXT = $("#mainbar-full > .leftcol > p")[0];
     if (TEXT) {
-      TEXT.textContent = "We couldn't find the page you wanted. We did, however found this program.";
+      TEXT.textContent = "We couldn't find the page you wanted. We did, however, found this program.";
     }
     $('#mainbar-full > .rightcol > img').attr('src', obj.PAGE404);
   }
