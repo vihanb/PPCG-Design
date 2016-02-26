@@ -16,6 +16,7 @@ var reps = [
   // ["Propose", "Porpoise"], // >:D
   ["Helka Homba", "Calvin's Hobbies"],
   ["Helka", "Calvin"],
+  ["fItaJ.png", "qkXJy.png"],
   ["Code Review", "the evil code reviewers"]
 ];
 
