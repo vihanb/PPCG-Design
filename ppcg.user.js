@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.7.4
+// @version     3.7.5
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://chat.stackexchange.com/*
@@ -20,6 +20,7 @@ var reps = [
   ["Helka Homba", "Calvin's Hobbies"],
   ["Helka", "Calvin"],
   ["fItaJ.png", "qkXJy.png"],
+  ["Aqua Tart", "quartata"],
   ["Code Review", "the evil code reviewers"]
 ];
 
