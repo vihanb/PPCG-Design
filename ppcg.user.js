@@ -26,7 +26,6 @@ var reps = [
   ["DonMusolini", "LuisMendo"]
   ["AandN", "Adnan"],
   ["A and N", "Adnan"],
-  ["Lynn", "Mauris"],
   ["lirtosiast", "Thomas Kwa"],
   ["I Go Best", "Geobits"],
   ["IGoBest", "Geobits"],
