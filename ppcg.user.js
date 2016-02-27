@@ -22,6 +22,8 @@ var reps = [
   ["fItaJ.png", "qkXJy.png"],
   ["Aqua Tart", "quartata"],
   ["Don Musolini", "Luis Mendo"],
+  ["AandN", "Adnan"],
+  ["A and N", "Adnan"],
   ["Code Review", "the evil code reviewers"]
 ];
 
