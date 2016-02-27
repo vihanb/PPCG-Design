@@ -28,6 +28,8 @@ var reps = [
   ["A and N", "Adnan"],
   ["Lynn", "Mauris"],
   ["lirtosiast", "Thomas Kwa"],
+  ["I Go Best", "Geobits"],
+  ["IGoBest", "Geobits"],
   
   ["Code Review", "the evil code reviewers"]
 ];
