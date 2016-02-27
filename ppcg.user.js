@@ -15,15 +15,20 @@ if(site === 'code') { // from codegolf.stackexchange.com
   site = 'main';
 }
 
+// ["Propose", "Porpoise"], // >:D
 var reps = [
-  // ["Propose", "Porpoise"], // >:D
   ["Helka Homba", "Calvin's Hobbies"],
+  ["HelkaHomba", "CalvinsHobbies"],
   ["Helka", "Calvin"],
   ["fItaJ.png", "qkXJy.png"],
   ["Aqua Tart", "quartata"],
   ["Don Musolini", "Luis Mendo"],
+  ["DonMusolini", "LuisMendo"]
   ["AandN", "Adnan"],
   ["A and N", "Adnan"],
+  ["Lynn", "Mauris"],
+  ["lirtosiast", "Thomas Kwa"],
+  
   ["Code Review", "the evil code reviewers"]
 ];
 
