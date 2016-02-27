@@ -21,14 +21,14 @@ var reps = [
   ["HelkaHomba", "CalvinsHobbies"],
   ["Helka", "Calvin"],
   ["fItaJ.png", "qkXJy.png"],
-  //["Aqua Tart", "quartata"],
-  //["Don Musolini", "Luis Mendo"],
-  //["DonMusolini", "LuisMendo"]
-  //["AandN", "Adnan"],
-  //["A and N", "Adnan"],
-  //["lirtosiast", "Thomas Kwa"],
-  //["I Go Best", "Geobits"],
-  //["IGoBest", "Geobits"],
+  ["Aqua Tart", "quartata"],
+  ["Don Musolini", "Luis Mendo"],
+  ["DonMusolini", "LuisMendo"]
+  ["AandN", "Adnan"],
+  ["A and N", "Adnan"],
+  ["lirtosiast", "Thomas Kwa"],
+  ["I Go Best", "Geobits"],
+  ["IGoBest", "Geobits"],
 
   ["Code Review", "the evil code reviewers"]
 ];
