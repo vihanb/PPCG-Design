@@ -38,7 +38,7 @@ if(($.cookie("RUN_IN_CHAT") !== "true") && site === "chat") return;
 function execreps() {
   reps.forEach(function (r) {
     try {
-      document.body.innerHTML = document.body.innerHTML.replace(RegExp(r[0], "gi"), r[1]);
+   //   document.body.innerHTML = document.body.innerHTML.replace(RegExp(r[0], "gi"), r[1]);
     } catch(e) {}
   });
 }
