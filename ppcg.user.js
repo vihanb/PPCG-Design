@@ -286,6 +286,18 @@ $(".small-site-logo").each(function(i, el){
     $(el).attr("src", main.FAVICON);
   }
 });
+if(localStorage.getItem('GOAT_MODE') == "true") {
+  $(".vote-up-off").css({
+    'background-image': 'url(http://rawgit.com/somebody1234/Misc-Files/master/upgoat.svg)',
+    'background-size': '100%',
+    'background-position': '0px 0px'
+  });
+  $(".vote-down-off").css({
+    'background-image': 'url(http://rawgit.com/somebody1234/Misc-Files/master/downgoat.svg)',
+    'background-size': '100%',
+    'background-position': '0px 0px'
+  });
+}
 var match = $('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').attr('href', main.FAVICON);
 if(match.length) {
   $("#input-area").css("background", "url(" + "http://i.stack.imgur.com/oqoGQ.png" + ")");
@@ -498,6 +510,7 @@ if (site === "main" || site === "meta") {
                     '<div style="position:absolute;z-index:3;width:40%;height:40%;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:' + optionbox.BACKGROUND_COLOR + ';padding:1em;">' +
                     '<h1>Userscript Options</h1><div>' +
                     '<div style="width:50%;height:100%;float:left;">' +
+                    '<input class="OPT_Bool" data-var="GOAT_MODE" type="checkbox" id="goat-mode"><label for="goat-moden">Goats instead of boats?</label><br>' +
                     '<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on"><label for="light_bg_on">Lighter Background?</label><br>' +
                     '<input class="OPT_Bool" data-var="main.MODE_DARK" type="checkbox" id="dark_theme_on"><label for="dark_theme_on">Dark Theme? (WIP)</label><br>' +
                     '<p>What text to use for the porpise challenge button?</p>' +
