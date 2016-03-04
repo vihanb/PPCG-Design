@@ -286,6 +286,7 @@ $(".small-site-logo").each(function(i, el){
     $(el).attr("src", main.FAVICON);
   }
 });
+$('[rel="shortcut icon"][href^="//cdn.sstatic.net/codegolf/img/favicon.ico"]').attr("href", "//i.stack.imgur.com/oHkfe.png)
 if(localStorage.getItem('GOAT_MODE') == "true") {
   $(".vote-up-off").css({
     'background-image': 'url(http://rawgit.com/somebody1234/Misc-Files/master/upgoat.svg)',
