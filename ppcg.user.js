@@ -289,6 +289,16 @@ $(".small-site-logo").each(function(i, el){
 $('[rel="shortcut icon"][href^="//cdn.sstatic.net/codegolf/img/favicon.ico"]').attr("href", "//i.stack.imgur.com/oHkfe.png")
 if(localStorage.getItem('GOAT_MODE') == "true") {
   $(".vote-up-off").css({
+    'background-image': 'url(http://rawgit.com/somebody1234/Misc-Files/master/upgoat-off.svg)',
+    'background-size': '100%',
+    'background-position': '0px 0px'
+  });
+  $(".vote-down-off").css({
+    'background-image': 'url(http://rawgit.com/somebody1234/Misc-Files/master/downgoat-off.svg)',
+    'background-size': '100%',
+    'background-position': '0px 0px'
+  });
+  $(".vote-up-off").css({
     'background-image': 'url(http://rawgit.com/somebody1234/Misc-Files/master/upgoat.svg)',
     'background-size': '100%',
     'background-position': '0px 0px'
@@ -508,7 +518,7 @@ if (site === "main" || site === "meta") {
   // Options Menu
   $(".topbar-wrapper > .network-items").append('<a id="USER_Opt" class="topbar-icon yes-hover" style="z-index:1;width: 36px; background-image: url(' + main.SPRITE_SHEET + '); background-position: 0px 0px;"></a>');
   $("body").prepend('<div id="USER_OptMenu" style="display: none; width: inherit; height: inherit;"><div id="USER_Backblur" style="position:absolute;z-index:2;width:100%;height:100%;background:rgba(0,0,0,0.5)"></div>' +
-                    '<div style="position:absolute;z-index:3;width:40%;height:40%;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:' + optionbox.BACKGROUND_COLOR + ';padding:1em;">' +
+                    '<div style="position:absolute;z-index:3;width:40%;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:' + optionbox.BACKGROUND_COLOR + ';padding:1em;">' +
                     '<h1>Userscript Options</h1><div>' +
                     '<div style="width:50%;height:100%;float:left;">' +
                     '<input class="OPT_Bool" data-var="GOAT_MODE" type="checkbox" id="goat-mode"><label for="goat-moden">Goats instead of boats?</label><br>' +
