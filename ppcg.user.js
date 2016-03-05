@@ -298,15 +298,11 @@ if(localStorage.getItem('GOAT_MODE') == "true") {
     'background-size': '100%',
     'background-position': '0px 0px'
   });
-  $(".vote-up-off").css({
-    'background-image': 'url(http://rawgit.com/somebody1234/Misc-Files/master/upgoat.svg)',
-    'background-size': '100%',
-    'background-position': '0px 0px'
+  $(".vote-up-on").css({
+    'background-image': 'url(http://rawgit.com/somebody1234/Misc-Files/master/upgoat.svg)'
   });
-  $(".vote-down-off").css({
-    'background-image': 'url(http://rawgit.com/somebody1234/Misc-Files/master/downgoat.svg)',
-    'background-size': '100%',
-    'background-position': '0px 0px'
+  $(".vote-down-on").css({
+    'background-image': 'url(http://rawgit.com/somebody1234/Misc-Files/master/downgoat.svg)'
   });
 }
 var match = $('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').attr('href', main.FAVICON);
