@@ -289,6 +289,16 @@ $(".small-site-logo").each(function(i, el){
 $('[rel="shortcut icon"][href^="//cdn.sstatic.net/codegolf/img/favicon.ico"]').attr("href", "//i.stack.imgur.com/oHkfe.png")
 if(localStorage.getItem('GOAT_MODE') == "true") {
   $(".vote-up-off").css({
+    'background-image': 'url(http://rawgit.com/somebody1234/Misc-Files/master/upgoat-off.svg)',
+    'background-size': '100%',
+    'background-position': '0px 0px'
+  });
+  $(".vote-down-off").css({
+    'background-image': 'url(http://rawgit.com/somebody1234/Misc-Files/master/downgoat-off.svg)',
+    'background-size': '100%',
+    'background-position': '0px 0px'
+  });
+  $(".vote-up-off").css({
     'background-image': 'url(http://rawgit.com/somebody1234/Misc-Files/master/upgoat.svg)',
     'background-size': '100%',
     'background-position': '0px 0px'
