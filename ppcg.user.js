@@ -288,22 +288,22 @@ $(".small-site-logo").each(function(i, el){
 });
 $('[rel="shortcut icon"][href^="//cdn.sstatic.net/codegolf/img/favicon.ico"]').attr("href", "//i.stack.imgur.com/oHkfe.png")
 if(localStorage.getItem('GOAT_MODE') == "true") {
-  $(".vote-up-off").css({
-    'background-image': 'url(http://rawgit.com/somebody1234/Misc-Files/master/upgoat-off.svg)',
-    'background-size': '100%',
-    'background-position': '0px 0px'
-  });
-  $(".vote-down-off").css({
-    'background-image': 'url(http://rawgit.com/somebody1234/Misc-Files/master/downgoat-off.svg)',
-    'background-size': '100%',
-    'background-position': '0px 0px'
-  });
-  $(".vote-up-on").css({
-    'background-image': 'url(http://rawgit.com/somebody1234/Misc-Files/master/upgoat.svg)'
-  });
-  $(".vote-down-on").css({
-    'background-image': 'url(http://rawgit.com/somebody1234/Misc-Files/master/downgoat.svg)'
-  });
+  $('head').append('<style/>', {html: '.vote-up-off {\
+  background-image: url(http://rawgit.com/somebody1234/Misc-Files/master/upgoat-off.svg)\
+  background-size: 100%;\
+  background-position: 0px 0px;\
+}\
+.vote-down-off {\
+  background-image: url(http://rawgit.com/somebody1234/Misc-Files/master/downgoat-off.svg)\
+  background-size: 100%;\
+  background-position: 0px 0px;\
+}\
+.vote-up-on {\
+  background-image: url(http://rawgit.com/somebody1234/Misc-Files/master/upgoat.svg)\
+}\
+.vote-up-off {\
+  background-image: url(http://rawgit.com/somebody1234/Misc-Files/master/downgoat.svg)\
+}'})
 }
 var match = $('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').attr('href', main.FAVICON);
 if(match.length) {
