@@ -301,7 +301,7 @@ if(localStorage.getItem('GOAT_MODE') == "true") {
 .vote-up-on {\
   background-image: url(http://rawgit.com/somebody1234/Misc-Files/master/upgoat.svg) !important;\
 }\
-.vote-up-off {\
+.vote-down-on {\
   background-image: url(http://rawgit.com/somebody1234/Misc-Files/master/downgoat.svg) !important;\
 }'}));
 }
