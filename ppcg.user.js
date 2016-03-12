@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.7.11
+// @version     3.7.12
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://chat.stackexchange.com/*
@@ -620,7 +620,7 @@ if (site === "main" || site === "meta") {
   }
   $('#wmd-preview').after(answerafter);
   // tio.net (WIP) support
-  if (main.NO_AUTOTIO != "false" && window.location.pathname.indexOf("/questions/") === 0) { // question
+  if (window.location.pathname.indexOf("/questions/") > -1) { // question
     $(".answer").each(function() {
       var tiolinks = $(this).find('a[href*="tryitonline.net"]');
       if (tiolinks[0]) {
@@ -636,6 +636,8 @@ if (site === "main" || site === "meta") {
             });
 
             try {
+			  console.log(  (parts["code"] || "").replace(/\s+/g, "") );
+			  console.log(  (parts["input"] || "").replace(/\s/g, "") );
               var code = encodeURIComponent(atob(  (parts["code"] || "").replace(/\s+/g, "") ));
               var input = encodeURIComponent(atob(  (parts["input"] || "").replace(/\s/g, "") ));
               var url = $this.attr('href').match(/https?:\/\/[^\/]+/)[0];
@@ -664,10 +666,11 @@ if (site === "main" || site === "meta") {
                 r.responseType = "text/plain;charset=UTF-8";
                 r.send("code=" + code + "&input=" + input);
               }
-            } catch(e) { console.log("Bad TIO™ Permalink."); }
+            } catch(e) { console.log("Bad TIO™ Permalink.", e); }
           };
-          run(tiolinks.eq(counter++));
+          if (tiolinks.eq(counter)[0]) run(tiolinks.eq(counter++));
         }
+		run(tiolinks.eq(counter++));
       }
     });
   }
@@ -813,3 +816,4 @@ if (site === "main" || site === "meta") {
     }
   }
 }
+
