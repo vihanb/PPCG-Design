@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.7.10
+// @version     3.7.11
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://chat.stackexchange.com/*
@@ -620,7 +620,7 @@ if (site === "main" || site === "meta") {
   }
   $('#wmd-preview').after(answerafter);
   // tio.net (WIP) support
-  if (!main.NO_AUTOTIO && window.location.pathname.indexOf("/questions/") === 0) { // question
+  if (main.NO_AUTOTIO != "false" && window.location.pathname.indexOf("/questions/") === 0) { // question
     $(".answer").each(function() {
       var tiolinks = $(this).find('a[href*="tryitonline.net"]');
       if (tiolinks[0]) {
