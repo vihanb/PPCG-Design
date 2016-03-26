@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.7.13
+// @version     3.7.14
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://chat.stackexchange.com/*
@@ -67,7 +67,7 @@ function bf(x, y) {
 }
 
 function bytes(x, y) { // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
-  var ISO_8859_1 = /^(Japt|TeaScript|Retina|Pyth\b)/i;
+  var ISO_8859_1 = /^(Japt|TeaScript|Retina|Pyth\b|Reng)/i;
   var ISO_8859_7 = /^(Jolf)/;
   var UTF_16 = /^(Ziim|Funciton)/i;
   var custom = /^(GS2|Seriously|Unicorn|Jelly|(Dyalog )?APL)/i;
