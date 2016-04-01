@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.7.14
+// @version     3.7.15
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://chat.stackexchange.com/*
@@ -286,7 +286,7 @@ $(".small-site-logo").each(function(i, el){
     $(el).attr("src", main.FAVICON);
   }
 });
-$('[rel="shortcut icon"][href^="//cdn.sstatic.net/codegolf/img/favicon.ico"]').attr("href", "//i.stack.imgur.com/oHkfe.png")
+$('[rel="shortcut icon"][href^="//cdn.sstatic.net/Sites/codegolf/img/favicon.ico"]').attr("href", "//i.stack.imgur.com/oHkfe.png")
 if(localStorage.getItem('GOAT_MODE') == "true") {
   $('head').append($('<style/>', {html: '.vote-up-off {\
   background-image: url(http://rawgit.com/somebody1234/Misc-Files/master/upgoat-off.svg) !important;\
