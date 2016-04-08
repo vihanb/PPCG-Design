@@ -23,7 +23,7 @@ var reps = [
   ["fItaJ.png", "qkXJy.png"],
   ["Aqua Tart", "quartata"],
   ["Don Musolini", "Luis Mendo"],
-  ["DonMusolini", "LuisMendo"]
+  ["DonMusolini", "LuisMendo"],
   ["AandN", "Adnan"],
   ["A and N", "Adnan"],
   ["lirtosiast", "Thomas Kwa"],
@@ -151,7 +151,7 @@ var main = {
   MODE_DARK: (localStorage.getItem("main.MODE_DARK") === "true"),
   NO_LEADERBOARD: (localStorage.getItem("main.NO_LEADERBOARD") === "true"),
   NO_AUTOTIO: (localStorage.getItem("main.NO_AUTOTIO") === "true"),
-  PROPOSE: 'Propose',
+  PROPOSE: localStorage.getItem("main.PROPOSE") || 'Propose',
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#FAFAFA",
   HEADER_BG_COLOR: "transparent",
@@ -532,9 +532,10 @@ if (site === "main" || site === "meta") {
                     '</div><div style="width:50%;height:100%;float:right;">' +
                     '' +
                     '</div></div>For changes to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
+  $('#proposechoice').val(main.PROPOSE);
   $('#proposechoice').change(function () {
     var str = $(this).find('option:selected').val();
-    main.PROPOSE=str.split(" ")[0];
+    localStorage.setItem("main.PROPOSE", str);
   });
   $("#USER_Opt, #USER_Backblur").click(function() {
     $("#USER_OptMenu").fadeToggle(50);
