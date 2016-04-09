@@ -300,9 +300,13 @@ if(localStorage.getItem('GOAT_MODE') == "true") {
 }\
 .vote-up-on {\
   background-image: url(http://rawgit.com/somebody1234/Misc-Files/master/upgoat.svg) !important;\
+  background-size: 100% !important;\
+  background-position: 0px 0px;\
 }\
 .vote-down-on {\
   background-image: url(http://rawgit.com/somebody1234/Misc-Files/master/downgoat.svg) !important;\
+  background-size: 100% !important;\
+  background-position: 0px 0px;\
 }'}));
 }
 var match = $('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').attr('href', main.FAVICON);
