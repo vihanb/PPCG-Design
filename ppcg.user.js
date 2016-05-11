@@ -30,7 +30,7 @@ var reps = [
   ["I Go Best", "Geobits"],
   ["IGoBest", "Geobits"],
 
-  ["Code Review", "the evil code reviewers"]
+  //["Code Review", "the evil code reviewers"] ihaichu - EasterlyIrk on behalf of CR.
 ];
 
 if(($.cookie("RUN_IN_CHAT") !== "true") && site === "chat") return;
