@@ -380,9 +380,6 @@ if (site === "chat") {
     '.popup .small-site-logo { right: initial; top: 38px }' +
 
     '#footer-legal a { color: #366fb3 !important }' +
-    
-    '#footer a { text-shadow: none; color: #78ee74 !important }' +
-    '#footer a:visited { color: #78ff74 !important }' +
 
     '#sidebar { background: #fbfbfb; box-shadow: 5px 0px 5px -3px #EEE inset; padding-left: 3px } ' +
 
@@ -704,6 +701,7 @@ if (site === "main" || site === "meta") {
      "#content{margin-top: 7px;}"+
      '#footer #footer-sites a, #footer th {color: #BFBFBF;}'+
      ".container{box-shadow: none !important;}"+
+     ".nav.askquestion li { display: block !important; }" +
      'body,#content{background:$$STATS_COLOR !important;}'+
      "#hmenus > div.nav:not(.mainnavs) a{text-align:center; color: $$BG_COL;font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;background: $$BG_START;padding: 8px 12px;-webkit-transition: color 0.15s ease, background 0.15s ease;-moz-transition: color 0.15s ease, background 0.15s ease;-ms-transition: color 0.15s ease, background 0.15s ease;-o-transition: color 0.15s ease, background 0.15s ease;}"+
      "#hmenus > div.nav:not(.mainnavs) a:hover{color: $$BG_COL_HOVER;background: $$BG_REV;}" +
@@ -724,6 +722,8 @@ if (site === "main" || site === "meta") {
      "div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}" +
      "#newlogo{top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}" +
      ".top-footer-links a {text-shadow: 1px 1px white;}" +
+     '#footer a { text-shadow: none; color: #78ee74 !important }' +
+     '#footer a:visited { color: #78ff74 !important }' +
      "#newlogo, #hlogo a{font-family:" + HEADER_FONT + ";}"+
      "</style>").replace(/\$\$(\w+)/g, function(_, x) {
     return eval(site + "." + x);
