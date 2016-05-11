@@ -756,7 +756,7 @@ if (site === "main" || site === "meta") {
   $(".started a:not(.started-link)").css('color', '#487D4B');
   window.addEventListener("load", function() {
     setTimeout(function() {
-      document.getElementById("footer").setAttribute("style", 'background: transparent url("'+obj.BACKGROUND_IMAGE+'") repeat fixed;');
+      document.getElementById("footer").setAttribute("style", 'background: transparent url("'+obj.BACKGROUND_IMAGE+'") repeat fixed; background-size: 50%;');
     }, 300);
   });
   // identify 404
