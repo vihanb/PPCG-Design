@@ -741,7 +741,7 @@ if (site === "main" || site === "meta") {
       });
     });
   }
-  $("body .container").prepend('<div style="position: absolute;width: inherit; z-index: 0; height: 130px; background: url(' + obj.BACKGROUND_IMAGE + '); background-attachment: fixed;"></div>');
+  $("body .container").prepend('<div style="position: absolute;width: inherit; z-index: 0; height: 130px; background: url(' + obj.BACKGROUND_IMAGE + '); background-attachment: fixed; background-size: 50% 50%;"></div>');
   //addQuestionOfTheDay(); // Disabling because of cookie bugs
   $(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
   document.head.innerHTML += 
