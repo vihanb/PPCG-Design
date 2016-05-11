@@ -140,7 +140,6 @@ var main = {
   // Set to empty string for no background image
   BACKGROUND_IMAGE: "//i.stack.imgur.com/4Y7TE.png",
   PAGE404: "http://i.stack.imgur.com/ToEtE.png",
-  BACKGROUND_SIZE: "650px 150px",
   BG_COL: "#175D2E",
   BG_COL_HOVER: "white",
   BG_START: "white",
@@ -195,7 +194,6 @@ var meta = {
   // Set to empty string for no background image
   BACKGROUND_IMAGE: "//i.stack.imgur.com/4535h.png",
   PAGE404: "",
-  BACKGROUND_SIZE: "650px 150px",
   BG_COL: "#474747",
   BG_COL_HOVER: "#474747",
   BG_START: "rgba(255, 255, 255, 0.8)",
@@ -740,7 +738,7 @@ if (site === "main" || site === "meta") {
       });
     });
   }
-  $("body .container").prepend('<div style="position: absolute;width: inherit; z-index: 0; height: 130px; background: url(' + obj.BACKGROUND_IMAGE + '); background-size: '+obj.BACKGROUND_SIZE+'; background-attachment: fixed;"></div>');
+  $("body .container").prepend('<div style="position: absolute;width: inherit; z-index: 0; height: 130px; background: url(' + obj.BACKGROUND_IMAGE + '); background-attachment: fixed;"></div>');
   //addQuestionOfTheDay(); // Disabling because of cookie bugs
   $(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
   document.head.innerHTML += 
@@ -755,7 +753,7 @@ if (site === "main" || site === "meta") {
   $(".started a:not(.started-link)").css('color', '#487D4B');
   window.addEventListener("load", function() {
     setTimeout(function() {
-      document.getElementById("footer").setAttribute("style", 'background: transparent url("'+obj.BACKGROUND_IMAGE+'") repeat fixed 0% 0% / '+obj.BACKGROUND_SIZE+';');
+      document.getElementById("footer").setAttribute("style", 'background: transparent url("'+obj.BACKGROUND_IMAGE+'") repeat fixed;');
     }, 300);
   });
   // identify 404
