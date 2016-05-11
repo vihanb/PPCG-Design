@@ -381,8 +381,8 @@ if (site === "chat") {
 
     '#footer-legal a { color: #366fb3 !important }' +
     
-    '#footer > a { color: #78ee74 !important }' +
-    '#footer > a:visited { color: #78ff74 !important }' +
+    '#footer a { color: #78ee74 !important }' +
+    '#footer a:visited { color: #78ff74 !important }' +
 
     '#sidebar { background: #fbfbfb; box-shadow: 5px 0px 5px -3px #EEE inset; padding-left: 3px } ' +
 
