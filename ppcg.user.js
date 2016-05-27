@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.7.21
+// @version     3.7.22
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://chat.stackexchange.com/*
@@ -287,22 +287,22 @@ $(".small-site-logo").each(function(i, el){
 $('[rel="shortcut icon"][href^="//cdn.sstatic.net/Sites/codegolf/img/favicon.ico"]').attr("href", "//i.stack.imgur.com/oHkfe.png")
 if(localStorage.getItem('GOAT_MODE') == "true") {
   $('head').append($('<style/>', {html: '.vote-up-off {\
-  background-image: url(http://rawgit.com/somebody1234/Misc-Files/master/upgoat-off.svg) !important;\
+  background-image: url(http://cdn.rawgit.com/somebody1234/Misc-Files/master/upgoat-off.svg) !important;\
   background-size: 100% !important;\
   background-position: 0px 0px;\
 }\
 .vote-down-off {\
-  background-image: url(http://rawgit.com/somebody1234/Misc-Files/master/downgoat-off.svg) !important;\
+  background-image: url(http://cdn.rawgit.com/somebody1234/Misc-Files/master/downgoat-off.svg) !important;\
   background-size: 100% !important;\
   background-position: 0px 0px;\
 }\
 .vote-up-on {\
-  background-image: url(http://rawgit.com/somebody1234/Misc-Files/master/upgoat.svg) !important;\
+  background-image: url(http://cdn.rawgit.com/somebody1234/Misc-Files/master/upgoat.svg) !important;\
   background-size: 100% !important;\
   background-position: 0px 0px;\
 }\
 .vote-down-on {\
-  background-image: url(http://rawgit.com/somebody1234/Misc-Files/master/downgoat.svg) !important;\
+  background-image: url(http://cdn.rawgit.com/somebody1234/Misc-Files/master/downgoat.svg) !important;\
   background-size: 100% !important;\
   background-position: 0px 0px;\
 }'}));
