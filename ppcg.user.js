@@ -641,8 +641,8 @@ if (site === "main" || site === "meta") {
             try {
 			  console.log(  (parts["code"] || "").replace(/\s+/g, "") );
 			  console.log(  (parts["input"] || "").replace(/\s/g, "") );
-              var code = encodeURIComponent(atob(  (parts["code"] || "").replace(/\s+/g, "") ));
-              var input = encodeURIComponent(atob(  (parts["input"] || "").replace(/\s/g, "") ));
+              var code = escape(atob(  (parts["code"] || "").replace(/\s+/g, "") ));
+              var input = escape(atob(  (parts["input"] || "").replace(/\s/g, "") ));
               var url = $this.attr('href').match(/https?:\/\/[^\/]+/)[0];
               if (url && code) { // Was able to get data
                 var r = new XMLHttpRequest();
