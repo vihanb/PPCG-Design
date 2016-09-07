@@ -67,10 +67,12 @@ function bf(x, y) {
 }
 
 function bytes(x, y) { // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
-  var ISO_8859_1 = /^(Japt|TeaScript|Retina|Pyth\b|Reng)/i;
-  var ISO_8859_7 = /^(Jolf)/;
-  var UTF_16 = /^(Ziim|Funciton)/i;
-  var custom = /^(GS2|Seriously|Unicorn|Jelly|(Dyalog )?APL)/i;
+  var ISO_8859_1_langs = /^(Japt|TeaScript|Retina|Pyth\b|Reng)/i;
+  var ISO_8859_7_langs = /^(Jolf)/;
+  var UTF_16_langs = /^(Ziim|Funciton)/i;
+  var custom_langs = /^(GS2|Seriously|Unicorn|Jelly|(Dyalog )?APL)/i;
+  var ISO_8859_1 = /^[\x00-\xFF]*$/;
+  var ISO_8859_7 = /^[\u0000-\u00A0\u2018\u2019\u00A3\u20AC\u20AF\u00A6-\u00A9\u037A\u00AB-\u00AD\u2015\u00B0-\u00B3\u0384-\u0386\u00B7\u0388-\u038A\u00BB\u038C\u00BD\u038E-\u03CE]*$/; // Taken from http://stackoverflow.com/a/34800836/4449486
   y = y || "";
   if (PARSE_HEXDUMPS) {
     var a = "";
@@ -80,10 +82,10 @@ function bytes(x, y) { // Takes in a length of text and piece of header text, an
     if (a) return bf(a.length / 2, "hex");
     if (/^[\da-f\s-]+$/i.test(x.replace(/\n/g, ''))) return bf(x.replace(/[\s-]/g, '').length / 2, "hex");
   }
-  if (/iso.?8859.1/i.test(y) || ISO_8859_1.test(y)) return bf(chars(x), "ISO-8859-1");
-  if (/iso.?8859.7/i.test(y) || ISO_8859_7.test(y)) return bf(chars(x), "ISO-8859-7");
-  if (/utf.?16/i.test(y) || UTF_16.test(y)) return bf(x.length * 2, "UTF-16");
-  if (custom.test(y)) return bf(chars(x), y.match(custom)[0]);
+  if ((/iso.?8859.1/i.test(y) || ISO_8859_1_langs.test(y)) && ISO_8859_1.test(x)) return bf(chars(x), "ISO-8859-1");
+  if ((/iso.?8859.7/i.test(y) || ISO_8859_7_langs.test(y)) && ISO_8859_7.test(x)) return bf(chars(x), "ISO-8859-7");
+  if (/utf.?16/i.test(y) || UTF_16_langs.test(y)) return bf(x.length * 2, "UTF-16");
+  if (custom_langs.test(y)) return bf(chars(x), y.match(custom_langs)[0]);
   return bf(unicodes(x).map(function(c) {
     return c >> 16 ? 4 : c >> 11 ? 3 : c >> 7 ? 2 : 1;
   }).reduce(function(a, b) {
