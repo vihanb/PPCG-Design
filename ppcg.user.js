@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.7.24
+// @version     3.8.0
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://chat.stackexchange.com/*
@@ -67,10 +67,10 @@ function bf(x, y) {
 }
 
 function bytes(x, y) { // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
-  var ISO_8859_1_langs = /^(Japt|TeaScript|Retina|Pyth\b|Reng)/i;
-  var ISO_8859_7_langs = /^(Jolf)/;
-  var UTF_16_langs = /^(Ziim|Funciton)/i;
-  var custom_langs = /^(GS2|Seriously|Unicorn|Jelly|(Dyalog )?APL)/i;
+  var ISO_8859_1_langs = /^(Japt|TeaScript|Retina|Pyth|Reng)\b/i;
+  var ISO_8859_7_langs = /^(Jolf)\b/;
+  var UTF_16_langs = /^(Ziim|Funciton)\b/i;
+  var custom_langs = /^(GS2|Seriously|Unicorn|Jelly|(Dyalog )?APL)\b/i;
   var ISO_8859_1 = /^[\x00-\xFF]*$/;
   var ISO_8859_7 = /^[\u0000-\u00A0\u2018\u2019\u00A3\u20AC\u20AF\u00A6-\u00A9\u037A\u00AB-\u00AD\u2015\u00B0-\u00B3\u0384-\u0386\u00B7\u0388-\u038A\u00BB\u038C\u00BD\u038E-\u03CE]*$/; // Taken from http://stackoverflow.com/a/34800836/4449486
   y = y || "";
@@ -643,8 +643,8 @@ if (site === "main" || site === "meta") {
             try {
 			  console.log(  (parts["code"] || "").replace(/\s+/g, "") );
 			  console.log(  (parts["input"] || "").replace(/\s/g, "") );
-              var code = encodeURIComponent(atob(  (parts["code"] || "").replace(/\s+/g, "") ));
-              var input = encodeURIComponent(atob(  (parts["input"] || "").replace(/\s/g, "") ));
+              var code = escape(atob(  (parts["code"] || "").replace(/\s+/g, "") ));
+              var input = escape(atob(  (parts["input"] || "").replace(/\s/g, "") ));
               var url = $this.attr('href').match(/https?:\/\/[^\/]+/)[0];
               if (url && code) { // Was able to get data
                 var r = new XMLHttpRequest();
