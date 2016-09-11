@@ -627,7 +627,7 @@ if (site === "main" || site === "meta") {
   }
   $('#wmd-preview').after(answerafter);
   // tio.net (WIP) support
-  if (window.location.pathname.indexOf("/questions/") > -1) { // question
+  if (!main.NO_AUTOTIO && window.location.pathname.indexOf("/questions/") > -1) { // question
     $(".answer").each(function() {
       var tiolinks = $(this).find('a[href*="tryitonline.net"]');
       if (tiolinks[0]) {
