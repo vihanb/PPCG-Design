@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.8.1
+// @version     3.8.2
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://chat.stackexchange.com/*
@@ -584,9 +584,9 @@ if (site === "main" || site === "meta") {
           var j = +(
             /non.?competing/i.test(header) ? NaN :
             (header.match(/.+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/) || [])[1] ||
-            (header.match(/[^,\d]+,\s+(\d+)\s*(?:\n|$)/) || [])[1] ||
+            (header.match(/[^,\d]+,\s+(-?\d+(?:\.\d+)?)\s*(?:\n|$)/) || [])[1] ||
             (i.body.match(/(?:<h\d>|<p><strong>).+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/) || [])[1] ||
-            (i.body.match(/^\s*(?:<h\d>|<p><strong>).*?(\d+)\D*?<\/(?:h\d|strong)>/) || [])[1]
+            (i.body.match(/^\s*(?:<h\d>|<p><strong>).*?(-?\d+(?:\.\d+)?)\D*?<\/(?:h\d|strong)>/) || [])[1]
           );
           i.body = i.body.replace(RegExp(",?\\s*" + j + ".*"), "");
           // Taken (and modified) from http://codegolf.stackexchange.com/a/69936/40695
