@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.8.2
+// @version     3.8.3
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://chat.stackexchange.com/*
@@ -578,6 +578,7 @@ if (site === "main" || site === "meta") {
       var answers = [];
       loadAnswers(function(json) {
         answers = json.map(function(i, l, a) {
+	  i.body = i.body.replace(/[\u2010-\u2015\u2212]/g, "-");
           var copyvalue = i.body.slice().replace(/<(strike|s|del)>.*?<\/\1>/g, "");
           var header = ((copyvalue.match(/<(h\d|strong)>(.+?)<\/\1>/) || [])[2] || "")
           i.body = i.body.replace(/^(?!<p><strong>|<h\d>)(.(?!<p><strong>|<h\d>))*/, "").replace(/<(strike|s|del)>.*<\/\1>/g, "").replace(/<a [^>]+>(.*)<\/a>/g, "$1").replace(/\(\s*(\d+)/g, ", $1").replace(/\s*-\s+|:\s*/, ", ");
