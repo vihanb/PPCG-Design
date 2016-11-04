@@ -393,6 +393,15 @@ if (site === "chat") {
     '</style>';
 }
 
+
+////////////////////////////////////////////////////////////////////
+///////////////                                   //////////////////
+///////////////     QUESTON OF THE DAY WIDGET     //////////////////
+///////////////                                   //////////////////
+////////////////////////////////////////////////////////////////////
+
+
+
 /* These are the tag choices */
 var otherTags = ["string", "popularity-contest", "ascii-art", "number",
                  "kolmogorov-complexity", "graphical-output", "king-of-the-hill", "fastest-code",
@@ -403,12 +412,13 @@ var otherTags = ["string", "popularity-contest", "ascii-art", "number",
                  "path-finding", "puzzle-solver", "underhanded", "source-layout",
                  "base-conversion"];
 
-/* Get a cookie (I wish it was a real cookie ;) */
-function getCookie(name) {
-  // http://stackoverflow.com/a/15724300/4683264
-  var value = "; " + document.cookie;
-  var parts = value.split("; " + name + "=");
-  if (parts.length == 2) return parts.pop().split(";").shift();
+/* Get a string from persistant stroage (in this case localStorage) */
+function getData(name) {
+  return localStorage.getItem(name);
+}
+
+function storeData(name, dataStr) {
+   localStorage.setItem(name, dataStr);
 }
 
 /* Get all questions that are taged, are >1yr old, and have a score >7 */
@@ -423,37 +433,40 @@ function getValidQuestions(tag, onDone) {
 //for (var i=0;i<x.length;i++){
 //	x[i].style.color=META_LINK_COLOR
 //}
-/* Check the cookies for the question, or grab a new one. return format is [url, title] */
+
+/* Check storage for the question, or grab a new one. callback argument is [url, title] */
 function getQuestion(tag, callback) {
+   // console.log('getting q');
+   
   // prevent overlap
-  var cookieSuffix = '-tag-question';
-  // separator is a space
-  var cookieVal = getCookie(tag + cookieSuffix);
-  if (cookieVal) {
-    // parts splits at a space, so the format is [url, word1, word2, word3, ...]
-    var parts = cookieVal.split(/ (.+)?/);
-    var url = parts[0];
-    delete parts[0];// remove the url so we can join the title with a space
-    var title = parts.join(' ');
-    callback([url, title]);
+  var storageSuffix = '-tag-question';
+  var item = getData(tag + storageSuffix);
+  // console.log('item is ', item);
+  if (item) {
+   //   console.log('has item');
+     
+    // item is a json string. format is {"url": ..., "title": ...}
+    item = JSON.parse(item);
+    callback([item['url'], item['title']]);
+    
     return 0;
   }
 
   getValidQuestions(tag, function (ret) {
+   //   console.log('got a list of valid qs');
     var quest = ret[Math.floor(Math.random()*ret.length)];
-    var url = quest['link'];
-    var title = quest['title'];
-    console.log(title);
-
-    document.cookie = (tag + cookieSuffix)+'='+url+' '+title.replace(/'/g,'&apos;')+';max-age=86400';
-    callback([url, title]);
+    var urlTitleMap = {'url': quest['link'], 'title': quest['title']};
+   //  console.log('got url', urlTitleMap, tag + storageSuffix);
+    
+    storeData(tag + storageSuffix, JSON.stringify(urlTitleMap));
+    callback([urlTitleMap['url'], urlTitleMap['title']]);
   });
 }
 
 /* Add a tag to the question of the day widget */
 function addTag(tag) {
   getQuestion(tag, function (a) {
-    qS('#question-of-the-day').innerHTML +=
+    qS('#question-of-the-day-content').innerHTML +=
       '<div class="qod-qitem"><span>'+
       '<a href="/questions/tagged/'+tag+'" class="post-tag user-tag" title="show questions tagged \''+tag+'\'" rel="tag">'+tag+
       '</a></span><a href="'+a[0]+'">'+a[1]+'</a></div>';
@@ -475,13 +488,14 @@ function httpGetAsync(theUrl, callback){
 
 /* Add the bottom 2 rotating tags to the question of the day widget */
 function addOtherTags() {
-  var cookieName = 'other-tags-today';
-  var tags = getCookie(cookieName);
-  if (tags) {tags = tags.split(' ');}
+  var dataName = 'other-tags-today';
+  
+  var tags = getData(dataName);
+  if (tags) {tags = JSON.parse(tags);}
   else {
     tags = [otherTags[Math.floor(Math.random()*otherTags.length)],
             otherTags[Math.floor(Math.random()*otherTags.length)]];
-    document.cookie = cookieName + "=" + tags[0] + " " + tags[1] + ";max-age=86400;";
+    storeData(dataName, JSON.stringify(tags));
   }
 
   tags.forEach(function (a) {
@@ -489,12 +503,53 @@ function addOtherTags() {
   });
 }
 
+// check to see if we need to refresh the question list
+function isTimeToGetNewQs() {
+   var key = 'lastDateRefreshedQOD';
+   var lastUpdate = JSON.parse(getData(key));
+   // console.log('checking is time to get new q\'s. lst update', lastUpdate, 'today', new Date().getDate());
+   
+   if (lastUpdate !== null && lastUpdate !== undefined) {
+      // console.log('dt', lastUpdate !== new Date().getDate());
+      return lastUpdate !== new Date().getDate();
+   } else {
+      // console.log(2);
+      storeData(key, JSON.stringify(new Date().getDate()));
+      return false;
+   }
+}
+
+function resetData() {
+   // console.log('rm-ing data');
+   var toRemove = [];
+   for (var i = 0; i < localStorage.length; i++) {
+      
+      var k = localStorage.key(i);
+      if (k.indexOf('tag') !== -1) {
+          toRemove = toRemove.concat(k);
+       }
+   }
+   console.log('data to rm', toRemove);
+   
+   for (var i = 0; i < toRemove.length; i++) {
+      localStorage.removeItem(toRemove[i]);
+   }
+   
+   storeData('lastDateRefreshedQOD', JSON.stringify(new Date().getDate()));
+}
+
 /* Add the question of the day widget */
 function addQuestionOfTheDay() {
-  var questionOfTheDayHtml = '<div class="module" id="question-of-the-day"><h4 id="h-inferred-tags">Challenges of the Day</h4></div>';
+  console.log('adding question of the day');
+  var questionOfTheDayHtml = '<div class="module" id="question-of-the-day"><h4 id="h-inferred-tags">Challenges of the Day</h4><div id="question-of-the-day-content"></div></div>';
 
-  // below the blog posts
-  var favTags = qS('div.module:nth-child(2)');
+  if (isTimeToGetNewQs()) {
+   resetData();
+  }
+
+   
+  // below the blog postsf
+  var favTags = qS('div.module:nth-child(2)') || qS("div.question-stats");
   if (favTags) {
     favTags.insertAdjacentHTML('afterend', questionOfTheDayHtml);
 
@@ -504,7 +559,18 @@ function addQuestionOfTheDay() {
 
     addOtherTags();
   }
+  console.log('done adding question of the day');
 }
+
+
+
+//////////////////////////////////////////////////////////////////////
+///////////////                                   ////////////////////
+///////////////   END QUESTON OF THE DAY WIDGET   ////////////////////
+///////////////                                   ////////////////////
+//////////////////////////////////////////////////////////////////////
+
+
 
 if (site === "main" || site === "meta") {
   execreps();
@@ -730,6 +796,8 @@ if (site === "main" || site === "meta") {
      '#footer a { text-shadow: none; color: #78ee74 !important }' +
      '#footer a:visited { color: #78ff74 !important }' +
      "#newlogo, #hlogo a{font-family:" + HEADER_FONT + ";}"+
+     "#question-of-the-day-content {padding: 5px;border: 3px solid #d4f493;}"+
+     "#question-of-the-day h4 {font-weight: 700;}"+
      "</style>").replace(/\$\$(\w+)/g, function(_, x) {
     return eval(site + "." + x);
   });
@@ -747,7 +815,7 @@ if (site === "main" || site === "meta") {
     });
   }
   $("body .container").prepend('<div style="position: absolute;width: inherit; z-index: 0; height: 130px; background: url(' + obj.BACKGROUND_IMAGE + '); background-attachment: fixed; background-size: 50%;"></div>');
-  //addQuestionOfTheDay(); // Disabling because of cookie bugs
+  addQuestionOfTheDay(); // Disabling because of cookie bugs
   $(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
   document.head.innerHTML += 
     ("<style>" +
