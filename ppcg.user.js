@@ -153,6 +153,7 @@ var main = {
   NO_LEADERBOARD: (localStorage.getItem("main.NO_LEADERBOARD") === "true"),
   NO_AUTOTIO: (localStorage.getItem("main.NO_AUTOTIO") === "true"),
   PROPOSE: localStorage.getItem("main.PROPOSE") || 'Propose',
+  
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#FAFAFA",
   HEADER_BG_COLOR: "transparent",
@@ -182,7 +183,11 @@ var main = {
   // Specify nothing to make these default color
   BOUNTY_COLOR: "rgb(72,125,75)",
   BOUNTY_BG_COLOR: "rgb(172,225,175)",
-  BOUNTY_INDICATOR: "#6DAB71"
+  BOUNTY_INDICATOR: "#6DAB71",
+  
+  // QOD Settings
+  QOD_NUMBER_OF_QS_SHOWN: JSON.parse(localStorage.getItem("QOD_NUMBER_OF_QS_SHOWN")) || 5,
+  QOD_ALWAYS_SHOWN_TAGS: JSON.parse(localStorage.getItem("QOD_ALWAYS_SHOWN_TAGS")) || ['code-golf', 'code-challenge', 'math']
 };
 
 /** ~~~~~~~~~~~~~~~~ META SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
@@ -393,6 +398,13 @@ if (site === "chat") {
     '</style>';
 }
 
+// what is this for?
+
+//x=document.getElementsByClassName("community-bulletin")[0].getElementsByClassName('question-hyperlink')
+//for (var i=0;i<x.length;i++){
+//	x[i].style.color=META_LINK_COLOR
+//}
+
 
 ////////////////////////////////////////////////////////////////////
 ///////////////                                   //////////////////
@@ -402,7 +414,7 @@ if (site === "chat") {
 
 
 
-/* These are the tag choices */
+/* These are the alternating tag choices */
 var otherTags = ["string", "popularity-contest", "ascii-art", "number",
                  "kolmogorov-complexity", "graphical-output", "king-of-the-hill", "fastest-code",
                  "restricted-source", "arithmetic", "sequence", "game",
@@ -411,6 +423,94 @@ var otherTags = ["string", "popularity-contest", "ascii-art", "number",
                  "sorting", "interpreter", "optimization", "parsing",
                  "path-finding", "puzzle-solver", "underhanded", "source-layout",
                  "base-conversion"];
+                 
+                 
+                 
+/* Add the question of the day widget */
+function addQuestionOfTheDay() {
+   console.log('adding question of the day');
+   var questionOfTheDayHtml = '<div class="module" id="question-of-the-day"><h4 id="h-inferred-tags">Challenges of the Day</h4><div id="question-of-the-day-content"></div></div>';
+
+   if (isTimeToGetNewQs()) {
+      resetData();
+   }
+
+
+   // below the blog posts
+   var favTags = $('div.module:nth-child(2)')
+   if (favTags.length === 0) {favTags = $("div.question-stats");}
+
+   if (favTags) {
+      favTags.after(questionOfTheDayHtml);
+      (main.QOD_ALWAYS_SHOWN_TAGS.concat(getOtherTags())).forEach(function(tag) {
+        addTag(tag);
+      });
+   }
+   console.log('done adding question of the day');
+}
+
+
+
+/* Add a tag to the question of the day widget */
+function addTag(tag) {
+  getQuestion(tag, function (a) {
+    $('#question-of-the-day-content').append(
+      '<div class="qod-item"><span>'+
+      '<a href="/questions/tagged/'+tag+'" class="post-tag user-tag" title="show questions tagged \''+tag+'\'" rel="tag">'+tag+
+      '</a></span><a href="'+a['url']+'">'+a['title']+'</a></div>');
+  });
+}
+
+/* get the names of the bottom rotating tags */
+function getOtherTags() {
+  var dataName = 'other-tags-today';
+  var numberOfTags = main.QOD_NUMBER_OF_QS_SHOWN - main.QOD_ALWAYS_SHOWN_TAGS.length;
+  
+  var tags = getData(dataName);
+  if (tags) {tags = JSON.parse(tags);}
+  else {
+    tags = new Array(numberOfTags);
+    for (var i = 0; i < tags.length; i++) {
+       tags[i] = otherTags[Math.floor(Math.random()*otherTags.length)];
+    }
+    storeData(dataName, JSON.stringify(tags));
+  }
+
+  return tags;
+}
+
+
+// check to see if we need to refresh the question list
+function isTimeToGetNewQs() {
+   var key = 'lastDateRefreshedQOD';
+   var lastUpdate = JSON.parse(getData(key));
+   
+   if (lastUpdate !== null && lastUpdate !== undefined) {
+      return lastUpdate !== new Date().getDate();
+   } else {
+      storeData(key, JSON.stringify(new Date().getDate()));
+      return false;
+   }
+}
+
+function resetData() {
+   var toRemove = ['other-tags-today'];
+   for (var i = 0; i < localStorage.length; i++) {
+      
+      var k = localStorage.key(i);
+      if (k.indexOf('tag') !== -1 && k.indexOf('QOD') === -1) {
+          toRemove = toRemove.concat(k);
+       }
+   }
+   console.log('data to rm', toRemove);
+   
+   for (var i = 0; i < toRemove.length; i++) {
+      localStorage.removeItem(toRemove[i]);
+   }
+   
+   storeData('lastDateRefreshedQOD', JSON.stringify(new Date().getDate()));
+}
+
 
 /* Get a string from persistant stroage (in this case localStorage) */
 function getData(name) {
@@ -429,52 +529,29 @@ function getValidQuestions(tag, onDone) {
   });
 }
 
-//x=document.getElementsByClassName("community-bulletin")[0].getElementsByClassName('question-hyperlink')
-//for (var i=0;i<x.length;i++){
-//	x[i].style.color=META_LINK_COLOR
-//}
 
-/* Check storage for the question, or grab a new one. callback argument is [url, title] */
+/* Check storage for the question, or grab a new one. callback argument is {url: ..., title: ...} */
 function getQuestion(tag, callback) {
-   // console.log('getting q');
-   
-  // prevent overlap
   var storageSuffix = '-tag-question';
   var item = getData(tag + storageSuffix);
-  // console.log('item is ', item);
+  
   if (item) {
-   //   console.log('has item');
-     
-    // item is a json string. format is {"url": ..., "title": ...}
     item = JSON.parse(item);
-    callback([item['url'], item['title']]);
-    
-    return 0;
+    callback(item);
+  } else {
+     getValidQuestions(tag, function (ret) {
+        var quest = ret[Math.floor(Math.random()*ret.length)];
+        var urlTitleMap = {'url': quest['link'], 'title': quest['title']};
+        
+        storeData(tag + storageSuffix, JSON.stringify(urlTitleMap));
+        callback(urlTitleMap);
+     });
   }
-
-  getValidQuestions(tag, function (ret) {
-   //   console.log('got a list of valid qs');
-    var quest = ret[Math.floor(Math.random()*ret.length)];
-    var urlTitleMap = {'url': quest['link'], 'title': quest['title']};
-   //  console.log('got url', urlTitleMap, tag + storageSuffix);
-    
-    storeData(tag + storageSuffix, JSON.stringify(urlTitleMap));
-    callback([urlTitleMap['url'], urlTitleMap['title']]);
-  });
 }
 
-/* Add a tag to the question of the day widget */
-function addTag(tag) {
-  getQuestion(tag, function (a) {
-    qS('#question-of-the-day-content').innerHTML +=
-      '<div class="qod-qitem"><span>'+
-      '<a href="/questions/tagged/'+tag+'" class="post-tag user-tag" title="show questions tagged \''+tag+'\'" rel="tag">'+tag+
-      '</a></span><a href="'+a[0]+'">'+a[1]+'</a></div>';
-  });
-}
 
 /* General purpose function, get a http request async */
-function httpGetAsync(theUrl, callback){
+function httpGetAsync(theUrl, callback) {
   // http://stackoverflow.com/a/4033310/4683264
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.onreadystatechange = function() {
@@ -484,82 +561,6 @@ function httpGetAsync(theUrl, callback){
   };
   xmlHttp.open("GET", theUrl, true); // true for asynchronous
   xmlHttp.send(null);
-}
-
-/* Add the bottom 2 rotating tags to the question of the day widget */
-function addOtherTags() {
-  var dataName = 'other-tags-today';
-  
-  var tags = getData(dataName);
-  if (tags) {tags = JSON.parse(tags);}
-  else {
-    tags = [otherTags[Math.floor(Math.random()*otherTags.length)],
-            otherTags[Math.floor(Math.random()*otherTags.length)]];
-    storeData(dataName, JSON.stringify(tags));
-  }
-
-  tags.forEach(function (a) {
-    addTag(a);
-  });
-}
-
-// check to see if we need to refresh the question list
-function isTimeToGetNewQs() {
-   var key = 'lastDateRefreshedQOD';
-   var lastUpdate = JSON.parse(getData(key));
-   // console.log('checking is time to get new q\'s. lst update', lastUpdate, 'today', new Date().getDate());
-   
-   if (lastUpdate !== null && lastUpdate !== undefined) {
-      // console.log('dt', lastUpdate !== new Date().getDate());
-      return lastUpdate !== new Date().getDate();
-   } else {
-      // console.log(2);
-      storeData(key, JSON.stringify(new Date().getDate()));
-      return false;
-   }
-}
-
-function resetData() {
-   // console.log('rm-ing data');
-   var toRemove = [];
-   for (var i = 0; i < localStorage.length; i++) {
-      
-      var k = localStorage.key(i);
-      if (k.indexOf('tag') !== -1) {
-          toRemove = toRemove.concat(k);
-       }
-   }
-   console.log('data to rm', toRemove);
-   
-   for (var i = 0; i < toRemove.length; i++) {
-      localStorage.removeItem(toRemove[i]);
-   }
-   
-   storeData('lastDateRefreshedQOD', JSON.stringify(new Date().getDate()));
-}
-
-/* Add the question of the day widget */
-function addQuestionOfTheDay() {
-  console.log('adding question of the day');
-  var questionOfTheDayHtml = '<div class="module" id="question-of-the-day"><h4 id="h-inferred-tags">Challenges of the Day</h4><div id="question-of-the-day-content"></div></div>';
-
-  if (isTimeToGetNewQs()) {
-   resetData();
-  }
-
-   
-  // below the blog postsf
-  var favTags = qS('div.module:nth-child(2)') || qS("div.question-stats");
-  if (favTags) {
-    favTags.insertAdjacentHTML('afterend', questionOfTheDayHtml);
-
-    addTag('code-golf');
-    addTag('code-challenge');//king-of-the-hill
-    addTag('math');//fastest-code
-
-    addOtherTags();
-  }
-  console.log('done adding question of the day');
 }
 
 
@@ -583,30 +584,112 @@ if (site === "main" || site === "meta") {
 
   // Options Menu
   $(".topbar-wrapper > .network-items").append('<a id="USER_Opt" class="topbar-icon yes-hover" style="z-index:1;width: 36px; background-image: url(' + main.SPRITE_SHEET + '); background-position: 0px 0px;"></a>');
-  $("body").prepend('<div id="USER_OptMenu" style="display: none; width: inherit; height: inherit;"><div id="USER_Backblur" style="position:fixed;z-index:2;width:100%;height:100%;background:rgba(0,0,0,0.5)"></div>' +
-                    '<div style="position:fixed;z-index:3;width:40%;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:' + optionbox.BACKGROUND_COLOR + ';padding:1em;">' +
-                    '<h1>Userscript Options</h1><div>' +
-                    '<div style="width:50%;height:100%;float:left;">' +
-                    '<input class="OPT_Bool" data-var="GOAT_MODE" type="checkbox" id="goat-mode"><label for="goat-moden">Goats instead of boats?</label><br>' +
-                    '<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on"><label for="light_bg_on">Lighter Background?</label><br>' +
-                    '<input class="OPT_Bool" data-var="main.MODE_DARK" type="checkbox" id="dark_theme_on"><label for="dark_theme_on">Dark Theme? (WIP)</label><br>' +
-                    '<p>What text to use for the porpise challenge button?</p>' +
-                    '<select id="proposechoice">' + 
-                    '<option value="Porpoise">Porpoise Challenge</option>' + 
-                    '<option value="Propose">Propose Challenge</option>' + 
-                    '<option value="Propoise">Propoise Challenge</option>' + 
-                    '</select><br/>' + 
-                    '<input class="OPT_Bool" type="checkbox" id="chat_on" onclick="$.cookie(\'RUN_IN_CHAT\',this.checked,{domain:\'stackexchange.com\'})"><label for="chat_on">Make design modifications in chat?</label><br>' +
-                    '<input class="OPT_Bool" data-var="main.NO_LEADERBOARD" type="checkbox" id="noleader"><label for="noleader">Disable Auto Leaderboard?</label><br>' +
-                    '<input class="OPT_Bool" data-var="main.NO_AUTOTIO" type="checkbox" id="notio"><label for="notio">Disable Auto-TryItOnline™ execution?</label>' +
-                    '</div><div style="width:50%;height:100%;float:right;">' +
-                    '' +
-                    '</div></div>For changes to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
+  $("body").prepend(
+  '<div id="USER_OptMenu" style="width: inherit; height: inherit; display: none;">'+
+  '    <div id="USER_Backblur" style="position:fixed;z-index:2;width:100%;height:100%;background:rgba(0,0,0,0.5)"></div>'+
+  '    <div style="position:fixed;z-index:3;width:40%;min-width:600px;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:'+optionbox.BACKGROUND_COLOR+';padding:1em;" class="settings-page">'+
+  '       <h1>Userscript Options</h1>'+
+  '       <div style="/*width:50%;height:100%;float:left;*/max-height: 70vh;overflow-y: scroll;/*! overflow-x: none; */">'+
+  '           <div class="inner-container inner-container-flex">'+
+  '               <div class="title-box">'+
+  '                   <div class="title">'+
+  '                       Theme'+
+  '               </div></div>'+
+  '               <div class="content">'+
+  '                   <div class="row">'+
+  '                       <div class="col-12">'+
+  '                           <input class="OPT_Bool" data-var="GOAT_MODE" id="goat-mode" type="checkbox">'+
+  '                           <label for="goat-moden">Use goats instead of boats</label>'+
+  '                   </div></div>'+
+  '                   <div class="row">'+
+  '                       <div class="col-12">'+
+  '                           <input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" id="light_bg_on" type="checkbox">'+
+  '                           <label for="light_bg_on">Use ighter Background</label>'+
+  '                   </div></div>'+
+  '                   <div class="row">'+
+  '                       <div class="col-12">'+
+  '                           <input class="OPT_Bool" data-var="main.MODE_DARK" id="dark_theme_on" type="checkbox">'+
+  '                           <label for="dark_theme_on">Use Dark Theme <span style="color: #aaa;/*! font-size: 0.6em; *//*! position: center; */">(WIP)</span>'+
+  '                           </label>'+
+  '                   </div></div>'+
+  '                   <div class="row">'+
+  '                       <div class="col-12">'+
+  '                           <input class="OPT_Bool" id="chat_on" onclick="$.cookie(\'RUN_IN_CHAT\',this.checked,{domain:\'stackexchange.com\'})" type="checkbox">'+
+  '                           <label for="chat_on">Use modified theme in chat</label>'+
+  '           </div></div></div></div>'+
+  '           <div class="inner-container inner-container-flex">'+
+  '               <div class="title-box">'+
+  '                   <div class="title">'+
+  '                       Challange of the day'+
+  '               </div></div>'+
+  '               <div class="content">'+
+  '                   <div class="row">'+
+  '                       <div class="col-12 with-padding">'+
+  '                           <p>Number of questions shown</p>'+
+  '                           <select id="qod-item-cnt">'+
+  '                               <option value="qs-3">3</option>'+
+  '                               <option value="qs-4">4</option>'+
+  '                               <option value="qs-5">5</option>'+
+  '                               <option value="qs-6">6</option>'+
+  '                               <option value="qs-7">7</option>'+
+  '                               <option value="qs-8">8</option>'+
+  '                               <option value="qs-9">9</option>'+
+  '                           </select>'+
+  '                   </div></div>'+
+  '                   <div class="row" style="margin-top:1.2em;">'+
+  '                       <div class="col-12">'+
+  '                           Always show these tags: <span style="color: #999;">(format is "tag-1,tag-2,tag-n,..." for as many tags as you want)</span>'+
+  '                           <br>'+
+  '                           <input id="qod-always-shown-tags" type="text">'+
+  '           </div></div></div></div>'+
+  '           <div class="inner-container inner-container-flex">'+
+  '               <div class="title-box">'+
+  '                   <div class="title">'+
+  '                       Extras'+
+  '               </div></div>'+
+  '               <div class="content">'+
+  '                   <div class="row">'+
+  '                       <div class="col-12">'+
+  '                           <p>What text to use for the porpise challenge button?</p>'+
+  '                           <select id="proposechoice">'+
+  '                               <option value="Porpoise">Porpoise Challenge</option>'+
+  '                               <option value="Propose">Propose Challenge</option>'+
+  '                               <option value="Propoise">Propoise Challenge</option>'+
+  '                   </select></div></div>'+
+  '                   <div class="row">'+
+  '                       <div class="col-12">'+
+  '                           <input class="OPT_Bool" data-var="main.NO_LEADERBOARD" id="noleader" type="checkbox">'+
+  '                           <label for="noleader">Disable Auto Leaderboard?</label>'+
+  '                   </div></div>'+
+  '                   <div class="row">'+
+  '                       <div class="col-12">'+
+  '                           <input class="OPT_Bool" data-var="main.NO_AUTOTIO" id="notio" type="checkbox">'+
+  '                           <label for="notio">Disable Auto-TryItOnline™ execution?</label>'+
+  '       </div></div></div></div></div>'+
+  '       <button onclick="location.reload()" style="float: right;margin-top: 1em;">Apply Changes</button>'+
+  '</div></div>');      
+      
   $('#proposechoice').val(main.PROPOSE);
   $('#proposechoice').change(function () {
     var str = $(this).find('option:selected').val();
     localStorage.setItem("main.PROPOSE", str);
   });
+  $('#qod-item-cnt').val('qs-' + main.QOD_NUMBER_OF_QS_SHOWN);
+  $('#qod-item-cnt').change(function () {
+    var str = +$(this).find('option:selected').val().slice(3);
+    localStorage.setItem("QOD_NUMBER_OF_QS_SHOWN", JSON.stringify(str));
+    resetData();
+  });
+  console.log('got to 1');
+  $('#qod-always-shown-tags').val(main.QOD_ALWAYS_SHOWN_TAGS.join())
+  $('#qod-always-shown-tags').keypress(function () {
+    var str = $('#qod-always-shown-tags').val().split(','); 
+    console.log('putting', str, 'old', main.QOD_ALWAYS_SHOWN_TAGS);
+    localStorage.setItem("QOD_ALWAYS_SHOWN_TAGS", JSON.stringify(str));
+    resetData();
+  });
+  console.log('got to 2');
+  
   $("#USER_Opt, #USER_Backblur").click(function() {
     $("#USER_OptMenu").fadeToggle(50);
   });
@@ -632,6 +715,8 @@ if (site === "main" || site === "meta") {
     title: 'Switch to ' + (site === 'meta' ? 'main' : 'meta')
   })
     .appendTo('.network-items');
+    
+    
 
   $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox">'+ main.PROPOSE + ' Challenge</a></li>');
   document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
@@ -762,10 +847,10 @@ if (site === "main" || site === "meta") {
      ".bulletin-title{color:$$BULLETIN_TITLE;}" +
      "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}" +
      ".yes-hover{cursor:pointer !important;}" +
-     '.qod-qitem { display: table }' +
-     '.qod-qitem > *{ display: table-cell; vertical-align:middle }' +
-     '.qod-qitem > *:not(.post-tag) { font-weight: normal; font-size: 12px; white-space: normal; padding-left: 5px; }' +
-     '.qod-qitem:not(:first-child) { margin-top: 5px; }'+
+     '.qod-item { display: table }' +
+     '.qod-item > *{ display: table-cell; vertical-align:middle }' +
+     '.qod-item > *:not(.post-tag) { font-weight: normal; font-size: 12px; white-space: normal; padding-left: 5px; }' +
+     '.qod-item:not(:first-child) { margin-top: 5px; }'+
      ".LEADERBOARD {border-collapse: collapse} .LEADERBOARD td { padding: 6px 8px } .LEADERBOARD tr:nth-child(even) { background-color: #F1F1F1 } .LEADERBOARD thead { border-bottom: 1px solid #DDD }" +
      "html,body{font-family:" + TEXT_FONT + "}" +
      'a.badge { color: white !important }' +
