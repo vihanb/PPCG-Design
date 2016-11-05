@@ -402,7 +402,11 @@ if (site === "chat") {
 
 
 
-/* These are the tag choices */
+var permanentTags = ['code-golf', 'code-challenge', 'math'];
+
+var tagsShown = 5;
+
+/* These are the alternating tag choices */
 var otherTags = ["string", "popularity-contest", "ascii-art", "number",
                  "kolmogorov-complexity", "graphical-output", "king-of-the-hill", "fastest-code",
                  "restricted-source", "arithmetic", "sequence", "game",
@@ -411,6 +415,94 @@ var otherTags = ["string", "popularity-contest", "ascii-art", "number",
                  "sorting", "interpreter", "optimization", "parsing",
                  "path-finding", "puzzle-solver", "underhanded", "source-layout",
                  "base-conversion"];
+                 
+                 
+                 
+/* Add the question of the day widget */
+function addQuestionOfTheDay() {
+   console.log('adding question of the day');
+   var questionOfTheDayHtml = '<div class="module" id="question-of-the-day"><h4 id="h-inferred-tags">Challenges of the Day</h4><div id="question-of-the-day-content"></div></div>';
+
+   if (isTimeToGetNewQs()) {
+      resetData();
+   }
+
+
+   // below the blog posts
+   var favTags = $('div.module:nth-child(2)')
+   if (favTags.length === 0) {favTags = $("div.question-stats");}
+
+   if (favTags) {
+      favTags.after(questionOfTheDayHtml);
+      (permanentTags.concat(getOtherTags())).forEach(function(tag) {
+        addTag(tag);
+      });
+   }
+   console.log('done adding question of the day');
+}
+
+
+
+/* Add a tag to the question of the day widget */
+function addTag(tag) {
+  getQuestion(tag, function (a) {
+    $('#question-of-the-day-content').append(
+      '<div class="qod-qitem"><span>'+
+      '<a href="/questions/tagged/'+tag+'" class="post-tag user-tag" title="show questions tagged \''+tag+'\'" rel="tag">'+tag+
+      '</a></span><a href="'+a['url']+'">'+a['title']+'</a></div>');
+  });
+}
+
+/* get the names of the bottom rotating tags */
+function getOtherTags() {
+  var dataName = 'other-tags-today';
+  var numberOfTags = tagsShown - permanentTags.length;
+  
+  var tags = getData(dataName);
+  if (tags) {tags = JSON.parse(tags);}
+  else {
+    tags = new Array(numberOfTags);
+    for (var i = 0; i < tags.length; i++) {
+       tags[i] = otherTags[Math.floor(Math.random()*otherTags.length)];
+    }
+    storeData(dataName, JSON.stringify(tags));
+  }
+
+  return tags;
+}
+
+
+// check to see if we need to refresh the question list
+function isTimeToGetNewQs() {
+   var key = 'lastDateRefreshedQOD';
+   var lastUpdate = JSON.parse(getData(key));
+   
+   if (lastUpdate !== null && lastUpdate !== undefined) {
+      return lastUpdate !== new Date().getDate();
+   } else {
+      storeData(key, JSON.stringify(new Date().getDate()));
+      return false;
+   }
+}
+
+function resetData() {
+   var toRemove = ['other-tags-today'];
+   for (var i = 0; i < localStorage.length; i++) {
+      
+      var k = localStorage.key(i);
+      if (k.indexOf('tag') !== -1) {
+          toRemove = toRemove.concat(k);
+       }
+   }
+   console.log('data to rm', toRemove);
+   
+   for (var i = 0; i < toRemove.length; i++) {
+      localStorage.removeItem(toRemove[i]);
+   }
+   
+   storeData('lastDateRefreshedQOD', JSON.stringify(new Date().getDate()));
+}
+
 
 /* Get a string from persistant stroage (in this case localStorage) */
 function getData(name) {
@@ -429,52 +521,29 @@ function getValidQuestions(tag, onDone) {
   });
 }
 
-//x=document.getElementsByClassName("community-bulletin")[0].getElementsByClassName('question-hyperlink')
-//for (var i=0;i<x.length;i++){
-//	x[i].style.color=META_LINK_COLOR
-//}
 
-/* Check storage for the question, or grab a new one. callback argument is [url, title] */
+/* Check storage for the question, or grab a new one. callback argument is {url: ..., title: ...} */
 function getQuestion(tag, callback) {
-   // console.log('getting q');
-   
-  // prevent overlap
   var storageSuffix = '-tag-question';
   var item = getData(tag + storageSuffix);
-  // console.log('item is ', item);
+  
   if (item) {
-   //   console.log('has item');
-     
-    // item is a json string. format is {"url": ..., "title": ...}
     item = JSON.parse(item);
-    callback([item['url'], item['title']]);
-    
-    return 0;
+    callback(item);
+  } else {
+     getValidQuestions(tag, function (ret) {
+        var quest = ret[Math.floor(Math.random()*ret.length)];
+        var urlTitleMap = {'url': quest['link'], 'title': quest['title']};
+        
+        storeData(tag + storageSuffix, JSON.stringify(urlTitleMap));
+        callback(urlTitleMap);
+     });
   }
-
-  getValidQuestions(tag, function (ret) {
-   //   console.log('got a list of valid qs');
-    var quest = ret[Math.floor(Math.random()*ret.length)];
-    var urlTitleMap = {'url': quest['link'], 'title': quest['title']};
-   //  console.log('got url', urlTitleMap, tag + storageSuffix);
-    
-    storeData(tag + storageSuffix, JSON.stringify(urlTitleMap));
-    callback([urlTitleMap['url'], urlTitleMap['title']]);
-  });
 }
 
-/* Add a tag to the question of the day widget */
-function addTag(tag) {
-  getQuestion(tag, function (a) {
-    qS('#question-of-the-day-content').innerHTML +=
-      '<div class="qod-qitem"><span>'+
-      '<a href="/questions/tagged/'+tag+'" class="post-tag user-tag" title="show questions tagged \''+tag+'\'" rel="tag">'+tag+
-      '</a></span><a href="'+a[0]+'">'+a[1]+'</a></div>';
-  });
-}
 
 /* General purpose function, get a http request async */
-function httpGetAsync(theUrl, callback){
+function httpGetAsync(theUrl, callback) {
   // http://stackoverflow.com/a/4033310/4683264
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.onreadystatechange = function() {
@@ -484,82 +553,6 @@ function httpGetAsync(theUrl, callback){
   };
   xmlHttp.open("GET", theUrl, true); // true for asynchronous
   xmlHttp.send(null);
-}
-
-/* Add the bottom 2 rotating tags to the question of the day widget */
-function addOtherTags() {
-  var dataName = 'other-tags-today';
-  
-  var tags = getData(dataName);
-  if (tags) {tags = JSON.parse(tags);}
-  else {
-    tags = [otherTags[Math.floor(Math.random()*otherTags.length)],
-            otherTags[Math.floor(Math.random()*otherTags.length)]];
-    storeData(dataName, JSON.stringify(tags));
-  }
-
-  tags.forEach(function (a) {
-    addTag(a);
-  });
-}
-
-// check to see if we need to refresh the question list
-function isTimeToGetNewQs() {
-   var key = 'lastDateRefreshedQOD';
-   var lastUpdate = JSON.parse(getData(key));
-   // console.log('checking is time to get new q\'s. lst update', lastUpdate, 'today', new Date().getDate());
-   
-   if (lastUpdate !== null && lastUpdate !== undefined) {
-      // console.log('dt', lastUpdate !== new Date().getDate());
-      return lastUpdate !== new Date().getDate();
-   } else {
-      // console.log(2);
-      storeData(key, JSON.stringify(new Date().getDate()));
-      return false;
-   }
-}
-
-function resetData() {
-   // console.log('rm-ing data');
-   var toRemove = [];
-   for (var i = 0; i < localStorage.length; i++) {
-      
-      var k = localStorage.key(i);
-      if (k.indexOf('tag') !== -1) {
-          toRemove = toRemove.concat(k);
-       }
-   }
-   console.log('data to rm', toRemove);
-   
-   for (var i = 0; i < toRemove.length; i++) {
-      localStorage.removeItem(toRemove[i]);
-   }
-   
-   storeData('lastDateRefreshedQOD', JSON.stringify(new Date().getDate()));
-}
-
-/* Add the question of the day widget */
-function addQuestionOfTheDay() {
-  console.log('adding question of the day');
-  var questionOfTheDayHtml = '<div class="module" id="question-of-the-day"><h4 id="h-inferred-tags">Challenges of the Day</h4><div id="question-of-the-day-content"></div></div>';
-
-  if (isTimeToGetNewQs()) {
-   resetData();
-  }
-
-   
-  // below the blog postsf
-  var favTags = qS('div.module:nth-child(2)') || qS("div.question-stats");
-  if (favTags) {
-    favTags.insertAdjacentHTML('afterend', questionOfTheDayHtml);
-
-    addTag('code-golf');
-    addTag('code-challenge');//king-of-the-hill
-    addTag('math');//fastest-code
-
-    addOtherTags();
-  }
-  console.log('done adding question of the day');
 }
 
 
