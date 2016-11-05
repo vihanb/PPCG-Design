@@ -393,6 +393,13 @@ if (site === "chat") {
     '</style>';
 }
 
+// what is this for?
+
+//x=document.getElementsByClassName("community-bulletin")[0].getElementsByClassName('question-hyperlink')
+//for (var i=0;i<x.length;i++){
+//	x[i].style.color=META_LINK_COLOR
+//}
+
 
 ////////////////////////////////////////////////////////////////////
 ///////////////                                   //////////////////
@@ -447,7 +454,7 @@ function addQuestionOfTheDay() {
 function addTag(tag) {
   getQuestion(tag, function (a) {
     $('#question-of-the-day-content').append(
-      '<div class="qod-qitem"><span>'+
+      '<div class="qod-item"><span>'+
       '<a href="/questions/tagged/'+tag+'" class="post-tag user-tag" title="show questions tagged \''+tag+'\'" rel="tag">'+tag+
       '</a></span><a href="'+a['url']+'">'+a['title']+'</a></div>');
   });
@@ -577,32 +584,82 @@ if (site === "main" || site === "meta") {
   // Options Menu
   $(".topbar-wrapper > .network-items").append('<a id="USER_Opt" class="topbar-icon yes-hover" style="z-index:1;width: 36px; background-image: url(' + main.SPRITE_SHEET + '); background-position: 0px 0px;"></a>');
   $("body").prepend(
-     '<div id="USER_OptMenu" style="display: none; width: inherit; height: inherit;">'+
-         '<div id="USER_Backblur" style="position:fixed;z-index:2;width:100%;height:100%;background:rgba(0,0,0,0.5)"></div>' +
-         '<div style="position:fixed;z-index:3;width:40%;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:'+
-                                                                              optionbox.BACKGROUND_COLOR + ';padding:1em;">' +
-            '<h1>Userscript Options</h1><div>' +
-         '<div style="width:50%;height:100%;float:left;">'+
-            '<input class="OPT_Bool" data-var="GOAT_MODE" type="checkbox" id="goat-mode">'+
-            '<label for="goat-moden">Goats instead of boats?</label><br>' +
-            '<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on">'+
-            '<label for="light_bg_on">Lighter Background?</label><br>' +
-            '<input class="OPT_Bool" data-var="main.MODE_DARK" type="checkbox" id="dark_theme_on">'+
-            '<label for="dark_theme_on">Dark Theme? (WIP)</label><br>' +
-            '<p>What text to use for the porpise challenge button?</p>' +
-            '<select id="proposechoice">' + 
-              '<option value="Porpoise">Porpoise Challenge</option>' + 
-              '<option value="Propose">Propose Challenge</option>' + 
-              '<option value="Propoise">Propoise Challenge</option>' + 
-            '</select><br/>' + 
-            '<input class="OPT_Bool" type="checkbox" id="chat_on" onclick="$.cookie(\'RUN_IN_CHAT\',this.checked,{domain:\'stackexchange.com\'})">'+
-            '<label for="chat_on">Make design modifications in chat?</label><br>' +
-            '<input class="OPT_Bool" data-var="main.NO_LEADERBOARD" type="checkbox" id="noleader">'+
-            '<label for="noleader">Disable Auto Leaderboard?</label><br>' +
-            '<input class="OPT_Bool" data-var="main.NO_AUTOTIO" type="checkbox" id="notio">'+
-            '<label for="notio">Disable Auto-TryItOnline™ execution?</label>' +
-         '</div><div style="width:50%;height:100%;float:right;">' +
-      '</div></div>For changes to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
+  '<div id="USER_OptMenu" style="width: inherit; height: inherit; display: none;">'+
+  '    <div id="USER_Backblur" style="position:fixed;z-index:2;width:100%;height:100%;background:rgba(0,0,0,0.5)"></div>'+
+  '    <div style="position:fixed;z-index:3;width:40%;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:'+optionbox.BACKGROUND_COLOR+';padding:1em;" class="settings-page">'+
+  '       <h1>Userscript Options</h1>'+
+  '       <div style="/*width:50%;height:100%;float:left;*/max-height: 70vh;overflow-y: scroll;/*! overflow-x: none; */">'+
+  '           <div class="inner-container inner-container-flex">'+
+  '               <div class="title-box">'+
+  '                   <div class="title">'+
+  '                       Theme'+
+  '               </div></div>'+
+  '               <div class="content">'+
+  '                   <div class="row">'+
+  '                       <div class="col-12">'+
+  '                           <input class="OPT_Bool" data-var="GOAT_MODE" id="goat-mode" type="checkbox">'+
+  '                           <label for="goat-moden">Use goats instead of boats</label>'+
+  '                   </div></div>'+
+  '                   <div class="row">'+
+  '                       <div class="col-12">'+
+  '                           <input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" id="light_bg_on" type="checkbox">'+
+  '                           <label for="light_bg_on">Use ighter Background</label>'+
+  '                   </div></div>'+
+  '                   <div class="row">'+
+  '                       <div class="col-12">'+
+  '                           <input class="OPT_Bool" data-var="main.MODE_DARK" id="dark_theme_on" type="checkbox">'+
+  '                           <label for="dark_theme_on">Use Dark Theme <span style="color: #aaa;/*! font-size: 0.6em; *//*! position: center; */">(WIP)</span>'+
+  '                           </label>'+
+  '                   </div></div>'+
+  '                   <div class="row">'+
+  '                       <div class="col-12">'+
+  '                           <input class="OPT_Bool" id="chat_on" onclick="$.cookie(\'RUN_IN_CHAT\',this.checked,{domain:\'stackexchange.com\'})" type="checkbox">'+
+  '                           <label for="chat_on">Use modified theme in chat</label>'+
+  '           </div></div></div></div>'+
+  '           <div class="inner-container inner-container-flex">'+
+  '               <div class="title-box">'+
+  '                   <div class="title">'+
+  '                       Challange of the day'+
+  '               </div></div>'+
+  '               <div class="content">'+
+  '                   <div class="row">'+
+  '                       <div class="col-12 with-padding">'+
+  '                           <input name="qod-item-cnt" value="" style="width: 3em; padding:0;" type="number">'+
+  '                           <label for="qod-item-cnt" style="padding-left: 5px;">Number of questions shown</label>'+
+  '                   </div></div>'+
+  '                   <div class="row" style="margin-top:1.2em;">'+
+  '                       <div class="col-12">'+
+  '                           Always show these tags: <span style="color: #999;">(format is "tag-1,tag-2,tag-n,..." for as many tags as you want)</span>'+
+  '                           <br>'+
+  '                           <input name="name" value="code-golf,code-challenge,math" type="text">'+
+  '           </div></div></div></div>'+
+  '           <div class="inner-container inner-container-flex">'+
+  '               <div class="title-box">'+
+  '                   <div class="title">'+
+  '                       Extras'+
+  '               </div></div>'+
+  '               <div class="content">'+
+  '                   <div class="row">'+
+  '                       <div class="col-12">'+
+  '                           <p>What text to use for the porpise challenge button?</p>'+
+  '                           <select id="proposechoice">'+
+  '                               <option value="Porpoise">Porpoise Challenge</option>'+
+  '                               <option value="Propose">Propose Challenge</option>'+
+  '                               <option value="Propoise">Propoise Challenge</option>'+
+  '                   </select></div></div>'+
+  '                   <div class="row">'+
+  '                       <div class="col-12">'+
+  '                           <input class="OPT_Bool" data-var="main.NO_LEADERBOARD" id="noleader" type="checkbox">'+
+  '                           <label for="noleader">Disable Auto Leaderboard?</label>'+
+  '                   </div></div>'+
+  '                   <div class="row">'+
+  '                       <div class="col-12">'+
+  '                           <input class="OPT_Bool" data-var="main.NO_AUTOTIO" id="notio" type="checkbox">'+
+  '                           <label for="notio">Disable Auto-TryItOnline™ execution?</label>'+
+  '       </div></div></div></div></div>'+
+  '       <button onclick="location.reload()" style="float: right;margin-top: 1em;">Save Changes</button>'+
+  '</div></div>');      
+      
   $('#proposechoice').val(main.PROPOSE);
   $('#proposechoice').change(function () {
     var str = $(this).find('option:selected').val();
@@ -763,10 +820,10 @@ if (site === "main" || site === "meta") {
      ".bulletin-title{color:$$BULLETIN_TITLE;}" +
      "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}" +
      ".yes-hover{cursor:pointer !important;}" +
-     '.qod-qitem { display: table }' +
-     '.qod-qitem > *{ display: table-cell; vertical-align:middle }' +
-     '.qod-qitem > *:not(.post-tag) { font-weight: normal; font-size: 12px; white-space: normal; padding-left: 5px; }' +
-     '.qod-qitem:not(:first-child) { margin-top: 5px; }'+
+     '.qod-item { display: table }' +
+     '.qod-item > *{ display: table-cell; vertical-align:middle }' +
+     '.qod-item > *:not(.post-tag) { font-weight: normal; font-size: 12px; white-space: normal; padding-left: 5px; }' +
+     '.qod-item:not(:first-child) { margin-top: 5px; }'+
      ".LEADERBOARD {border-collapse: collapse} .LEADERBOARD td { padding: 6px 8px } .LEADERBOARD tr:nth-child(even) { background-color: #F1F1F1 } .LEADERBOARD thead { border-bottom: 1px solid #DDD }" +
      "html,body{font-family:" + TEXT_FONT + "}" +
      'a.badge { color: white !important }' +
