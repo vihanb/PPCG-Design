@@ -153,6 +153,7 @@ var main = {
   NO_LEADERBOARD: (localStorage.getItem("main.NO_LEADERBOARD") === "true"),
   NO_AUTOTIO: (localStorage.getItem("main.NO_AUTOTIO") === "true"),
   PROPOSE: localStorage.getItem("main.PROPOSE") || 'Propose',
+  
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#FAFAFA",
   HEADER_BG_COLOR: "transparent",
@@ -182,7 +183,11 @@ var main = {
   // Specify nothing to make these default color
   BOUNTY_COLOR: "rgb(72,125,75)",
   BOUNTY_BG_COLOR: "rgb(172,225,175)",
-  BOUNTY_INDICATOR: "#6DAB71"
+  BOUNTY_INDICATOR: "#6DAB71",
+  
+  // QOD Settings
+  QOD_NUMBER_OF_QS_SHOWN: JSON.parse(localStorage.getItem("QOD_NUMBER_OF_QS_SHOWN")) || 5,
+  QOD_ALWAYS_SHOWN_TAGS: JSON.parse(localStorage.getItem("QOD_ALWAYS_SHOWN_TAGS")) || ['code-golf', 'code-challenge', 'math']
 };
 
 /** ~~~~~~~~~~~~~~~~ META SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
@@ -409,10 +414,6 @@ if (site === "chat") {
 
 
 
-var permanentTags = ['code-golf', 'code-challenge', 'math'];
-
-var tagsShown = 5;
-
 /* These are the alternating tag choices */
 var otherTags = ["string", "popularity-contest", "ascii-art", "number",
                  "kolmogorov-complexity", "graphical-output", "king-of-the-hill", "fastest-code",
@@ -441,7 +442,7 @@ function addQuestionOfTheDay() {
 
    if (favTags) {
       favTags.after(questionOfTheDayHtml);
-      (permanentTags.concat(getOtherTags())).forEach(function(tag) {
+      (main.QOD_ALWAYS_SHOWN_TAGS.concat(getOtherTags())).forEach(function(tag) {
         addTag(tag);
       });
    }
@@ -463,7 +464,7 @@ function addTag(tag) {
 /* get the names of the bottom rotating tags */
 function getOtherTags() {
   var dataName = 'other-tags-today';
-  var numberOfTags = tagsShown - permanentTags.length;
+  var numberOfTags = main.QOD_NUMBER_OF_QS_SHOWN - main.QOD_ALWAYS_SHOWN_TAGS.length;
   
   var tags = getData(dataName);
   if (tags) {tags = JSON.parse(tags);}
@@ -497,7 +498,7 @@ function resetData() {
    for (var i = 0; i < localStorage.length; i++) {
       
       var k = localStorage.key(i);
-      if (k.indexOf('tag') !== -1) {
+      if (k.indexOf('tag') !== -1 && k.indexOf('QOD') === -1) {
           toRemove = toRemove.concat(k);
        }
    }
@@ -586,7 +587,7 @@ if (site === "main" || site === "meta") {
   $("body").prepend(
   '<div id="USER_OptMenu" style="width: inherit; height: inherit; display: none;">'+
   '    <div id="USER_Backblur" style="position:fixed;z-index:2;width:100%;height:100%;background:rgba(0,0,0,0.5)"></div>'+
-  '    <div style="position:fixed;z-index:3;width:40%;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:'+optionbox.BACKGROUND_COLOR+';padding:1em;" class="settings-page">'+
+  '    <div style="position:fixed;z-index:3;width:40%;min-width:600px;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:'+optionbox.BACKGROUND_COLOR+';padding:1em;" class="settings-page">'+
   '       <h1>Userscript Options</h1>'+
   '       <div style="/*width:50%;height:100%;float:left;*/max-height: 70vh;overflow-y: scroll;/*! overflow-x: none; */">'+
   '           <div class="inner-container inner-container-flex">'+
@@ -624,14 +625,22 @@ if (site === "main" || site === "meta") {
   '               <div class="content">'+
   '                   <div class="row">'+
   '                       <div class="col-12 with-padding">'+
-  '                           <input name="qod-item-cnt" value="" style="width: 3em; padding:0;" type="number">'+
-  '                           <label for="qod-item-cnt" style="padding-left: 5px;">Number of questions shown</label>'+
+  '                           <p>Number of questions shown</p>'+
+  '                           <select id="qod-item-cnt">'+
+  '                               <option value="qs-3">3</option>'+
+  '                               <option value="qs-4">4</option>'+
+  '                               <option value="qs-5">5</option>'+
+  '                               <option value="qs-6">6</option>'+
+  '                               <option value="qs-7">7</option>'+
+  '                               <option value="qs-8">8</option>'+
+  '                               <option value="qs-9">9</option>'+
+  '                           </select>'+
   '                   </div></div>'+
   '                   <div class="row" style="margin-top:1.2em;">'+
   '                       <div class="col-12">'+
   '                           Always show these tags: <span style="color: #999;">(format is "tag-1,tag-2,tag-n,..." for as many tags as you want)</span>'+
   '                           <br>'+
-  '                           <input name="name" value="code-golf,code-challenge,math" type="text">'+
+  '                           <input id="qod-always-shown-tags" type="text">'+
   '           </div></div></div></div>'+
   '           <div class="inner-container inner-container-flex">'+
   '               <div class="title-box">'+
@@ -657,7 +666,7 @@ if (site === "main" || site === "meta") {
   '                           <input class="OPT_Bool" data-var="main.NO_AUTOTIO" id="notio" type="checkbox">'+
   '                           <label for="notio">Disable Auto-TryItOnline™ execution?</label>'+
   '       </div></div></div></div></div>'+
-  '       <button onclick="location.reload()" style="float: right;margin-top: 1em;">Save Changes</button>'+
+  '       <button onclick="location.reload()" style="float: right;margin-top: 1em;">Apply Changes</button>'+
   '</div></div>');      
       
   $('#proposechoice').val(main.PROPOSE);
@@ -665,6 +674,22 @@ if (site === "main" || site === "meta") {
     var str = $(this).find('option:selected').val();
     localStorage.setItem("main.PROPOSE", str);
   });
+  $('#qod-item-cnt').val('qs-' + main.QOD_NUMBER_OF_QS_SHOWN);
+  $('#qod-item-cnt').change(function () {
+    var str = +$(this).find('option:selected').val().slice(3);
+    localStorage.setItem("QOD_NUMBER_OF_QS_SHOWN", JSON.stringify(str));
+    resetData();
+  });
+  console.log('got to 1');
+  $('#qod-always-shown-tags').val(main.QOD_ALWAYS_SHOWN_TAGS.join())
+  $('#qod-always-shown-tags').keypress(function () {
+    var str = $('#qod-always-shown-tags').val().split(','); 
+    console.log('putting', str, 'old', main.QOD_ALWAYS_SHOWN_TAGS);
+    localStorage.setItem("QOD_ALWAYS_SHOWN_TAGS", JSON.stringify(str));
+    resetData();
+  });
+  console.log('got to 2');
+  
   $("#USER_Opt, #USER_Backblur").click(function() {
     $("#USER_OptMenu").fadeToggle(50);
   });
@@ -690,6 +715,8 @@ if (site === "main" || site === "meta") {
     title: 'Switch to ' + (site === 'meta' ? 'main' : 'meta')
   })
     .appendTo('.network-items');
+    
+    
 
   $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox">'+ main.PROPOSE + ' Challenge</a></li>');
   document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
