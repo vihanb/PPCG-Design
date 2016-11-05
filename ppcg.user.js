@@ -576,25 +576,33 @@ if (site === "main" || site === "meta") {
 
   // Options Menu
   $(".topbar-wrapper > .network-items").append('<a id="USER_Opt" class="topbar-icon yes-hover" style="z-index:1;width: 36px; background-image: url(' + main.SPRITE_SHEET + '); background-position: 0px 0px;"></a>');
-  $("body").prepend('<div id="USER_OptMenu" style="display: none; width: inherit; height: inherit;"><div id="USER_Backblur" style="position:fixed;z-index:2;width:100%;height:100%;background:rgba(0,0,0,0.5)"></div>' +
-                    '<div style="position:fixed;z-index:3;width:40%;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:' + optionbox.BACKGROUND_COLOR + ';padding:1em;">' +
-                    '<h1>Userscript Options</h1><div>' +
-                    '<div style="width:50%;height:100%;float:left;">' +
-                    '<input class="OPT_Bool" data-var="GOAT_MODE" type="checkbox" id="goat-mode"><label for="goat-moden">Goats instead of boats?</label><br>' +
-                    '<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on"><label for="light_bg_on">Lighter Background?</label><br>' +
-                    '<input class="OPT_Bool" data-var="main.MODE_DARK" type="checkbox" id="dark_theme_on"><label for="dark_theme_on">Dark Theme? (WIP)</label><br>' +
-                    '<p>What text to use for the porpise challenge button?</p>' +
-                    '<select id="proposechoice">' + 
-                    '<option value="Porpoise">Porpoise Challenge</option>' + 
-                    '<option value="Propose">Propose Challenge</option>' + 
-                    '<option value="Propoise">Propoise Challenge</option>' + 
-                    '</select><br/>' + 
-                    '<input class="OPT_Bool" type="checkbox" id="chat_on" onclick="$.cookie(\'RUN_IN_CHAT\',this.checked,{domain:\'stackexchange.com\'})"><label for="chat_on">Make design modifications in chat?</label><br>' +
-                    '<input class="OPT_Bool" data-var="main.NO_LEADERBOARD" type="checkbox" id="noleader"><label for="noleader">Disable Auto Leaderboard?</label><br>' +
-                    '<input class="OPT_Bool" data-var="main.NO_AUTOTIO" type="checkbox" id="notio"><label for="notio">Disable Auto-TryItOnline™ execution?</label>' +
-                    '</div><div style="width:50%;height:100%;float:right;">' +
-                    '' +
-                    '</div></div>For changes to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
+  $("body").prepend(
+     '<div id="USER_OptMenu" style="display: none; width: inherit; height: inherit;">'+
+         '<div id="USER_Backblur" style="position:fixed;z-index:2;width:100%;height:100%;background:rgba(0,0,0,0.5)"></div>' +
+         '<div style="position:fixed;z-index:3;width:40%;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:'+
+                                                                              optionbox.BACKGROUND_COLOR + ';padding:1em;">' +
+            '<h1>Userscript Options</h1><div>' +
+         '<div style="width:50%;height:100%;float:left;">'+
+            '<input class="OPT_Bool" data-var="GOAT_MODE" type="checkbox" id="goat-mode">'+
+            '<label for="goat-moden">Goats instead of boats?</label><br>' +
+            '<input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" type="checkbox" id="light_bg_on">'+
+            '<label for="light_bg_on">Lighter Background?</label><br>' +
+            '<input class="OPT_Bool" data-var="main.MODE_DARK" type="checkbox" id="dark_theme_on">'+
+            '<label for="dark_theme_on">Dark Theme? (WIP)</label><br>' +
+            '<p>What text to use for the porpise challenge button?</p>' +
+            '<select id="proposechoice">' + 
+              '<option value="Porpoise">Porpoise Challenge</option>' + 
+              '<option value="Propose">Propose Challenge</option>' + 
+              '<option value="Propoise">Propoise Challenge</option>' + 
+            '</select><br/>' + 
+            '<input class="OPT_Bool" type="checkbox" id="chat_on" onclick="$.cookie(\'RUN_IN_CHAT\',this.checked,{domain:\'stackexchange.com\'})">'+
+            '<label for="chat_on">Make design modifications in chat?</label><br>' +
+            '<input class="OPT_Bool" data-var="main.NO_LEADERBOARD" type="checkbox" id="noleader">'+
+            '<label for="noleader">Disable Auto Leaderboard?</label><br>' +
+            '<input class="OPT_Bool" data-var="main.NO_AUTOTIO" type="checkbox" id="notio">'+
+            '<label for="notio">Disable Auto-TryItOnline™ execution?</label>' +
+         '</div><div style="width:50%;height:100%;float:right;">' +
+      '</div></div>For changes to take effect: <button onclick="location.reload()">Refresh</button></div></div>');
   $('#proposechoice').val(main.PROPOSE);
   $('#proposechoice').change(function () {
     var str = $(this).find('option:selected').val();
