@@ -10,6 +10,14 @@
 // @updateURL   https://rawgit.com/vihanb/PPCG-Design/master/ppcg.user.js
 // ==/UserScript==
 
+
+
+////////////////////////////////////////////////////////////////////////
+//////////////////////                        //////////////////////////
+//////////////////////    GLOBAL VARIABLES    //////////////////////////
+//////////////////////                        //////////////////////////
+////////////////////////////////////////////////////////////////////////
+
 var site = window.location.hostname.slice(0, 4); // main, meta, or chat
 if(site === 'code') { // from codegolf.stackexchange.com
   site = 'main';
@@ -33,91 +41,9 @@ var reps = [
   //["Code Review", "the evil code reviewers"] ihaichu - EasterlyIrk on behalf of CR.
 ];
 
+
 if(($.cookie("RUN_IN_CHAT") !== "true") && site === "chat") return;
 
-function execreps() {
-  reps.forEach(function (r) {
-    try {
-   //   document.body.innerHTML = document.body.innerHTML.replace(RegExp(r[0], "gi"), r[1]);
-    } catch(e) {}
-  });
-}
-
-function qS(x) {
-  return document.querySelector(x);
-}
-
-function unicodes(x) {
-  return (x.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\n|./g) || []).map(function(c) {
-    return c[1] ? (c.charCodeAt(0) & 1023) * 1024 + (c.charCodeAt(1) & 1023) + 65536 : c.charCodeAt(0);
-  });
-}
-
-function chars(x) {
-  return unicodes(x).length;
-}
-
-function fchars(x) {
-  var y = chars(x);
-  return y + " char" + (y == 1 ? "" : "s");
-}
-
-function bf(x, y) {
-  return x + " " + y + " byte" + (x == 1 ? "" : "s");
-}
-
-function bytes(x, y) { // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
-  var ISO_8859_1_langs = /^(Japt|TeaScript|Retina|Pyth|Reng)\b/i;
-  var ISO_8859_7_langs = /^(Jolf)\b/;
-  var UTF_16_langs = /^(Ziim|Funciton)\b/i;
-  var custom_langs = /^(GS2|Seriously|Unicorn|Jelly|(Dyalog )?APL)\b/i;
-  var ISO_8859_1 = /^[\x00-\xFF]*$/;
-  var ISO_8859_7 = /^[\u0000-\u00A0\u2018\u2019\u00A3\u20AC\u20AF\u00A6-\u00A9\u037A\u00AB-\u00AD\u2015\u00B0-\u00B3\u0384-\u0386\u00B7\u0388-\u038A\u00BB\u038C\u00BD\u038E-\u03CE]*$/; // Taken from http://stackoverflow.com/a/34800836/4449486
-  y = y || "";
-  if (PARSE_HEXDUMPS) {
-    var a = "";
-    x.replace(/[\da-f]{6,8}:? ((?:[\da-f][\da-f] ?){10,})[^\n]*\n?/gi, function(_, z) {
-      a += z.replace(/\s/g, '');
-    });
-    if (a) return bf(a.length / 2, "hex");
-    if (/^[\da-f\s-]+$/i.test(x.replace(/\n/g, ''))) return bf(x.replace(/[\s-]/g, '').length / 2, "hex");
-  }
-  if ((/iso.?8859.1/i.test(y) || ISO_8859_1_langs.test(y)) && ISO_8859_1.test(x)) return bf(chars(x), "ISO-8859-1");
-  if ((/iso.?8859.7/i.test(y) || ISO_8859_7_langs.test(y)) && ISO_8859_7.test(x)) return bf(chars(x), "ISO-8859-7");
-  if (/utf.?16/i.test(y) || UTF_16_langs.test(y)) return bf(x.length * 2, "UTF-16");
-  if (custom_langs.test(y)) return bf(chars(x), y.match(custom_langs)[0]);
-  return bf(unicodes(x).map(function(c) {
-    return c >> 16 ? 4 : c >> 11 ? 3 : c >> 7 ? 2 : 1;
-  }).reduce(function(a, b) {
-    return a + b;
-  }, 0), "UTF-8");
-}
-
-function loadAnswers(onFinish) {
-  var answers = [],
-      i = 5;
-
-  function loadPage() {
-    $.get(
-      'https://api.stackexchange.com/2.2/questions/' +
-      String(window.location).match(/\d+/)[0] + '/answers?key=43GcpjKdprvwYoLebJVMOg((&page=' +
-      (page++).toString() + '&pagesize=100&order=asc&sort=creation&site=codegolf&filter=!.Fjs-H6J36vlFbqzY4mEMnTsXxwcX', readPage);
-  }
-
-  function readPage(data) {
-    if (data.hasOwnProperty('error_id'))
-      onFinish(data.error_id.toString());
-    else {
-      answers = answers.concat(data.items);
-      if (data.has_more)
-        loadPage();
-      else
-        onFinish(answers, console.log("answers", answers));
-    }
-  }
-  var page = 1;
-  loadPage(page, readPage);
-}
 
 var PARSE_CODEBLOCKS = true; // set to false to not parse code block lengths
 var PARSE_HEXDUMPS = true; // set to false to not parse hexdump lengths
@@ -131,6 +57,8 @@ var FONT_URL = "//fonts.googleapis.com/css?family=Lato:700|Open+Sans|Inconsolata
 // Colors
 var MOD_FLAIR = "#F0C800"; // Mod diamond
 var MOD_FLAIR_HOVER = "#FFE32E";
+
+
 /** ~~~~~~~~~~~~~~~~ MAIN SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
 
 
@@ -191,6 +119,7 @@ var main = {
 };
 
 /** ~~~~~~~~~~~~~~~~ META SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
+
 var meta = {
   FAVICON: "//i.imgur.com/xJx4Jdd.png",
   DISP_ICON: "//i.stack.imgur.com/dY4TQ.png",
@@ -283,7 +212,10 @@ if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true"){
   main = $.extend(main, lightbg);
   document.body.style.backgroundRepeat="repeat";
 }
+
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
+
+
 document.head.innerHTML += '<style>.favicon-codegolf{background-position: initial !important; background-image: url("' + main.FAVICON + '"); background-size: 100% 100% !important;}' +
   '.favicon-codegolfmeta{background-position: initial !important; background-image: url("' + meta.FAVICON + '"); background-size: 100% 100% !important;}</style>';
 $(".small-site-logo").each(function(i, el){
@@ -292,30 +224,33 @@ $(".small-site-logo").each(function(i, el){
   }
 });
 $('[rel="shortcut icon"][href^="//cdn.sstatic.net/Sites/codegolf/img/favicon.ico"]').attr("href", "//i.stack.imgur.com/oHkfe.png")
+
+// apply goat mode
 if(localStorage.getItem('GOAT_MODE') == "true") {
   $('head').append($('<style/>', {html: '.vote-up-off {\
-  background-image: url(http://cdn.rawgit.com/somebody1234/Misc-Files/master/upgoat-off.svg) !important;\
-  background-size: 100% !important;\
-  background-position: 0px 0px;\
-}\
-.vote-down-off {\
-  background-image: url(http://cdn.rawgit.com/somebody1234/Misc-Files/master/downgoat-off.svg) !important;\
-  background-size: 100% !important;\
-  background-position: 0px 0px;\
-}\
-.vote-up-on {\
-  background-image: url(http://cdn.rawgit.com/somebody1234/Misc-Files/master/upgoat.svg) !important;\
-  background-size: 100% !important;\
-  background-position: 0px 0px;\
-}\
-.vote-down-on {\
-  background-image: url(http://cdn.rawgit.com/somebody1234/Misc-Files/master/downgoat.svg) !important;\
-  background-size: 100% !important;\
-  background-position: 0px 0px;\
-}'}));
+        background-image: url(http://cdn.rawgit.com/somebody1234/Misc-Files/master/upgoat-off.svg) !important;\
+        background-size: 100% !important;\
+        background-position: 0px 0px;\
+      }\
+      .vote-down-off {\
+        background-image: url(http://cdn.rawgit.com/somebody1234/Misc-Files/master/downgoat-off.svg) !important;\
+        background-size: 100% !important;\
+        background-position: 0px 0px;\
+      }\
+      .vote-up-on {\
+        background-image: url(http://cdn.rawgit.com/somebody1234/Misc-Files/master/upgoat.svg) !important;\
+        background-size: 100% !important;\
+        background-position: 0px 0px;\
+      }\
+      .vote-down-on {\
+        background-image: url(http://cdn.rawgit.com/somebody1234/Misc-Files/master/downgoat.svg) !important;\
+        background-size: 100% !important;\
+        background-position: 0px 0px;\
+  }'}));
 }
+
 var match = $('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').attr('href', main.FAVICON);
-if(match.length) {
+if(match.length > 0) {
   $("#input-area").css("background", "url(" + "http://i.stack.imgur.com/oqoGQ.png" + ")");
   $("#input-area").css("background-size", "600px 400px");
   if (localStorage.getItem('main.MODE_DARK') == "true") $("#input-area").css("background", "url(" + darktheme.BACKGROUND_IMAGE + ")");
@@ -404,6 +339,545 @@ if (site === "chat") {
 //for (var i=0;i<x.length;i++){
 //	x[i].style.color=META_LINK_COLOR
 //}
+
+
+var siteProperties = site == "meta" ? meta : main;
+
+if (site === "main" || site === "meta") {
+  applyCss();
+   
+  replaceNames();
+
+  $("#search input").attr("placeholder", siteProperties.SEARCH_TEXT);
+  $("#search input").queue("expand", function(){});
+  $("#nav-askquestion").text(site === "main" ? "Post Challenge" : "Ask Question");
+  $(".bulletin-title:contains('Featured on Meta')").html('<a href="//meta.codegolf.stackexchange.com" class="bulletin-title" style="color: inherit !important"> Meta </a>');
+
+
+
+  addSettingsPane();
+    
+
+  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox">'+ main.PROPOSE + ' Challenge</a></li>');
+  document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
+
+  var answerafter= (/users\/edit/.test(document.location.href) || /questions\/ask/.test(document.location.href)) ? '' : '<div>Before you post, take some time to read through the <a href="http://meta.codegolf.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>';
+  if (site == "main") {
+      showLeaderboard();
+  } else {
+    answerafter='';
+    qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.DISP_ICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\" style=\"font-size: 14px; color: #CF7720\">meta</span></td></tr></table>";
+    if (window.location.href.indexOf('/2140/') > 0){ // If on sandbox
+      answerafter='<div>Try reading through <a href="http://meta.codegolf.stackexchange.com/q/8047">the things to avoid when writing challenges</a> before you post.</div>';
+    }
+  }
+  $('#wmd-preview').after(answerafter);
+  // tio.net (WIP) support
+  if (!main.NO_AUTOTIO && window.location.pathname.indexOf("/questions/") > -1) { // question
+     breakoutTIOLinks();
+  }
+  
+  try {
+    qS("link[rel$=\"icon\"]").href = siteProperties.FAVICON;
+  } catch (e) {}
+  if (PARSE_CODEBLOCKS) {
+    $(".answer").each(function() {
+      // Find the first header or strong element (some old posts use **this** for header) and set h to its text
+      var h = $(this).find("h1, h2, h3, strong").first().text();
+      $(this).find("pre code").each(function() {
+        var t = $(this).text().trim().replace("\r\n", "\n");
+        $(this).parent().before('<div style="padding-bottom:4px;font-size:11px;font-family:' + TEXT_FONT + '">' + bytes(t, h) + ", " + formatChars(t) + "</div>");
+      });
+    });
+  }
+  $("body .container").prepend('<div style="position: absolute;width: inherit; z-index: 0; height: 130px; background: url(' + siteProperties.BACKGROUND_IMAGE + '); background-attachment: fixed; background-size: 50%;"></div>');
+  addQuestionOfTheDay();
+  $(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
+  document.head.innerHTML += 
+    ("<style>" +
+     //".question-hyperlink, .answer-hyperlink, #hot-network-questions a{color:$$LINK_COLOR}.question-hyperlink:visited, .answer-hyperlink:visited,.started-link:visited, #hot-network-questions a:visited{color:$$VISITED_LINK_COLOR}" +
+     "#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover{color:#5DA261;border-bottom:2px solid #5DA261}" +
+     //"a:hover,.question-hyperlink:hover,.answer-hyperlink:hover,.started-link:hover{color:#487D4B}" +
+     "a{color:$$LINK_COLOR}a:visited{color:$$VISITED_LINK_COLOR}a:hover{color:$$HOVER_LINK_COLOR}" +
+     "</style>").replace(/\$\$(\w+)/g, function(_, x) {
+    return eval(site + "." + x);
+  }); //workaround for several links
+  $(".started a:not(.started-link)").css('color', '#487D4B');
+  window.addEventListener("load", function() {
+    setTimeout(function() {
+      document.getElementById("footer").setAttribute("style", 'background: transparent url("'+siteProperties.BACKGROUND_IMAGE+'") repeat fixed; background-size: 50%;');
+    }, 300);
+  });
+  
+  // identify 404
+  if (~document.title.indexOf("Page Not Found - Programming Puzzles & Code Golf")) {
+    console.log("404, PAGE NOT FOUND");
+    style404();
+  }
+
+  // votes
+  if (site === "main" || site === "meta") {
+    showVoteCounts();
+  }
+}
+
+////////////////////////////////////////////////////////////////////
+//////////////////                           ///////////////////////
+//////////////////        STTINGS PANE       ///////////////////////
+//////////////////                           ///////////////////////
+////////////////////////////////////////////////////////////////////
+
+
+function addSettingsPane() {
+     // Options Menu
+     $(".topbar-wrapper > .network-items").append('<a id="USER_Opt" class="topbar-icon yes-hover" style="z-index:1;width: 36px; background-image: url(' + main.SPRITE_SHEET + '); background-position: 0px 0px;"></a>');
+   
+     $("body").prepend(
+     '<div id="USER_OptMenu" style="width: inherit; height: inherit; display: none;">'+
+     '    <div id="USER_Backblur" style="position:fixed;z-index:2;width:100%;height:100%;background:rgba(0,0,0,0.5)"></div>'+
+     '    <div style="position:fixed;z-index:3;width:40%;min-width:600px;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:'+optionbox.BACKGROUND_COLOR+';padding:1em;" class="settings-page">'+
+     '       <h1>Userscript Options</h1>'+
+     '       <div style="/*width:50%;height:100%;float:left;*/max-height: 70vh;overflow-y: scroll;/*! overflow-x: none; */">'+
+     '           <div class="inner-container inner-container-flex">'+
+     '               <div class="title-box">'+
+     '                   <div class="title">'+
+     '                       Theme'+
+     '               </div></div>'+
+     '               <div class="content">'+
+     '                   <div class="row">'+
+     '                       <div class="col-12">'+
+     '                           <input class="OPT_Bool" data-var="GOAT_MODE" id="goat-mode" type="checkbox">'+
+     '                           <label for="goat-moden">Use goats instead of boats</label>'+
+     '                   </div></div>'+
+     '                   <div class="row">'+
+     '                       <div class="col-12">'+
+     '                           <input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" id="light_bg_on" type="checkbox">'+
+     '                           <label for="light_bg_on">Use ighter Background</label>'+
+     '                   </div></div>'+
+     '                   <div class="row">'+
+     '                       <div class="col-12">'+
+     '                           <input class="OPT_Bool" data-var="main.MODE_DARK" id="dark_theme_on" type="checkbox">'+
+     '                           <label for="dark_theme_on">Use Dark Theme <span style="color: #aaa;/*! font-size: 0.6em; *//*! position: center; */">(WIP)</span>'+
+     '                           </label>'+
+     '                   </div></div>'+
+     '                   <div class="row">'+
+     '                       <div class="col-12">'+
+     '                           <input class="OPT_Bool" id="chat_on" onclick="$.cookie(\'RUN_IN_CHAT\',this.checked,{domain:\'stackexchange.com\'})" type="checkbox">'+
+     '                           <label for="chat_on">Use modified theme in chat</label>'+
+     '           </div></div></div></div>'+
+     '           <div class="inner-container inner-container-flex">'+
+     '               <div class="title-box">'+
+     '                   <div class="title">'+
+     '                       Challange of the day'+
+     '               </div></div>'+
+     '               <div class="content">'+
+     '                   <div class="row">'+
+     '                       <div class="col-12 with-padding">'+
+     '                           <p>Number of questions shown</p>'+
+     '                           <select id="qod-item-cnt">'+
+     '                               <option value="qs-3">3</option>'+
+     '                               <option value="qs-4">4</option>'+
+     '                               <option value="qs-5">5</option>'+
+     '                               <option value="qs-6">6</option>'+
+     '                               <option value="qs-7">7</option>'+
+     '                               <option value="qs-8">8</option>'+
+     '                               <option value="qs-9">9</option>'+
+     '                           </select>'+
+     '                   </div></div>'+
+     '                   <div class="row" style="margin-top:1.2em;">'+
+     '                       <div class="col-12">'+
+     '                           Always show these tags: <span style="color: #999;">(format is "tag-1,tag-2,tag-n,..." for as many tags as you want)</span>'+
+     '                           <br>'+
+     '                           <input id="qod-always-shown-tags" type="text">'+
+     '           </div></div></div></div>'+
+     '           <div class="inner-container inner-container-flex">'+
+     '               <div class="title-box">'+
+     '                   <div class="title">'+
+     '                       Extras'+
+     '               </div></div>'+
+     '               <div class="content">'+
+     '                   <div class="row">'+
+     '                       <div class="col-12">'+
+     '                           <p>What text to use for the porpise challenge button?</p>'+
+     '                           <select id="proposechoice">'+
+     '                               <option value="Porpoise">Porpoise Challenge</option>'+
+     '                               <option value="Propose">Propose Challenge</option>'+
+     '                               <option value="Propoise">Propoise Challenge</option>'+
+     '                   </select></div></div>'+
+     '                   <div class="row">'+
+     '                       <div class="col-12">'+
+     '                           <input class="OPT_Bool" data-var="main.NO_LEADERBOARD" id="noleader" type="checkbox">'+
+     '                           <label for="noleader">Disable Auto Leaderboard?</label>'+
+     '                   </div></div>'+
+     '                   <div class="row">'+
+     '                       <div class="col-12">'+
+     '                           <input class="OPT_Bool" data-var="main.NO_AUTOTIO" id="notio" type="checkbox">'+
+     '                           <label for="notio">Disable Auto-TryItOnline™ execution?</label>'+
+     '       </div></div></div></div></div>'+
+     '       <button onclick="location.reload()" style="float: right;margin-top: 1em;">Apply Changes</button>'+
+     '</div></div>');      
+         
+     $('#proposechoice').val(main.PROPOSE);
+     $('#proposechoice').change(function () {
+       var str = $(this).find('option:selected').val();
+       localStorage.setItem("main.PROPOSE", str);
+     });
+     $('#qod-item-cnt').val('qs-' + main.QOD_NUMBER_OF_QS_SHOWN);
+     $('#qod-item-cnt').change(function () {
+       var str = +$(this).find('option:selected').val().slice(3);
+       localStorage.setItem("QOD_NUMBER_OF_QS_SHOWN", JSON.stringify(str));
+       resetData();
+     });
+     $('#qod-always-shown-tags').val(main.QOD_ALWAYS_SHOWN_TAGS.join())
+     $('#qod-always-shown-tags').keypress(function () {
+       var str = $('#qod-always-shown-tags').val().split(','); 
+       console.log('putting', str, 'old', main.QOD_ALWAYS_SHOWN_TAGS);
+       localStorage.setItem("QOD_ALWAYS_SHOWN_TAGS", JSON.stringify(str));
+       resetData();
+     });
+     
+     $("#USER_Opt, #USER_Backblur").click(function() {
+       $("#USER_OptMenu").fadeToggle(50);
+     });
+     $(".OPT_Bool").prop("checked", function() {
+       return localStorage.getItem($(this).data('var')) === 'true';
+     });
+     $(".OPT_Bool").change(function() {
+       localStorage.setItem($(this).data('var'), $(this).is(':checked'));
+       console.log(localStorage.getItem('main.BACKGROUND_LIGHT'));
+     });
+     $('<a>')
+       .addClass('topbar-icon yes-hover')
+       .css({
+       'z-index': 1,
+       'width': '36px',
+       'background-size': '19px 19px',
+       'background-position': '8px 7px',
+       'background-image': 'url(//i.imgur.com/n246U22.png)'
+     })
+       .attr({
+       id: 'toggleSite',
+       href: (site === "meta" ? "//" : "//meta.") + 'codegolf.stackexchange.com',
+       title: 'Switch to ' + (site === 'meta' ? 'main' : 'meta')
+     })
+       .appendTo('.network-items');
+
+}
+
+
+//
+
+function style404() {
+   var TEXT = $("#mainbar-full > .leftcol > p")[0];
+   if (TEXT) {
+      TEXT.textContent = "We couldn't find the page you wanted. We did, however, find this program.";
+   }
+   $('#mainbar-full > .rightcol > img').attr('src', siteProperties.PAGE404);
+}
+
+
+function showVoteCounts() {
+       /*=== SHOWS VOTE COUNTS ===*/
+       try {
+         void
+         function(t) {
+           var e = t.head || t.getElementsByTagName("head")[0] || t.documentElement,
+               o = t.createElement("style"),
+               n = "/*Added through UserScript*/.vote-count-post{cursor:pointer;}.vote-count-post[title]{cursor:default;}.vote-count-separator{height:0;*margin-left:0;}";
+           e.appendChild(o), o.styleSheet ? o.styleSheet.cssText = n : o.appendChild(t.createTextNode(n));
+           var s = t.createElement("script");
+           s["textContent" in s ? "textContent" : "text"] = "(" + function() {
+             var t = location.protocol + "//api.stackexchange.com/2.0/posts/",
+                 e = "?filter=!)q3b*aB43Xc&key=DwnkTjZvdT0qLs*o8rNDWw((&site=" + location.hostname,
+                 o = 1,
+                 n = StackExchange.helpers,
+                 s = $.fn.click;
+             $.fn.click = function() {
+               return this.hasClass("vote-count-post") && !o ? this : s.apply(this, arguments)
+             };
+             var r = function(s) {
+               var r, a = $(this),
+                   i = this.title;
+               if (!(/up \/ /.test(i) || /View/.test(i) && o)) {
+                 o = 0;
+                 var c = a.siblings('input[type="hidden"]').val();
+                 if (c || (r = a.closest("[data-questionid],[data-answerid]"), c = r.attr("data-answerid") || r.attr("data-questionid")), c || (r = a.closest(".suggested-edit"), c = $.trim(r.find(".post-id").text())), c || (r = a.closest(".question-summary"), c = /\d+/.exec(r.attr("id")), c = c && c[0]), !c) return void console.error("Post ID not found! Please report this at http://stackapps.com/q/3082/9699");
+                 n.addSpinner(a), $.ajax({
+                   type: "GET",
+                   url: t + c + e + "&callback=?",
+                   dataType: "json",
+                   success: function(t) {
+                     t = t.items[0];
+                     var e = t.up_vote_count,
+                         o = t.down_vote_count;
+                     e = e ? "+" + e : 0, o = o ? "-" + o : 0, $(".error-notification").fadeOut("fast", function() {
+                       $(this).remove()
+                     }), a.css("cursor", "default").attr("title", e + " up / " + o + " down").html('<div style="color:green">' + e + '</div><div class="vote-count-separator"></div><div style="color:maroon">' + o + "</div>")
+                   },
+                   error: function(t) {
+                     n.removeSpinner(), n.showErrorPopup(a.parent(), t.responseText && t.responseText.length < 100 ? t.responseText : "An error occurred during vote count fetch")
+                   }
+                 }), s.stopImmediatePropagation()
+               }
+             };
+             $.fn.on ? $(document).on("click", ".vote-count-post", r) : $(document).delegate(".vote-count-post", "click", r)
+           } + ")();", e.appendChild(s), s.parentNode.removeChild(s)
+         }(document);
+       } catch(e) {
+         console.log("An error occured loading vote distribution viewer thing:", e);
+       }
+}
+
+function breakoutTIOLinks() {
+    $(".answer").each(function() {
+      var tiolinks = $(this).find('a[href*="tryitonline.net"]');
+      if (tiolinks[0]) {
+        // They are tryitonline links
+        var counter = 0;
+        function run ($this) {
+          var parts = {};
+          if ($this.attr('href').split("#")[1]) {
+            var _parts = $this.attr('href').split("#")[1].split("&").map(function(i) {
+              return [i.split("=")[0],i.split("=")[1]]
+            }).forEach(function(l){
+              parts[l[0]] = l[1];
+            });
+
+            try {
+			  console.log(  (parts["code"] || "").replace(/\s+/g, "") );
+			  console.log(  (parts["input"] || "").replace(/\s/g, "") );
+              var code = escape(atob(  (parts["code"] || "").replace(/\s+/g, "") ));
+              var input = escape(atob(  (parts["input"] || "").replace(/\s/g, "") ));
+              var url = $this.attr('href').match(/https?:\/\/[^\/]+/)[0];
+              if (url && code) { // Was able to get data
+                var r = new XMLHttpRequest();
+                var running = false;
+                var uuid = '';
+                var output = "";
+                r.open("POST", url + "/cgi-bin/backend");
+                running = true;
+                r.onreadystatechange = function() {
+                  if (running && r.responseText.length > 32) {
+                    uuid = r.responseText.substr(0,32);
+                  }
+                  if (r.responseText.length < 100033) {
+                    output = r.responseText.substr(33);
+                  }
+                  if (r.readyState === 4) {
+                    output = r.responseText.substr(33);
+                    running = false;
+                    $this.after('<span style="padding-left: 5px; font-size: 10px;">Try it online result: <pre id="tiouuid-'+uuid+'"></pre></span>');
+                    $("#tiouuid-"+uuid).text(output);
+                    if (counter + 1 < tiolinks.length) run(tiolinks.eq(counter++));
+                  }
+                };
+                r.responseType = "text/plain;charset=UTF-8";
+                r.send("code=" + code + "&input=" + input);
+              }
+            } catch(e) { console.log("Bad TIO™ Permalink.", e); }
+          };
+          if (tiolinks.eq(counter)[0]) run(tiolinks.eq(counter++));
+        }
+		run(tiolinks.eq(counter++));
+      }
+    });
+}
+
+
+
+function showLeaderboard() {
+    qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
+    // Leaderboard
+    if (!main.NO_LEADERBOARD && $('.post-taglist .post-tag[href$="code-golf"]')[0] && !$('.post-taglist .post-tag[href$="tips"]')[0] && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
+        var answers = [];
+        loadAnswers(function(json) {
+            answers = json.map(function(i, l, a) {
+                i.body = i.body.replace(/[\u2010-\u2015\u2212]/g, "-");
+                var copyvalue = i.body.slice().replace(/<(strike|s|del)>.*?<\/\1>/g, "");
+                var header = ((copyvalue.match(/<(h\d|strong)>(.+?)<\/\1>/) || [])[2] || "")
+                i.body = i.body.replace(/^(?!<p><strong>|<h\d>)(.(?!<p><strong>|<h\d>))*/, "").replace(/<(strike|s|del)>.*<\/\1>/g, "").replace(/<a [^>]+>(.*)<\/a>/g, "$1").replace(/\(\s*(\d+)/g, ", $1").replace(/\s*-\s+|:\s*/, ", ");
+                var j = +(
+                    /no[nt].?competing|invalid/i.test(header) ? NaN :
+                    (header.match(/.+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/) || [])[1] ||
+                    (header.match(/[^,\d]+,\s+(-?\d+(?:\.\d+)?)\s*(?:\n|$)/) || [])[1] ||
+                    (i.body.match(/(?:<h\d>|<p><strong>).+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/) || [])[1] ||
+                    (i.body.match(/^\s*(?:<h\d>|<p><strong>).*?(-?\d+(?:\.\d+)?)\D*?<\/(?:h\d|strong)>/) || [])[1]
+                );
+                i.body = i.body.replace(RegExp(",?\\s*" + j + ".*"), "");
+                // Taken (and modified) from http://codegolf.stackexchange.com/a/69936/40695
+                var e = ((copyvalue.match(/<(h\d|strong)>(.+?)<\/\1>/) || [])[2] || "Unknown Language").replace(/<.*?>/g, "").replace(/^([A-Za-z]+)\s+\d+$/, "$1").replace(/([\–\|\/\-:\—,]\s*\d+\s*(b[l]?y[te]{2}s?|Lab  ?View|char[a-z]*|codels?)\s*)+/g, "").replace(/(,| [-&(–—5]| [0-7]\d)(?! W|...\)).*/g, "").replace(/2 |:/g, "").replace(/(Ver(sion)?.?\s*)\d{2,}w\d{2,}a/g, "");
+                return [j, i, copyvalue, e];
+            });
+            var lv = 0;
+            answers = answers.filter(function(a) {
+                return !isNaN(a[0]);
+            }).sort(function(a, b) {
+                return a[0] - b[0];
+            });
+            var generatedanswertable = answers.map(function(l, i, a) {
+                if ((a[i - 1] || [NaN])[0] !== l[0]) lv = (i || 0) + 1;
+                return '<tr><td>' + lv + '</td><td><a href="' + l[1].owner.link + '">' + l[1].owner.display_name + '</a></td><td>' + (l[3] /*(l[2].match(/(?:<h\d>|<p><strong>)(.+?)[,  -]\s*(?:(?:\d*\.\d+|\d+)(?:\s*%)?(?:\s*[+*\/\-]\s*(?:\d*\.\d+|\d+)(?:\s*%)?)+\s*=\s*)?(?:-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/)||[])[1]||(l[2].match(/\s*(?:<h\d>|<p><strong>)(\s*<a [^ >]+.+?<\/a>|(?:[#A-Za-z_\s\.\u00FF-\uFFFF!?]|(?:(?=\d+[^\d\n]+\d+\D*(?:<\/|$|\n))\d)|(?:(?=-\s?[A-Za-z_\u00FF-\uFFFF!?]).)|(?:(?=.+(,)),))+)/)||[0,"Lang N/A"])[1]*/ ).trim() + "</td><td>" + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
+            });
+            var tryitonlineattempt = $(answers[0][2]).find('a[href*=".tryitonline.net"]').attr('href');
+            $("#answers").prepend('<div style="border: 1px solid #e0e0e0; border-left: none; border-right: none; margin: 15px 0px; padding: 15px;"> <b>The current winner</b> is <a  href="' + answers[0][1].owner.link + '">' + answers[0][1].owner.display_name + '&apos;s</a> ' + answers[0][3] + ' <a href="' + answers[0][1].link + '">answer</a> at ' + answers[0][0] + ' bytes ' + (tryitonlineattempt ? ' &#8213 <a  href="' + tryitonlineattempt + '">TryItOnline&trade;</a>!' : '') + '</div>');
+            $(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>' +
+                '<div id="USER_BOARD" style="display:none"><table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Author</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>' + generatedanswertable.join("\n") + '</tbody></table> </div>');
+            $("#USER_BOARD_TEXT").click(function() {
+                $("#USER_BOARD").slideToggle(50, function() {
+                    $("#USER_BOARD_TEXT").text(function() {
+                        return $("#USER_BOARD").is(":visible") ? "Hide Answer Leadboard ▼" : "Show Answer Leadboard ▶";
+                    });
+                });
+            });
+        });
+        //qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
+
+    }
+}
+
+function applyCss() {
+   
+   console.log('applying the css', siteProperties);
+  // style
+  $("#mainbar").css('padding', '15px');
+  document.head.innerHTML +=
+    ("<style>@import url(" + FONT_URL + ");" +
+     "code,pre{color:$$CODE_COLOR;background-color:$$CODE_BACKGROUND}" +
+     ".envelope-on,.envelope-off,.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.star-on,.star-off,.comment-up-off,.comment-up-on,.comment-flag,.edited-yes,.feed-icon,.vote-accepted-off,.vote-accepted-on,.vote-accepted-bounty,.badge-earned-check,.delete-tag,.grippie,.expander-arrow-hide,.expander-arrow-show,.expander-arrow-small-hide,.expander-arrow-small-show,.anonymous-gravatar,.badge1,.badge2,.badge3,.gp-share,.fb-share,.twitter-share,#notify-containerspan.notify-close,.migrated.to,.migrated.from{background-image:url(\"$$SPRITE_SHEET\");background-size: initial;}" +
+     ".youarehere{color:$$CURR_TAB_COLOR !important;border-bottom:2px solid $$CURR_TAB_COLOR !important;}" +
+     "#sidebar #beta-stats, #sidebar #promo-box{background:$$RIGHTBAR_BG;border:$$RIGHTBAR_BORDER}" +
+     (siteProperties.BOUNTY_COLOR ? ".bounty-indicator-tab{background:$$BOUNTY_BG_COLOR;color:$$BOUNTY_COLOR !important;}" : "") +
+     "#sidebar .module.community-bulletin{background:$$BULLETIN_BG_COLOR;}" +
+     ".bulletin-title{color:$$BULLETIN_TITLE;}" +
+     "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}" +
+     ".yes-hover{cursor:pointer !important;}" +
+     '.qod-item { display: table }' +
+     '.qod-item > *{ display: table-cell; vertical-align:middle }' +
+     '.qod-item > *:not(.post-tag) { font-weight: normal; font-size: 12px; white-space: normal; padding-left: 5px; }' +
+     '.qod-item:not(:first-child) { margin-top: 5px; }'+
+     ".LEADERBOARD {border-collapse: collapse} .LEADERBOARD td { padding: 6px 8px } .LEADERBOARD tr:nth-child(even) { background-color: #F1F1F1 } .LEADERBOARD thead { border-bottom: 1px solid #DDD }" +
+     "html,body{font-family:" + TEXT_FONT + "}" +
+     'a.badge { color: white !important }' +
+     "#content{margin-top: 7px;}"+
+     '#footer #footer-sites a, #footer th {color: #BFBFBF;}'+
+     ".container{box-shadow: none !important;}"+
+     ".nav.askquestion li { display: block !important; }" +
+     'body,#content{background:$$STATS_COLOR !important;}'+
+     "#hmenus > div.nav:not(.mainnavs) a{text-align:center; color: $$BG_COL;font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;background: $$BG_START;padding: 8px 12px;-webkit-transition: color 0.15s ease, background 0.15s ease;-moz-transition: color 0.15s ease, background 0.15s ease;-ms-transition: color 0.15s ease, background 0.15s ease;-o-transition: color 0.15s ease, background 0.15s ease;}"+
+     "#hmenus > div.nav:not(.mainnavs) a:hover{color: $$BG_COL_HOVER;background: $$BG_REV;}" +
+     "#sidebar > .module{margin-left: 12px;}" +
+     "input[type=submit], input[type=button], button, .button, a.button, a.button:visited, .btn { box-shadow: none; border: 1px solid $$BUTTON_COLOR; background-color: $$BUTTON_COLOR }" +
+     ".module.community-bulletin{border: none}" +
+     "input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover," +
+     "input[type=submit]:focus, input[type=button]:focus, button:focus, .button:focus, a.button:focus, a.button:visited:focus, .btn:focus{ box-shadow: none; border: 1px solid $$BUTTON_HOVER; background-color: $$BUTTON_HOVER }" +
+     ".mod-flair,.started .mod-flair{ color: " + MOD_FLAIR + " !important }.mod-flair:hover,.started .mod-flair:hover{color:" + MOD_FLAIR_HOVER + "}" +
+     "#hmenus > div.nav.mainnavs{position: relative; top: 50%; -ms-transform: translateY(-50%);-webkit-transform: translateY(-50%);-moz-transform: translateY(-50%);-o-transform: translateY(-50%); transform: translateY(-50%);}" +
+     "div.nav.askquestion li{display:initial;}"+
+     "#hmenus{top: 50%;-ms-transform: translateY(-50%);-webkit-transform: translateY(-50%);-moz-transform: translateY(-50%);-o-transform: translateY(-50%);transform: translateY(-50%);}" +
+     "#hmenus > div.nav.askquestion li:not(:first-child) > a { margin-top: 5px; }" +
+     "#hmenus > div.nav:not(.mainnavs) a{border-radius: $$POST_QUESTION_RADIUS;background:$$POST_QUESTION_COLOR}" +
+     "#header{background:$$HEADER_BG_COLOR;}#header *, #hlogo a{color:$$HEADER_TEXT_COLOR;}" +
+     "a.post-tag{border-radius: 0;text-align:center;font-family:"+MONOSPACE_FONT+";font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border:none; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; border-bottom: 2px solid $$TAG_SHADOW_COLOR}" +
+     "a.post-tag:hover{border-bottom-color: $$TAG_HOVER_SHADOW_COLOR;background: $$TAG_HOVER; color: white}" +
+     "div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}" +
+     "#newlogo{top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}" +
+     ".top-footer-links a {text-shadow: 1px 1px white;}" +
+     '#footer a { text-shadow: none; color: #78ee74 !important }' +
+     '#footer a:visited { color: #78ff74 !important }' +
+     "#newlogo, #hlogo a{font-family:" + HEADER_FONT + ";}"+
+     "#question-of-the-day-content {padding: 5px;border: 3px solid #d4f493;}"+
+     "#question-of-the-day h4 {font-weight: 700;}"+
+     "#sidebar > .module {margin-left: 0;}"+
+     "</style>").replace(/\$\$(\w+)/g, function(_, x) {
+        console.log('got to', x);
+    return eval(site + "." + x);
+  });
+}
+
+function replaceNames() {
+  reps.forEach(function (r) {
+    try {
+   //   document.body.innerHTML = document.body.innerHTML.replace(RegExp(r[0], "gi"), r[1]);
+    } catch(e) {}
+  });
+}
+
+function qS(x) {
+  return document.querySelector(x);
+}
+
+function unicodes(x) {
+  return (x.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\n|./g) || []).map(function(c) {
+    return c[1] ? (c.charCodeAt(0) & 1023) * 1024 + (c.charCodeAt(1) & 1023) + 65536 : c.charCodeAt(0);
+  });
+}
+
+function chars(x) {
+  return unicodes(x).length;
+}
+
+function formatChars(x) {
+  var y = chars(x);
+  return y + " char" + (y == 1 ? "" : "s");
+}
+
+function formatBytes(x, y) {
+  return x + " " + y + " byte" + (x == 1 ? "" : "s");
+}
+
+function bytes(code, lang) { // Takes in a length of text and piece of header text, and returns "(# of bytes) (encoding) bytes"
+  var ISO_8859_1_langs = /^(Japt|TeaScript|Retina|Pyth|Reng)\b/i;
+  var ISO_8859_7_langs = /^(Jolf)\b/;
+  var UTF_16_langs = /^(Ziim|Funciton)\b/i;
+  var custom_langs = /^(GS2|Seriously|Unicorn|Jelly|(Dyalog )?APL)\b/i;
+  var ISO_8859_1 = /^[\x00-\xFF]*$/;
+  var ISO_8859_7 = /^[\u0000-\u00A0\u2018\u2019\u00A3\u20AC\u20AF\u00A6-\u00A9\u037A\u00AB-\u00AD\u2015\u00B0-\u00B3\u0384-\u0386\u00B7\u0388-\u038A\u00BB\u038C\u00BD\u038E-\u03CE]*$/; // Taken from http://stackoverflow.com/a/34800836/4449486
+  lang = lang || "";
+  if (PARSE_HEXDUMPS) {
+    var a = "";
+    code.replace(/[\da-f]{6,8}:? ((?:[\da-f][\da-f] ?){10,})[^\n]*\n?/gi, function(_, z) {
+      a += z.replace(/\s/g, '');
+    });
+    if (a) return formatBytes(a.length / 2, "hex");
+    if (/^[\da-f\s-]+$/i.test(code.replace(/\n/g, ''))) return formatBytes(code.replace(/[\s-]/g, '').length / 2, "hex");
+  }
+  if ((/iso.?8859.1/i.test(lang) || ISO_8859_1_langs.test(lang)) && ISO_8859_1.test(code)) return formatBytes(chars(code), "ISO-8859-1");
+  if ((/iso.?8859.7/i.test(lang) || ISO_8859_7_langs.test(lang)) && ISO_8859_7.test(code)) return formatBytes(chars(code), "ISO-8859-7");
+  if (/utf.?16/i.test(lang) || UTF_16_langs.test(lang)) return formatBytes(code.length * 2, "UTF-16");
+  if (custom_langs.test(lang)) return formatBytes(chars(code), lang.match(custom_langs)[0]);
+  return formatBytes(unicodes(code).map(function(c) {
+    return c >> 16 ? 4 : c >> 11 ? 3 : c >> 7 ? 2 : 1;
+  }).reduce(function(a, b) {
+    return a + b;
+  }, 0), "UTF-8");
+}
+
+function loadAnswers(onFinish) {
+  var answers = [],
+      i = 5;
+
+  function loadPage() {
+    $.get(
+      'https://api.stackexchange.com/2.2/questions/' +
+      String(window.location).match(/\d+/)[0] + '/answers?key=43GcpjKdprvwYoLebJVMOg((&page=' +
+      (page++).toString() + '&pagesize=100&order=asc&sort=creation&site=codegolf&filter=!.Fjs-H6J36vlFbqzY4mEMnTsXxwcX', readPage);
+  }
+
+  function readPage(data) {
+    if (data.hasOwnProperty('error_id'))
+      onFinish(data.error_id.toString());
+    else {
+      answers = answers.concat(data.items);
+      if (data.has_more)
+        loadPage();
+      else
+        onFinish(answers, console.log("answers", answers));
+    }
+  }
+  var page = 1;
+  loadPage(page, readPage);
+}
+
 
 
 ////////////////////////////////////////////////////////////////////
@@ -562,422 +1036,3 @@ function httpGetAsync(theUrl, callback) {
   xmlHttp.open("GET", theUrl, true); // true for asynchronous
   xmlHttp.send(null);
 }
-
-
-
-//////////////////////////////////////////////////////////////////////
-///////////////                                   ////////////////////
-///////////////   END QUESTON OF THE DAY WIDGET   ////////////////////
-///////////////                                   ////////////////////
-//////////////////////////////////////////////////////////////////////
-
-
-
-if (site === "main" || site === "meta") {
-  execreps();
-  var obj = site == "meta" ? meta : main;
-
-  $("#search input").attr("placeholder", obj.SEARCH_TEXT);
-  $("#search input").queue("expand", function(){});
-  $("#nav-askquestion").text(site === "main" ? "Post Challenge" : "Ask Question");
-  $(".bulletin-title:contains('Featured on Meta')").html('<a href="//meta.codegolf.stackexchange.com" class="bulletin-title" style="color: inherit !important"> Meta </a>');
-
-  // Options Menu
-  $(".topbar-wrapper > .network-items").append('<a id="USER_Opt" class="topbar-icon yes-hover" style="z-index:1;width: 36px; background-image: url(' + main.SPRITE_SHEET + '); background-position: 0px 0px;"></a>');
-  $("body").prepend(
-  '<div id="USER_OptMenu" style="width: inherit; height: inherit; display: none;">'+
-  '    <div id="USER_Backblur" style="position:fixed;z-index:2;width:100%;height:100%;background:rgba(0,0,0,0.5)"></div>'+
-  '    <div style="position:fixed;z-index:3;width:40%;min-width:600px;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:'+optionbox.BACKGROUND_COLOR+';padding:1em;" class="settings-page">'+
-  '       <h1>Userscript Options</h1>'+
-  '       <div style="/*width:50%;height:100%;float:left;*/max-height: 70vh;overflow-y: scroll;/*! overflow-x: none; */">'+
-  '           <div class="inner-container inner-container-flex">'+
-  '               <div class="title-box">'+
-  '                   <div class="title">'+
-  '                       Theme'+
-  '               </div></div>'+
-  '               <div class="content">'+
-  '                   <div class="row">'+
-  '                       <div class="col-12">'+
-  '                           <input class="OPT_Bool" data-var="GOAT_MODE" id="goat-mode" type="checkbox">'+
-  '                           <label for="goat-moden">Use goats instead of boats</label>'+
-  '                   </div></div>'+
-  '                   <div class="row">'+
-  '                       <div class="col-12">'+
-  '                           <input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" id="light_bg_on" type="checkbox">'+
-  '                           <label for="light_bg_on">Use ighter Background</label>'+
-  '                   </div></div>'+
-  '                   <div class="row">'+
-  '                       <div class="col-12">'+
-  '                           <input class="OPT_Bool" data-var="main.MODE_DARK" id="dark_theme_on" type="checkbox">'+
-  '                           <label for="dark_theme_on">Use Dark Theme <span style="color: #aaa;/*! font-size: 0.6em; *//*! position: center; */">(WIP)</span>'+
-  '                           </label>'+
-  '                   </div></div>'+
-  '                   <div class="row">'+
-  '                       <div class="col-12">'+
-  '                           <input class="OPT_Bool" id="chat_on" onclick="$.cookie(\'RUN_IN_CHAT\',this.checked,{domain:\'stackexchange.com\'})" type="checkbox">'+
-  '                           <label for="chat_on">Use modified theme in chat</label>'+
-  '           </div></div></div></div>'+
-  '           <div class="inner-container inner-container-flex">'+
-  '               <div class="title-box">'+
-  '                   <div class="title">'+
-  '                       Challange of the day'+
-  '               </div></div>'+
-  '               <div class="content">'+
-  '                   <div class="row">'+
-  '                       <div class="col-12 with-padding">'+
-  '                           <p>Number of questions shown</p>'+
-  '                           <select id="qod-item-cnt">'+
-  '                               <option value="qs-3">3</option>'+
-  '                               <option value="qs-4">4</option>'+
-  '                               <option value="qs-5">5</option>'+
-  '                               <option value="qs-6">6</option>'+
-  '                               <option value="qs-7">7</option>'+
-  '                               <option value="qs-8">8</option>'+
-  '                               <option value="qs-9">9</option>'+
-  '                           </select>'+
-  '                   </div></div>'+
-  '                   <div class="row" style="margin-top:1.2em;">'+
-  '                       <div class="col-12">'+
-  '                           Always show these tags: <span style="color: #999;">(format is "tag-1,tag-2,tag-n,..." for as many tags as you want)</span>'+
-  '                           <br>'+
-  '                           <input id="qod-always-shown-tags" type="text">'+
-  '           </div></div></div></div>'+
-  '           <div class="inner-container inner-container-flex">'+
-  '               <div class="title-box">'+
-  '                   <div class="title">'+
-  '                       Extras'+
-  '               </div></div>'+
-  '               <div class="content">'+
-  '                   <div class="row">'+
-  '                       <div class="col-12">'+
-  '                           <p>What text to use for the porpise challenge button?</p>'+
-  '                           <select id="proposechoice">'+
-  '                               <option value="Porpoise">Porpoise Challenge</option>'+
-  '                               <option value="Propose">Propose Challenge</option>'+
-  '                               <option value="Propoise">Propoise Challenge</option>'+
-  '                   </select></div></div>'+
-  '                   <div class="row">'+
-  '                       <div class="col-12">'+
-  '                           <input class="OPT_Bool" data-var="main.NO_LEADERBOARD" id="noleader" type="checkbox">'+
-  '                           <label for="noleader">Disable Auto Leaderboard?</label>'+
-  '                   </div></div>'+
-  '                   <div class="row">'+
-  '                       <div class="col-12">'+
-  '                           <input class="OPT_Bool" data-var="main.NO_AUTOTIO" id="notio" type="checkbox">'+
-  '                           <label for="notio">Disable Auto-TryItOnline™ execution?</label>'+
-  '       </div></div></div></div></div>'+
-  '       <button onclick="location.reload()" style="float: right;margin-top: 1em;">Apply Changes</button>'+
-  '</div></div>');      
-      
-  $('#proposechoice').val(main.PROPOSE);
-  $('#proposechoice').change(function () {
-    var str = $(this).find('option:selected').val();
-    localStorage.setItem("main.PROPOSE", str);
-  });
-  $('#qod-item-cnt').val('qs-' + main.QOD_NUMBER_OF_QS_SHOWN);
-  $('#qod-item-cnt').change(function () {
-    var str = +$(this).find('option:selected').val().slice(3);
-    localStorage.setItem("QOD_NUMBER_OF_QS_SHOWN", JSON.stringify(str));
-    resetData();
-  });
-  console.log('got to 1');
-  $('#qod-always-shown-tags').val(main.QOD_ALWAYS_SHOWN_TAGS.join())
-  $('#qod-always-shown-tags').keypress(function () {
-    var str = $('#qod-always-shown-tags').val().split(','); 
-    console.log('putting', str, 'old', main.QOD_ALWAYS_SHOWN_TAGS);
-    localStorage.setItem("QOD_ALWAYS_SHOWN_TAGS", JSON.stringify(str));
-    resetData();
-  });
-  console.log('got to 2');
-  
-  $("#USER_Opt, #USER_Backblur").click(function() {
-    $("#USER_OptMenu").fadeToggle(50);
-  });
-  $(".OPT_Bool").prop("checked", function() {
-    return localStorage.getItem($(this).data('var')) === 'true';
-  });
-  $(".OPT_Bool").change(function() {
-    localStorage.setItem($(this).data('var'), $(this).is(':checked'));
-    console.log(localStorage.getItem('main.BACKGROUND_LIGHT'));
-  });
-  $('<a>')
-    .addClass('topbar-icon yes-hover')
-    .css({
-    'z-index': 1,
-    'width': '36px',
-    'background-size': '19px 19px',
-    'background-position': '8px 7px',
-    'background-image': 'url(//i.imgur.com/n246U22.png)'
-  })
-    .attr({
-    id: 'toggleSite',
-    href: (site === "meta" ? "//" : "//meta.") + 'codegolf.stackexchange.com',
-    title: 'Switch to ' + (site === 'meta' ? 'main' : 'meta')
-  })
-    .appendTo('.network-items');
-    
-    
-
-  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox">'+ main.PROPOSE + ' Challenge</a></li>');
-  document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
-
-  var answerafter= (/users\/edit/.test(document.location.href) || /questions\/ask/.test(document.location.href)) ? '' : '<div>Before you post, take some time to read through the <a href="http://meta.codegolf.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>';
-  if (site == "main") {
-    qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
-    // Leaderboard
-    if (!main.NO_LEADERBOARD && $('.post-taglist .post-tag[href$="code-golf"]')[0] && !$('.post-taglist .post-tag[href$="tips"]')[0] && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
-      var answers = [];
-      loadAnswers(function(json) {
-        answers = json.map(function(i, l, a) {
-	  i.body = i.body.replace(/[\u2010-\u2015\u2212]/g, "-");
-          var copyvalue = i.body.slice().replace(/<(strike|s|del)>.*?<\/\1>/g, "");
-          var header = ((copyvalue.match(/<(h\d|strong)>(.+?)<\/\1>/) || [])[2] || "")
-          i.body = i.body.replace(/^(?!<p><strong>|<h\d>)(.(?!<p><strong>|<h\d>))*/, "").replace(/<(strike|s|del)>.*<\/\1>/g, "").replace(/<a [^>]+>(.*)<\/a>/g, "$1").replace(/\(\s*(\d+)/g, ", $1").replace(/\s*-\s+|:\s*/, ", ");
-          var j = +(
-            /no[nt].?competing|invalid/i.test(header) ? NaN :
-            (header.match(/.+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/) || [])[1] ||
-            (header.match(/[^,\d]+,\s+(-?\d+(?:\.\d+)?)\s*(?:\n|$)/) || [])[1] ||
-            (i.body.match(/(?:<h\d>|<p><strong>).+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/) || [])[1] ||
-            (i.body.match(/^\s*(?:<h\d>|<p><strong>).*?(-?\d+(?:\.\d+)?)\D*?<\/(?:h\d|strong)>/) || [])[1]
-          );
-          i.body = i.body.replace(RegExp(",?\\s*" + j + ".*"), "");
-          // Taken (and modified) from http://codegolf.stackexchange.com/a/69936/40695
-          var e = ((copyvalue.match(/<(h\d|strong)>(.+?)<\/\1>/) || [])[2] || "Unknown Language").replace(/<.*?>/g, "").replace(/^([A-Za-z]+)\s+\d+$/, "$1").replace(/([\–\|\/\-:\—,]\s*\d+\s*(b[l]?y[te]{2}s?|Lab ?View|char[a-z]*|codels?)\s*)+/g, "").replace(/(,| [-&(–—5]| [0-7]\d)(?! W|...\)).*/g, "").replace(/2 |:/g, "").replace(/(Ver(sion)?.?\s*)\d{2,}w\d{2,}a/g, "");
-          return [j, i, copyvalue, e];
-        });
-        var lv = 0;
-        answers = answers.filter(function(a) {
-          return !isNaN(a[0]);
-        }).sort(function(a, b) {
-          return a[0] - b[0];
-        });
-        var generatedanswertable = answers.map(function(l, i, a) {
-          if ((a[i - 1] || [NaN])[0] !== l[0]) lv = (i || 0) + 1;
-          return '<tr><td>' + lv + '</td><td><a href="'+l[1].owner.link+'">'+l[1].owner.display_name+'</a></td><td>' + (l[3] /*(l[2].match(/(?:<h\d>|<p><strong>)(.+?)[, -]\s*(?:(?:\d*\.\d+|\d+)(?:\s*%)?(?:\s*[+*\/\-]\s*(?:\d*\.\d+|\d+)(?:\s*%)?)+\s*=\s*)?(?:-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/)||[])[1]||(l[2].match(/\s*(?:<h\d>|<p><strong>)(\s*<a [^ >]+.+?<\/a>|(?:[#A-Za-z_\s\.\u00FF-\uFFFF!?]|(?:(?=\d+[^\d\n]+\d+\D*(?:<\/|$|\n))\d)|(?:(?=-\s?[A-Za-z_\u00FF-\uFFFF!?]).)|(?:(?=.+(,)),))+)/)||[0,"Lang N/A"])[1]*/ ).trim() + "</td><td>" + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
-        });
-        var tryitonlineattempt = $(answers[0][2]).find('a[href*=".tryitonline.net"]').attr('href');
-        $("#answers").prepend('<div style="border: 1px solid #e0e0e0; border-left: none; border-right: none; margin: 15px 0px; padding: 15px;"> <b>The current winner</b> is <a href="'+answers[0][1].owner.link+'">'+answers[0][1].owner.display_name+'&apos;s</a> '+answers[0][3]+' <a href="'+answers[0][1].link+'">answer</a> at '+answers[0][0]+' bytes ' + (tryitonlineattempt ? ' &#8213 <a href="'+tryitonlineattempt+'">TryItOnline&trade;</a>!' : '') + '</div>');
-        $(".question .post-text").append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>' +
-                                         '<div id="USER_BOARD" style="display:none"><table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Author</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>' + generatedanswertable.join("\n") + '</tbody></table> </div>');
-        $("#USER_BOARD_TEXT").click(function() {
-          $("#USER_BOARD").slideToggle(50, function() {
-            $("#USER_BOARD_TEXT").text(function() {
-              return $("#USER_BOARD").is(":visible") ? "Hide Answer Leadboard ▼" : "Show Answer Leadboard ▶";
-            });
-          });
-        });
-      });
-      //qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
-
-    }
-  } else {
-    answerafter='';
-    qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.DISP_ICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\" style=\"font-size: 14px; color: #CF7720\">meta</span></td></tr></table>";
-    if (window.location.href.indexOf('/2140/') > 0){ // If on sandbox
-      answerafter='<div>Try reading through <a href="http://meta.codegolf.stackexchange.com/q/8047">the things to avoid when writing challenges</a> before you post.</div>';
-    }
-  }
-  $('#wmd-preview').after(answerafter);
-  // tio.net (WIP) support
-  if (!main.NO_AUTOTIO && window.location.pathname.indexOf("/questions/") > -1) { // question
-    $(".answer").each(function() {
-      var tiolinks = $(this).find('a[href*="tryitonline.net"]');
-      if (tiolinks[0]) {
-        // They are tryitonline links
-        var counter = 0;
-        function run ($this) {
-          var parts = {};
-          if ($this.attr('href').split("#")[1]) {
-            var _parts = $this.attr('href').split("#")[1].split("&").map(function(i) {
-              return [i.split("=")[0],i.split("=")[1]]
-            }).forEach(function(l){
-              parts[l[0]] = l[1];
-            });
-
-            try {
-			  console.log(  (parts["code"] || "").replace(/\s+/g, "") );
-			  console.log(  (parts["input"] || "").replace(/\s/g, "") );
-              var code = escape(atob(  (parts["code"] || "").replace(/\s+/g, "") ));
-              var input = escape(atob(  (parts["input"] || "").replace(/\s/g, "") ));
-              var url = $this.attr('href').match(/https?:\/\/[^\/]+/)[0];
-              if (url && code) { // Was able to get data
-                var r = new XMLHttpRequest();
-                var running = false;
-                var uuid = '';
-                var output = "";
-                r.open("POST", url + "/cgi-bin/backend");
-                running = true;
-                r.onreadystatechange = function() {
-                  if (running && r.responseText.length > 32) {
-                    uuid = r.responseText.substr(0,32);
-                  }
-                  if (r.responseText.length < 100033) {
-                    output = r.responseText.substr(33);
-                  }
-                  if (r.readyState === 4) {
-                    output = r.responseText.substr(33);
-                    running = false;
-                    $this.after('<span style="padding-left: 5px; font-size: 10px;">Try it online result: <pre id="tiouuid-'+uuid+'"></pre></span>');
-                    $("#tiouuid-"+uuid).text(output);
-                    if (counter + 1 < tiolinks.length) run(tiolinks.eq(counter++));
-                  }
-                };
-                r.responseType = "text/plain;charset=UTF-8";
-                r.send("code=" + code + "&input=" + input);
-              }
-            } catch(e) { console.log("Bad TIO™ Permalink.", e); }
-          };
-          if (tiolinks.eq(counter)[0]) run(tiolinks.eq(counter++));
-        }
-		run(tiolinks.eq(counter++));
-      }
-    });
-  }
-
-  // style
-  $("#mainbar").css('padding', '15px');
-  document.head.innerHTML +=
-    ("<style>@import url(" + FONT_URL + ");" +
-     "code,pre{color:$$CODE_COLOR;background-color:$$CODE_BACKGROUND}" +
-     ".envelope-on,.envelope-off,.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.star-on,.star-off,.comment-up-off,.comment-up-on,.comment-flag,.edited-yes,.feed-icon,.vote-accepted-off,.vote-accepted-on,.vote-accepted-bounty,.badge-earned-check,.delete-tag,.grippie,.expander-arrow-hide,.expander-arrow-show,.expander-arrow-small-hide,.expander-arrow-small-show,.anonymous-gravatar,.badge1,.badge2,.badge3,.gp-share,.fb-share,.twitter-share,#notify-containerspan.notify-close,.migrated.to,.migrated.from{background-image:url(\"$$SPRITE_SHEET\");background-size: initial;}" +
-     ".youarehere{color:$$CURR_TAB_COLOR !important;border-bottom:2px solid $$CURR_TAB_COLOR !important;}" +
-     "#sidebar #beta-stats, #sidebar #promo-box{background:$$RIGHTBAR_BG;border:$$RIGHTBAR_BORDER}" +
-     (obj.BOUNTY_COLOR ? ".bounty-indicator-tab{background:$$BOUNTY_BG_COLOR;color:$$BOUNTY_COLOR !important;}" : "") +
-     "#sidebar .module.community-bulletin{background:$$BULLETIN_BG_COLOR;}" +
-     ".bulletin-title{color:$$BULLETIN_TITLE;}" +
-     "div.module.newuser,#promo-box{border-color:#e0dcbf;border-style:solid;border-width:1px;}" +
-     ".yes-hover{cursor:pointer !important;}" +
-     '.qod-item { display: table }' +
-     '.qod-item > *{ display: table-cell; vertical-align:middle }' +
-     '.qod-item > *:not(.post-tag) { font-weight: normal; font-size: 12px; white-space: normal; padding-left: 5px; }' +
-     '.qod-item:not(:first-child) { margin-top: 5px; }'+
-     ".LEADERBOARD {border-collapse: collapse} .LEADERBOARD td { padding: 6px 8px } .LEADERBOARD tr:nth-child(even) { background-color: #F1F1F1 } .LEADERBOARD thead { border-bottom: 1px solid #DDD }" +
-     "html,body{font-family:" + TEXT_FONT + "}" +
-     'a.badge { color: white !important }' +
-     "#content{margin-top: 7px;}"+
-     '#footer #footer-sites a, #footer th {color: #BFBFBF;}'+
-     ".container{box-shadow: none !important;}"+
-     ".nav.askquestion li { display: block !important; }" +
-     'body,#content{background:$$STATS_COLOR !important;}'+
-     "#hmenus > div.nav:not(.mainnavs) a{text-align:center; color: $$BG_COL;font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;background: $$BG_START;padding: 8px 12px;-webkit-transition: color 0.15s ease, background 0.15s ease;-moz-transition: color 0.15s ease, background 0.15s ease;-ms-transition: color 0.15s ease, background 0.15s ease;-o-transition: color 0.15s ease, background 0.15s ease;}"+
-     "#hmenus > div.nav:not(.mainnavs) a:hover{color: $$BG_COL_HOVER;background: $$BG_REV;}" +
-     "#sidebar > .module{margin-left: 12px;}" +
-     "input[type=submit], input[type=button], button, .button, a.button, a.button:visited, .btn { box-shadow: none; border: 1px solid $$BUTTON_COLOR; background-color: $$BUTTON_COLOR }" +
-     ".module.community-bulletin{border: none}" +
-     "input[type=submit]:hover, input[type=button]:hover, button:hover, .button:hover, a.button:hover, a.button:visited:hover, .btn:hover," +
-     "input[type=submit]:focus, input[type=button]:focus, button:focus, .button:focus, a.button:focus, a.button:visited:focus, .btn:focus{ box-shadow: none; border: 1px solid $$BUTTON_HOVER; background-color: $$BUTTON_HOVER }" +
-     ".mod-flair,.started .mod-flair{ color: " + MOD_FLAIR + " !important }.mod-flair:hover,.started .mod-flair:hover{color:" + MOD_FLAIR_HOVER + "}" +
-     "#hmenus > div.nav.mainnavs{position: relative; top: 50%; -ms-transform: translateY(-50%);-webkit-transform: translateY(-50%);-moz-transform: translateY(-50%);-o-transform: translateY(-50%); transform: translateY(-50%);}" +
-     "div.nav.askquestion li{display:initial;}"+
-     "#hmenus{top: 50%;-ms-transform: translateY(-50%);-webkit-transform: translateY(-50%);-moz-transform: translateY(-50%);-o-transform: translateY(-50%);transform: translateY(-50%);}" +
-     "#hmenus > div.nav.askquestion li:not(:first-child) > a { margin-top: 5px; }" +
-     "#hmenus > div.nav:not(.mainnavs) a{border-radius: $$POST_QUESTION_RADIUS;background:$$POST_QUESTION_COLOR}" +
-     "#header{background:$$HEADER_BG_COLOR;}#header *, #hlogo a{color:$$HEADER_TEXT_COLOR;}" +
-     "a.post-tag{border-radius: 0;text-align:center;font-family:"+MONOSPACE_FONT+";font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border:none; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; border-bottom: 2px solid $$TAG_SHADOW_COLOR}" +
-     "a.post-tag:hover{border-bottom-color: $$TAG_HOVER_SHADOW_COLOR;background: $$TAG_HOVER; color: white}" +
-     "div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}" +
-     "#newlogo{top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}" +
-     ".top-footer-links a {text-shadow: 1px 1px white;}" +
-     '#footer a { text-shadow: none; color: #78ee74 !important }' +
-     '#footer a:visited { color: #78ff74 !important }' +
-     "#newlogo, #hlogo a{font-family:" + HEADER_FONT + ";}"+
-     "#question-of-the-day-content {padding: 5px;border: 3px solid #d4f493;}"+
-     "#question-of-the-day h4 {font-weight: 700;}"+
-     "</style>").replace(/\$\$(\w+)/g, function(_, x) {
-    return eval(site + "." + x);
-  });
-  try {
-    qS("link[rel$=\"icon\"]").href = obj.FAVICON;
-  } catch (e) {}
-  if (PARSE_CODEBLOCKS) {
-    $(".answer").each(function() {
-      // Find the first header or strong element (some old posts use **this** for header) and set h to its text
-      var h = $(this).find("h1, h2, h3, strong").first().text();
-      $(this).find("pre code").each(function() {
-        var t = $(this).text().trim().replace("\r\n", "\n");
-        $(this).parent().before('<div style="padding-bottom:4px;font-size:11px;font-family:' + TEXT_FONT + '">' + bytes(t, h) + ", " + fchars(t) + "</div>");
-      });
-    });
-  }
-  $("body .container").prepend('<div style="position: absolute;width: inherit; z-index: 0; height: 130px; background: url(' + obj.BACKGROUND_IMAGE + '); background-attachment: fixed; background-size: 50%;"></div>');
-  addQuestionOfTheDay(); // Disabling because of cookie bugs
-  $(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
-  document.head.innerHTML += 
-    ("<style>" +
-     //".question-hyperlink, .answer-hyperlink, #hot-network-questions a{color:$$LINK_COLOR}.question-hyperlink:visited, .answer-hyperlink:visited,.started-link:visited, #hot-network-questions a:visited{color:$$VISITED_LINK_COLOR}" +
-     "#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover{color:#5DA261;border-bottom:2px solid #5DA261}" +
-     //"a:hover,.question-hyperlink:hover,.answer-hyperlink:hover,.started-link:hover{color:#487D4B}" +
-     "a{color:$$LINK_COLOR}a:visited{color:$$VISITED_LINK_COLOR}a:hover{color:$$HOVER_LINK_COLOR}" +
-     "</style>").replace(/\$\$(\w+)/g, function(_, x) {
-    return eval(site + "." + x);
-  }); //workaround for several links
-  $(".started a:not(.started-link)").css('color', '#487D4B');
-  window.addEventListener("load", function() {
-    setTimeout(function() {
-      document.getElementById("footer").setAttribute("style", 'background: transparent url("'+obj.BACKGROUND_IMAGE+'") repeat fixed; background-size: 50%;');
-    }, 300);
-  });
-  // identify 404
-  if (~document.title.indexOf("Page Not Found - Programming Puzzles & Code Golf")) {
-    console.log("404, PAGE NOT FOUND");
-    var TEXT = $("#mainbar-full > .leftcol > p")[0];
-    if (TEXT) {
-      TEXT.textContent = "We couldn't find the page you wanted. We did, however, found this program.";
-    }
-    $('#mainbar-full > .rightcol > img').attr('src', obj.PAGE404);
-  }
-
-  // votes
-  if (site === "main" || site === "meta") {
-    /*=== SHOWS VOTE COUNTS ===*/
-    try {
-      void
-      function(t) {
-        var e = t.head || t.getElementsByTagName("head")[0] || t.documentElement,
-            o = t.createElement("style"),
-            n = "/*Added through UserScript*/.vote-count-post{cursor:pointer;}.vote-count-post[title]{cursor:default;}.vote-count-separator{height:0;*margin-left:0;}";
-        e.appendChild(o), o.styleSheet ? o.styleSheet.cssText = n : o.appendChild(t.createTextNode(n));
-        var s = t.createElement("script");
-        s["textContent" in s ? "textContent" : "text"] = "(" + function() {
-          var t = location.protocol + "//api.stackexchange.com/2.0/posts/",
-              e = "?filter=!)q3b*aB43Xc&key=DwnkTjZvdT0qLs*o8rNDWw((&site=" + location.hostname,
-              o = 1,
-              n = StackExchange.helpers,
-              s = $.fn.click;
-          $.fn.click = function() {
-            return this.hasClass("vote-count-post") && !o ? this : s.apply(this, arguments)
-          };
-          var r = function(s) {
-            var r, a = $(this),
-                i = this.title;
-            if (!(/up \/ /.test(i) || /View/.test(i) && o)) {
-              o = 0;
-              var c = a.siblings('input[type="hidden"]').val();
-              if (c || (r = a.closest("[data-questionid],[data-answerid]"), c = r.attr("data-answerid") || r.attr("data-questionid")), c || (r = a.closest(".suggested-edit"), c = $.trim(r.find(".post-id").text())), c || (r = a.closest(".question-summary"), c = /\d+/.exec(r.attr("id")), c = c && c[0]), !c) return void console.error("Post ID not found! Please report this at http://stackapps.com/q/3082/9699");
-              n.addSpinner(a), $.ajax({
-                type: "GET",
-                url: t + c + e + "&callback=?",
-                dataType: "json",
-                success: function(t) {
-                  t = t.items[0];
-                  var e = t.up_vote_count,
-                      o = t.down_vote_count;
-                  e = e ? "+" + e : 0, o = o ? "-" + o : 0, $(".error-notification").fadeOut("fast", function() {
-                    $(this).remove()
-                  }), a.css("cursor", "default").attr("title", e + " up / " + o + " down").html('<div style="color:green">' + e + '</div><div class="vote-count-separator"></div><div style="color:maroon">' + o + "</div>")
-                },
-                error: function(t) {
-                  n.removeSpinner(), n.showErrorPopup(a.parent(), t.responseText && t.responseText.length < 100 ? t.responseText : "An error occurred during vote count fetch")
-                }
-              }), s.stopImmediatePropagation()
-            }
-          };
-          $.fn.on ? $(document).on("click", ".vote-count-post", r) : $(document).delegate(".vote-count-post", "click", r)
-        } + ")();", e.appendChild(s), s.parentNode.removeChild(s)
-      }(document);
-    } catch(e) {
-      console.log("An error occured loading vote distribution viewer thing:", e);
-    }
-  }
-}
-
