@@ -509,7 +509,7 @@ function addSettingsPane() {
      '                   <div class="row">'+
      '                       <div class="col-12">'+
      '                           <input class="OPT_Bool" data-var="main.REPLACE_NAMES" id="usetio" type="checkbox">'+
-     '                           <label for="usetio">Repace common usernames <span style="color: #aaa;/*! font-size: 0.6em; *//*! position: center; */">(WIP)</span></label>'+
+     '                           <label for="usetio">Replace common usernames <span style="color: #aaa;/*! font-size: 0.6em; *//*! position: center; */">(WIP)</span></label>'+
      '                   </div></div>'+
      '                   <div class="row">'+
      '                       <div class="col-12">'+
