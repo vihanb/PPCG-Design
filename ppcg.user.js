@@ -55,9 +55,6 @@ var QOD_ALTERNATING_TAGS = ["string", "popularity-contest", "ascii-art", "number
 if(($.cookie("RUN_IN_CHAT") !== "true") && site === "chat") return;
 
 
-var PARSE_CODEBLOCKS = true; // set to false to not parse code block lengths
-var PARSE_HEXDUMPS = true; // set to false to not parse hexdump lengths
-
 // Fonts
 var HEADER_FONT = 'Lato, "Open Sans", Arial, sans-serif'; // Header text
 var TEXT_FONT = '"Open Sans", Lato, "Helvetica Neue", Arial, sans-serif'; // Everything else besides code
@@ -86,11 +83,14 @@ var main = {
   BG_REV: "#329300",
 
 
+  GOAT_MODE: (localStorage.getItem("main.GOAT_MODE") === "true"), // default false
   BACKGROUND_LIGHT: (localStorage.getItem("main.BACKGROUND_LIGHT") === "true"), // Lighter shade of the background, CHANGE THROUGH OPTIONS
   MODE_DARK: (localStorage.getItem("main.MODE_DARK") === "true"),
-  NO_LEADERBOARD: (localStorage.getItem("main.NO_LEADERBOARD") === "true"),
-  NO_AUTOTIO: (localStorage.getItem("main.NO_AUTOTIO") === "true"),
+  USE_LEADERBOARD: (localStorage.getItem("main.USE_LEADERBOARD") !== "false"),// default is true
+  USE_AUTOTIO: (localStorage.getItem("main.USE_AUTOTIO") !== "false"),// default is true
   PROPOSE: localStorage.getItem("main.PROPOSE") || 'Propose',
+  REPLACE_NAMES: localStorage.getItem("main.REPLACE_NAMES") === "true", // default is false
+  SHOW_BYTE_COUNTS: localStorage.getItem("main.SHOW_BYTE_COUNTS") !== "false", // default is true
   
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: "#FAFAFA",
@@ -214,6 +214,9 @@ var optionbox = { // Customizes option box
 
 var BGHEIGHT = 0; // this + 130
 
+var PARSE_CODEBLOCKS = main.SHOW_BYTE_COUNTS; // set to false to not parse code block lengths
+var PARSE_HEXDUMPS = main.SHOW_BYTE_COUNTS; // set to false to not parse hexdump lengths
+
 if (localStorage.getItem('main.MODE_DARK') == "true") {
   main = $.extend(main, darktheme);
   meta = $.extend(meta, metadark);
@@ -236,7 +239,7 @@ $(".small-site-logo").each(function(i, el){
 $('[rel="shortcut icon"][href^="//cdn.sstatic.net/Sites/codegolf/img/favicon.ico"]').attr("href", "//i.stack.imgur.com/oHkfe.png")
 
 // apply goat mode
-if(localStorage.getItem('GOAT_MODE') == "true") {
+if(main.GOAT_MODE) {
   $('head').append($('<style/>', {html: '.vote-up-off {\
         background-image: url(http://cdn.rawgit.com/somebody1234/Misc-Files/master/upgoat-off.svg) !important;\
         background-size: 100% !important;\
@@ -369,7 +372,9 @@ var siteProperties = site == "meta" ? meta : main;
 if (site === "main" || site === "meta") {
   applyCss();
    
-  replaceNames();
+   if (main.REPLACE_NAMES) {
+      replaceNames();
+   }
 
   $("#search input").attr("placeholder", siteProperties.SEARCH_TEXT);
   $("#search input").queue("expand", function(){});
@@ -396,7 +401,7 @@ if (site === "main" || site === "meta") {
   }
   $('#wmd-preview').after(answerafter);
   // tio.net (WIP) support
-  if (!main.NO_AUTOTIO && window.location.pathname.indexOf("/questions/") > -1) { // question
+  if (main.USE_AUTOTIO && window.location.pathname.indexOf("/questions/") > -1) { // question
      breakoutTIOLinks();
   }
   
@@ -466,8 +471,8 @@ function addSettingsPane() {
      '               <div class="content">'+
      '                   <div class="row">'+
      '                       <div class="col-12">'+
-     '                           <input class="OPT_Bool" data-var="GOAT_MODE" id="goat-mode" type="checkbox">'+
-     '                           <label for="goat-moden">Use goats instead of boats</label>'+
+     '                           <input class="OPT_Bool" data-var="main.GOAT_MODE" id="goat-mode" type="checkbox">'+
+     '                           <label for="goat-mode">Use goats instead of boats</label>'+
      '                   </div></div>'+
      '                   <div class="row">'+
      '                       <div class="col-12">'+
@@ -485,6 +490,33 @@ function addSettingsPane() {
      '                           <input class="OPT_Bool" id="chat_on" onclick="$.cookie(\'RUN_IN_CHAT\',this.checked,{domain:\'stackexchange.com\'})" type="checkbox">'+
      '                           <label for="chat_on">Use modified theme in chat</label>'+
      '           </div></div></div></div>'+
+     '           <div class="inner-container inner-container-flex">'+
+     '               <div class="title-box">'+
+     '                   <div class="title">'+
+     '                       Features'+
+     '               </div></div>'+
+     '               <div class="content">'+
+     '                   <div class="row">'+
+     '                       <div class="col-12">'+
+     '                           <input class="OPT_Bool" data-var="main.USE_LEADERBOARD" id="useleader" type="checkbox">'+
+     '                           <label for="useleader">Use Auto Leaderboard</label>'+
+     '                   </div></div>'+
+     '                   <div class="row">'+
+     '                       <div class="col-12">'+
+     '                           <input class="OPT_Bool" data-var="main.USE_AUTOTIO" id="usetio" type="checkbox">'+
+     '                           <label for="usetio">Use Auto-TryItOnline™ execution</label>'+
+     '                   </div></div>'+
+     '                   <div class="row">'+
+     '                       <div class="col-12">'+
+     '                           <input class="OPT_Bool" data-var="main.REPLACE_NAMES" id="usetio" type="checkbox">'+
+     '                           <label for="usetio">Repace common usernames <span style="color: #aaa;/*! font-size: 0.6em; *//*! position: center; */">(WIP)</span></label>'+
+     '                   </div></div>'+
+     '                   <div class="row">'+
+     '                       <div class="col-12">'+
+     '                           <input class="OPT_Bool" data-var="main.SHOW_BYTE_COUNTS" id="showbcts" type="checkbox">'+
+     '                           <label for="showbcts">Show byte counts</span></label>'+
+     '                   </div></div>'+
+     '           </div></div>'+
      '           <div class="inner-container inner-container-flex">'+
      '               <div class="title-box">'+
      '                   <div class="title">'+
@@ -524,16 +556,7 @@ function addSettingsPane() {
      '                               <option value="Propose">Propose Challenge</option>'+
      '                               <option value="Propoise">Propoise Challenge</option>'+
      '                   </select></div></div>'+
-     '                   <div class="row">'+
-     '                       <div class="col-12">'+
-     '                           <input class="OPT_Bool" data-var="main.NO_LEADERBOARD" id="noleader" type="checkbox">'+
-     '                           <label for="noleader">Disable Auto Leaderboard?</label>'+
-     '                   </div></div>'+
-     '                   <div class="row">'+
-     '                       <div class="col-12">'+
-     '                           <input class="OPT_Bool" data-var="main.NO_AUTOTIO" id="notio" type="checkbox">'+
-     '                           <label for="notio">Disable Auto-TryItOnline™ execution?</label>'+
-     '       </div></div></div></div></div>'+
+     '       </div></div></div>'+
      '       <button onclick="location.reload()" style="float: right;margin-top: 1em;">Apply Changes</button>'+
      '</div></div>');      
          
@@ -560,11 +583,11 @@ function addSettingsPane() {
        $("#USER_OptMenu").fadeToggle(50);
      });
      $(".OPT_Bool").prop("checked", function() {
-       return localStorage.getItem($(this).data('var')) === 'true';
+        console.log('checking', $(this).data('var'), eval($(this).data('var')));
+       return eval($(this).data('var'));
      });
      $(".OPT_Bool").change(function() {
        localStorage.setItem($(this).data('var'), $(this).is(':checked'));
-       console.log(localStorage.getItem('main.BACKGROUND_LIGHT'));
      });
      $('<a>')
        .addClass('topbar-icon yes-hover')
@@ -581,7 +604,6 @@ function addSettingsPane() {
        title: 'Switch to ' + (site === 'meta' ? 'main' : 'meta')
      })
        .appendTo('.network-items');
-
 }
 
 
@@ -708,7 +730,7 @@ function breakoutTIOLinks() {
 function showLeaderboard() {
     qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + main.FAVICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>";
     // Leaderboard
-    if (!main.NO_LEADERBOARD && $('.post-taglist .post-tag[href$="code-golf"]')[0] && !$('.post-taglist .post-tag[href$="tips"]')[0] && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
+    if (main.USE_LEADERBOARD && $('.post-taglist .post-tag[href$="code-golf"]')[0] && !$('.post-taglist .post-tag[href$="tips"]')[0] && $(".answer")[1]) { // Tagged code-golf and has more than 1 answers
         var answers = [];
         loadAnswers(function(json) {
             answers = json.map(function(i, l, a) {
@@ -817,7 +839,7 @@ function applyCss() {
 function replaceNames() {
   reps.forEach(function (r) {
     try {
-   //   document.body.innerHTML = document.body.innerHTML.replace(RegExp(r[0], "gi"), r[1]);
+     document.body.innerHTML = document.body.innerHTML.replace(RegExp(r[0], "gi"), r[1]);
     } catch(e) {}
   });
 }
