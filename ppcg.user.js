@@ -41,6 +41,16 @@ var reps = [
   //["Code Review", "the evil code reviewers"] ihaichu - EasterlyIrk on behalf of CR.
 ];
 
+/* These are the alternating tag choices for the QOD widget */
+var QOD_ALTERNATING_TAGS = ["string", "popularity-contest", "ascii-art", "number",
+                 "kolmogorov-complexity", "graphical-output", "king-of-the-hill", "fastest-code",
+                 "restricted-source", "arithmetic", "sequence", "game",
+                 "tips", "geometry", "number-theory", "random", "primes",
+                 "array-manipulation", "date", "image-processing", "graphs",
+                 "sorting", "interpreter", "optimization", "parsing",
+                 "path-finding", "puzzle-solver", "underhanded", "source-layout",
+                 "base-conversion"];
+
 
 if(($.cookie("RUN_IN_CHAT") !== "true") && site === "chat") return;
 
@@ -215,7 +225,7 @@ if (localStorage.getItem('main.BACKGROUND_LIGHT') == "true"){
 
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
 
-
+// add favicon 
 document.head.innerHTML += '<style>.favicon-codegolf{background-position: initial !important; background-image: url("' + main.FAVICON + '"); background-size: 100% 100% !important;}' +
   '.favicon-codegolfmeta{background-position: initial !important; background-image: url("' + meta.FAVICON + '"); background-size: 100% 100% !important;}</style>';
 $(".small-site-logo").each(function(i, el){
@@ -249,6 +259,9 @@ if(localStorage.getItem('GOAT_MODE') == "true") {
   }'}));
 }
 
+
+// What does this do??
+
 var match = $('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').attr('href', main.FAVICON);
 if(match.length > 0) {
   $("#input-area").css("background", "url(" + "http://i.stack.imgur.com/oqoGQ.png" + ")");
@@ -261,6 +274,12 @@ if(match.length > 0) {
      "a.post-tag:hover{border-bottom-color: $$TAG_HOVER_SHADOW_COLOR;background: $$TAG_HOVER; color: white}"+
      "</style>").replace(/\$\$(\w+)/g, function(_,m){return main[m]});
 }
+
+
+////////////////////////////////////////////////////////////
+//////////////////    CHAT STYLES     //////////////////////
+////////////////////////////////////////////////////////////
+
 
 if (site === "chat") {
   $("body").css("background", "white");
@@ -333,8 +352,12 @@ if (site === "chat") {
     '</style>';
 }
 
-// what is this for?
+//////////////////////////////////////////////////////////
+///////////////    END CHAT STYLES    ////////////////////
+//////////////////////////////////////////////////////////
 
+
+// what is this for?
 //x=document.getElementsByClassName("community-bulletin")[0].getElementsByClassName('question-hyperlink')
 //for (var i=0;i<x.length;i++){
 //	x[i].style.color=META_LINK_COLOR
@@ -415,10 +438,7 @@ if (site === "main" || site === "meta") {
     style404();
   }
 
-  // votes
-  if (site === "main" || site === "meta") {
-    showVoteCounts();
-  }
+  showVoteCounts();
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -452,7 +472,7 @@ function addSettingsPane() {
      '                   <div class="row">'+
      '                       <div class="col-12">'+
      '                           <input class="OPT_Bool" data-var="main.BACKGROUND_LIGHT" id="light_bg_on" type="checkbox">'+
-     '                           <label for="light_bg_on">Use ighter Background</label>'+
+     '                           <label for="light_bg_on">Use Lighter Background</label>'+
      '                   </div></div>'+
      '                   <div class="row">'+
      '                       <div class="col-12">'+
@@ -887,19 +907,6 @@ function loadAnswers(onFinish) {
 ////////////////////////////////////////////////////////////////////
 
 
-
-/* These are the alternating tag choices */
-var otherTags = ["string", "popularity-contest", "ascii-art", "number",
-                 "kolmogorov-complexity", "graphical-output", "king-of-the-hill", "fastest-code",
-                 "restricted-source", "arithmetic", "sequence", "game",
-                 "tips", "geometry", "number-theory", "random", "primes",
-                 "array-manipulation", "date", "image-processing", "graphs",
-                 "sorting", "interpreter", "optimization", "parsing",
-                 "path-finding", "puzzle-solver", "underhanded", "source-layout",
-                 "base-conversion"];
-                 
-                 
-                 
 /* Add the question of the day widget */
 function addQuestionOfTheDay() {
    console.log('adding question of the day');
@@ -940,14 +947,14 @@ function getOtherTags() {
   var dataName = 'other-tags-today';
   var numberOfTags = main.QOD_NUMBER_OF_QS_SHOWN - main.QOD_ALWAYS_SHOWN_TAGS.length;
   
-  var tags = getData(dataName);
+  var tags = localStorage.getItem(dataName);
   if (tags) {tags = JSON.parse(tags);}
   else {
     tags = new Array(numberOfTags);
     for (var i = 0; i < tags.length; i++) {
-       tags[i] = otherTags[Math.floor(Math.random()*otherTags.length)];
+       tags[i] = QOD_ALTERNATING_TAGS[Math.floor(Math.random()*QOD_ALTERNATING_TAGS.length)];
     }
-    storeData(dataName, JSON.stringify(tags));
+    localStorage.setItem(dataName, JSON.stringify(tags));
   }
 
   return tags;
@@ -957,12 +964,12 @@ function getOtherTags() {
 // check to see if we need to refresh the question list
 function isTimeToGetNewQs() {
    var key = 'lastDateRefreshedQOD';
-   var lastUpdate = JSON.parse(getData(key));
+   var lastUpdate = JSON.parse(localStorage.getItem(key));
    
    if (lastUpdate !== null && lastUpdate !== undefined) {
       return lastUpdate !== new Date().getDate();
    } else {
-      storeData(key, JSON.stringify(new Date().getDate()));
+      localStorage.setItem(key, JSON.stringify(new Date().getDate()));
       return false;
    }
 }
@@ -982,18 +989,9 @@ function resetData() {
       localStorage.removeItem(toRemove[i]);
    }
    
-   storeData('lastDateRefreshedQOD', JSON.stringify(new Date().getDate()));
+   localStorage.setItem('lastDateRefreshedQOD', JSON.stringify(new Date().getDate()));
 }
 
-
-/* Get a string from persistant stroage (in this case localStorage) */
-function getData(name) {
-  return localStorage.getItem(name);
-}
-
-function storeData(name, dataStr) {
-   localStorage.setItem(name, dataStr);
-}
 
 /* Get all questions that are taged, are >1yr old, and have a score >7 */
 function getValidQuestions(tag, onDone) {
@@ -1007,7 +1005,7 @@ function getValidQuestions(tag, onDone) {
 /* Check storage for the question, or grab a new one. callback argument is {url: ..., title: ...} */
 function getQuestion(tag, callback) {
   var storageSuffix = '-tag-question';
-  var item = getData(tag + storageSuffix);
+  var item = localStorage.getItem(tag + storageSuffix);
   
   if (item) {
     item = JSON.parse(item);
@@ -1017,7 +1015,7 @@ function getQuestion(tag, callback) {
         var quest = ret[Math.floor(Math.random()*ret.length)];
         var urlTitleMap = {'url': quest['link'], 'title': quest['title']};
         
-        storeData(tag + storageSuffix, JSON.stringify(urlTitleMap));
+        localStorage.setItem(tag + storageSuffix, JSON.stringify(urlTitleMap));
         callback(urlTitleMap);
      });
   }
