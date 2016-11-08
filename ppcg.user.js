@@ -386,51 +386,48 @@ if (site === "main" || site === "meta") {
   addSettingsPane();
     
 
-  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox">'+ main.PROPOSE + ' Challenge</a></li>');
-  document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
+  showProposeChallangeButton();
 
-  var answerafter= (/users\/edit/.test(document.location.href) || /questions\/ask/.test(document.location.href)) ? '' : '<div>Before you post, take some time to read through the <a href="http://meta.codegolf.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>';
   if (site == "main") {
       showLeaderboard();
-  } else {
-    answerafter='';
-    qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.DISP_ICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\" style=\"font-size: 14px; color: #CF7720\">meta</span></td></tr></table>";
-    if (window.location.href.indexOf('/2140/') > 0){ // If on sandbox
-      answerafter='<div>Try reading through <a href="http://meta.codegolf.stackexchange.com/q/8047">the things to avoid when writing challenges</a> before you post.</div>';
+      // either editing or asking a question
+      if ((/users\/edit/.test(document.location.href) || /questions\/ask/.test(document.location.href))) {
+         $('#wmd-preview').after('<div>Before you post, take some time to read through the <a href="http://meta.codegolf.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>');
+      }
+   }
+  
+  if (site === 'meta') {
+     // show meta logo
+     qS("#hlogo > a").innerHTML = "<table id=\"newlogo\"><tr><td><img src=\"" + meta.DISP_ICON + "\" height=60></td><td>Programming Puzzles &amp; Code Golf <span class=\"meta-title\" style=\"font-size: 14px; color: #CF7720\">meta</span></td></tr></table>";
+    
+     if (window.location.href.indexOf('/2140/') > 0) {
+      showSandboxMsg();
     }
   }
-  $('#wmd-preview').after(answerafter);
+  
+  
   // tio.net (WIP) support
   if (main.USE_AUTOTIO && window.location.pathname.indexOf("/questions/") > -1) { // question
      breakoutTIOLinks();
   }
   
+  // replace all icons with the sites favicon
   try {
     qS("link[rel$=\"icon\"]").href = siteProperties.FAVICON;
   } catch (e) {}
+  
   if (PARSE_CODEBLOCKS) {
-    $(".answer").each(function() {
-      // Find the first header or strong element (some old posts use **this** for header) and set h to its text
-      var h = $(this).find("h1, h2, h3, strong").first().text();
-      $(this).find("pre code").each(function() {
-        var t = $(this).text().trim().replace("\r\n", "\n");
-        $(this).parent().before('<div style="padding-bottom:4px;font-size:11px;font-family:' + TEXT_FONT + '">' + bytes(t, h) + ", " + formatChars(t) + "</div>");
-      });
-    });
+     showByteCounts();
   }
+  
+  // apply background image
   $("body .container").prepend('<div style="position: absolute;width: inherit; z-index: 0; height: 130px; background: url(' + siteProperties.BACKGROUND_IMAGE + '); background-attachment: fixed; background-size: 50%;"></div>');
-  addQuestionOfTheDay();
+  
+  
   $(".bounty-indicator, .bounty-award").css("background-color", main.BOUNTY_INDICATOR);
-  document.head.innerHTML += 
-    ("<style>" +
-     //".question-hyperlink, .answer-hyperlink, #hot-network-questions a{color:$$LINK_COLOR}.question-hyperlink:visited, .answer-hyperlink:visited,.started-link:visited, #hot-network-questions a:visited{color:$$VISITED_LINK_COLOR}" +
-     "#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover{color:#5DA261;border-bottom:2px solid #5DA261}" +
-     //"a:hover,.question-hyperlink:hover,.answer-hyperlink:hover,.started-link:hover{color:#487D4B}" +
-     "a{color:$$LINK_COLOR}a:visited{color:$$VISITED_LINK_COLOR}a:hover{color:$$HOVER_LINK_COLOR}" +
-     "</style>").replace(/\$\$(\w+)/g, function(_, x) {
-    return eval(site + "." + x);
-  }); //workaround for several links
   $(".started a:not(.started-link)").css('color', '#487D4B');
+  
+  // does this really need to be in setTimeout?
   window.addEventListener("load", function() {
     setTimeout(function() {
       document.getElementById("footer").setAttribute("style", 'background: transparent url("'+siteProperties.BACKGROUND_IMAGE+'") repeat fixed; background-size: 50%;');
@@ -443,6 +440,7 @@ if (site === "main" || site === "meta") {
     style404();
   }
 
+  addQuestionOfTheDay();
   showVoteCounts();
 }
 
@@ -607,7 +605,20 @@ function addSettingsPane() {
 }
 
 
-//
+function showSandboxMsg() {
+     $('#wmd-preview').after('<div>Try reading through <a href="http://meta.codegolf.stackexchange.com/q/8047">the things to avoid when writing challenges</a> before you post.</div>');
+}
+
+function showByteCounts() {
+    $(".answer").each(function() {
+      // Find the first header or strong element (some old posts use **this** for header) and set header to its text
+      var header = $(this).find("h1, h2, h3, strong").first().text();
+      $(this).find("pre code").each(function() {
+        var text = $(this).text().trim().replace("\r\n", "\n");
+        $(this).parent().before('<div style="padding-bottom:4px;font-size:11px;font-family:' + TEXT_FONT + '">' + bytes(text, header) + ", " + formatChars(text) + "</div>");
+      });
+    });
+}
 
 function style404() {
    var TEXT = $("#mainbar-full > .leftcol > p")[0];
@@ -617,112 +628,116 @@ function style404() {
    $('#mainbar-full > .rightcol > img').attr('src', siteProperties.PAGE404);
 }
 
+function showProposeChallangeButton() {
+  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox">'+ main.PROPOSE + ' Challenge</a></li>');
+  document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
+}
 
 function showVoteCounts() {
-       /*=== SHOWS VOTE COUNTS ===*/
-       try {
-         void
-         function(t) {
-           var e = t.head || t.getElementsByTagName("head")[0] || t.documentElement,
-               o = t.createElement("style"),
-               n = "/*Added through UserScript*/.vote-count-post{cursor:pointer;}.vote-count-post[title]{cursor:default;}.vote-count-separator{height:0;*margin-left:0;}";
-           e.appendChild(o), o.styleSheet ? o.styleSheet.cssText = n : o.appendChild(t.createTextNode(n));
-           var s = t.createElement("script");
-           s["textContent" in s ? "textContent" : "text"] = "(" + function() {
-             var t = location.protocol + "//api.stackexchange.com/2.0/posts/",
-                 e = "?filter=!)q3b*aB43Xc&key=DwnkTjZvdT0qLs*o8rNDWw((&site=" + location.hostname,
-                 o = 1,
-                 n = StackExchange.helpers,
-                 s = $.fn.click;
-             $.fn.click = function() {
-               return this.hasClass("vote-count-post") && !o ? this : s.apply(this, arguments)
-             };
-             var r = function(s) {
-               var r, a = $(this),
-                   i = this.title;
-               if (!(/up \/ /.test(i) || /View/.test(i) && o)) {
-                 o = 0;
-                 var c = a.siblings('input[type="hidden"]').val();
-                 if (c || (r = a.closest("[data-questionid],[data-answerid]"), c = r.attr("data-answerid") || r.attr("data-questionid")), c || (r = a.closest(".suggested-edit"), c = $.trim(r.find(".post-id").text())), c || (r = a.closest(".question-summary"), c = /\d+/.exec(r.attr("id")), c = c && c[0]), !c) return void console.error("Post ID not found! Please report this at http://stackapps.com/q/3082/9699");
-                 n.addSpinner(a), $.ajax({
-                   type: "GET",
-                   url: t + c + e + "&callback=?",
-                   dataType: "json",
-                   success: function(t) {
-                     t = t.items[0];
-                     var e = t.up_vote_count,
-                         o = t.down_vote_count;
-                     e = e ? "+" + e : 0, o = o ? "-" + o : 0, $(".error-notification").fadeOut("fast", function() {
-                       $(this).remove()
-                     }), a.css("cursor", "default").attr("title", e + " up / " + o + " down").html('<div style="color:green">' + e + '</div><div class="vote-count-separator"></div><div style="color:maroon">' + o + "</div>")
-                   },
-                   error: function(t) {
-                     n.removeSpinner(), n.showErrorPopup(a.parent(), t.responseText && t.responseText.length < 100 ? t.responseText : "An error occurred during vote count fetch")
-                   }
-                 }), s.stopImmediatePropagation()
-               }
-             };
-             $.fn.on ? $(document).on("click", ".vote-count-post", r) : $(document).delegate(".vote-count-post", "click", r)
-           } + ")();", e.appendChild(s), s.parentNode.removeChild(s)
-         }(document);
-       } catch(e) {
-         console.log("An error occured loading vote distribution viewer thing:", e);
-       }
+    /*=== SHOWS VOTE COUNTS ===*/
+    try {
+      void
+      function(t) {
+        var e = t.head || t.getElementsByTagName("head")[0] || t.documentElement,
+            o = t.createElement("style"),
+            n = "/*Added through UserScript*/.vote-count-post{cursor:pointer;}.vote-count-post[title]{cursor:default;}.vote-count-separator{height:0;*margin-left:0;}";
+        e.appendChild(o), o.styleSheet ? o.styleSheet.cssText = n : o.appendChild(t.createTextNode(n));
+        var s = t.createElement("script");
+        s["textContent" in s ? "textContent" : "text"] = "(" + function() {
+          var t = location.protocol + "//api.stackexchange.com/2.0/posts/",
+              e = "?filter=!)q3b*aB43Xc&key=DwnkTjZvdT0qLs*o8rNDWw((&site=" + location.hostname,
+              o = 1,
+              n = StackExchange.helpers,
+              s = $.fn.click;
+          $.fn.click = function() {
+            return this.hasClass("vote-count-post") && !o ? this : s.apply(this, arguments)
+          };
+          var r = function(s) {
+            var r, a = $(this),
+                i = this.title;
+            if (!(/up \/ /.test(i) || /View/.test(i) && o)) {
+              o = 0;
+              var c = a.siblings('input[type="hidden"]').val();
+              if (c || (r = a.closest("[data-questionid],[data-answerid]"), c = r.attr("data-answerid") || r.attr("data-questionid")), c || (r = a.closest(".suggested-edit"), c = $.trim(r.find(".post-id").text())), c || (r = a.closest(".question-summary"), c = /\d+/.exec(r.attr("id")), c = c && c[0]), !c) return void console.error("Post ID not found! Please report this at http://stackapps.com/q/3082/9699");
+              n.addSpinner(a), $.ajax({
+                type: "GET",
+                url: t + c + e + "&callback=?",
+                dataType: "json",
+                success: function(t) {
+                  t = t.items[0];
+                  var e = t.up_vote_count,
+                      o = t.down_vote_count;
+                  e = e ? "+" + e : 0, o = o ? "-" + o : 0, $(".error-notification").fadeOut("fast", function() {
+                    $(this).remove()
+                  }), a.css("cursor", "default").attr("title", e + " up / " + o + " down").html('<div style="color:green">' + e + '</div><div class="vote-count-separator"></div><div style="color:maroon">' + o + "</div>")
+                },
+                error: function(t) {
+                  n.removeSpinner(), n.showErrorPopup(a.parent(), t.responseText && t.responseText.length < 100 ? t.responseText : "An error occurred during vote count fetch")
+                }
+              }), s.stopImmediatePropagation()
+            }
+          };
+          $.fn.on ? $(document).on("click", ".vote-count-post", r) : $(document).delegate(".vote-count-post", "click", r)
+        } + ")();", e.appendChild(s), s.parentNode.removeChild(s)
+      }(document);
+    } catch(e) {
+      console.log("An error occured loading vote distribution viewer thing:", e);
+    }
 }
 
 function breakoutTIOLinks() {
-    $(".answer").each(function() {
-      var tiolinks = $(this).find('a[href*="tryitonline.net"]');
-      if (tiolinks[0]) {
-        // They are tryitonline links
-        var counter = 0;
-        function run ($this) {
-          var parts = {};
-          if ($this.attr('href').split("#")[1]) {
-            var _parts = $this.attr('href').split("#")[1].split("&").map(function(i) {
-              return [i.split("=")[0],i.split("=")[1]]
-            }).forEach(function(l){
-              parts[l[0]] = l[1];
-            });
+ $(".answer").each(function() {
+   var tiolinks = $(this).find('a[href*="tryitonline.net"]');
+   if (tiolinks[0]) {
+     // They are tryitonline links
+     var counter = 0;
+     function run ($this) {
+       var parts = {};
+       if ($this.attr('href').split("#")[1]) {
+         var _parts = $this.attr('href').split("#")[1].split("&").map(function(i) {
+           return [i.split("=")[0],i.split("=")[1]]
+         }).forEach(function(l){
+           parts[l[0]] = l[1];
+         });
 
-            try {
-			  console.log(  (parts["code"] || "").replace(/\s+/g, "") );
-			  console.log(  (parts["input"] || "").replace(/\s/g, "") );
-              var code = escape(atob(  (parts["code"] || "").replace(/\s+/g, "") ));
-              var input = escape(atob(  (parts["input"] || "").replace(/\s/g, "") ));
-              var url = $this.attr('href').match(/https?:\/\/[^\/]+/)[0];
-              if (url && code) { // Was able to get data
-                var r = new XMLHttpRequest();
-                var running = false;
-                var uuid = '';
-                var output = "";
-                r.open("POST", url + "/cgi-bin/backend");
-                running = true;
-                r.onreadystatechange = function() {
-                  if (running && r.responseText.length > 32) {
-                    uuid = r.responseText.substr(0,32);
-                  }
-                  if (r.responseText.length < 100033) {
-                    output = r.responseText.substr(33);
-                  }
-                  if (r.readyState === 4) {
-                    output = r.responseText.substr(33);
-                    running = false;
-                    $this.after('<span style="padding-left: 5px; font-size: 10px;">Try it online result: <pre id="tiouuid-'+uuid+'"></pre></span>');
-                    $("#tiouuid-"+uuid).text(output);
-                    if (counter + 1 < tiolinks.length) run(tiolinks.eq(counter++));
-                  }
-                };
-                r.responseType = "text/plain;charset=UTF-8";
-                r.send("code=" + code + "&input=" + input);
-              }
-            } catch(e) { console.log("Bad TIO™ Permalink.", e); }
-          };
-          if (tiolinks.eq(counter)[0]) run(tiolinks.eq(counter++));
-        }
-		run(tiolinks.eq(counter++));
-      }
-    });
+         try {
+		  console.log(  (parts["code"] || "").replace(/\s+/g, "") );
+		  console.log(  (parts["input"] || "").replace(/\s/g, "") );
+           var code = escape(atob(  (parts["code"] || "").replace(/\s+/g, "") ));
+           var input = escape(atob(  (parts["input"] || "").replace(/\s/g, "") ));
+           var url = $this.attr('href').match(/https?:\/\/[^\/]+/)[0];
+           if (url && code) { // Was able to get data
+             var r = new XMLHttpRequest();
+             var running = false;
+             var uuid = '';
+             var output = "";
+             r.open("POST", url + "/cgi-bin/backend");
+             running = true;
+             r.onreadystatechange = function() {
+               if (running && r.responseText.length > 32) {
+                 uuid = r.responseText.substr(0,32);
+               }
+               if (r.responseText.length < 100033) {
+                 output = r.responseText.substr(33);
+               }
+               if (r.readyState === 4) {
+                 output = r.responseText.substr(33);
+                 running = false;
+                 $this.after('<span style="padding-left: 5px; font-size: 10px;">Try it online result: <pre id="tiouuid-'+uuid+'"></pre></span>');
+                 $("#tiouuid-"+uuid).text(output);
+                 if (counter + 1 < tiolinks.length) run(tiolinks.eq(counter++));
+               }
+             };
+             r.responseType = "text/plain;charset=UTF-8";
+             r.send("code=" + code + "&input=" + input);
+           }
+         } catch(e) { console.log("Bad TIO™ Permalink.", e); }
+       };
+       if (tiolinks.eq(counter)[0]) run(tiolinks.eq(counter++));
+     }
+	run(tiolinks.eq(counter++));
+   }
+ });
 }
 
 
@@ -830,6 +845,18 @@ function applyCss() {
      "#question-of-the-day-content {padding: 5px;border: 3px solid #d4f493;}"+
      "#question-of-the-day h4 {font-weight: 700;}"+
      "#sidebar > .module {margin-left: 0;}"+
+     
+     // fix some links
+     "#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover {"+
+        "color:#5DA261;"+
+        "border-bottom:2px solid #5DA261"+
+     "}" +
+     "a {"+
+        "color:$$LINK_COLOR}"+
+     "a:visited {"+
+        "color:$$VISITED_LINK_COLOR}"+
+     "a:hover {"+
+        "color:$$HOVER_LINK_COLOR}" +
      "</style>").replace(/\$\$(\w+)/g, function(_, x) {
         console.log('got to', x);
     return eval(site + "." + x);
