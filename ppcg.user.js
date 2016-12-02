@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.8.7
+// @version     3.8.8
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://chat.stackexchange.com/*
@@ -87,6 +87,7 @@ var main = {
   BACKGROUND_LIGHT: (localStorage.getItem("main.BACKGROUND_LIGHT") === "true"), // Lighter shade of the background, CHANGE THROUGH OPTIONS
   MODE_DARK: (localStorage.getItem("main.MODE_DARK") === "true"),
   USE_LEADERBOARD: (localStorage.getItem("main.USE_LEADERBOARD") !== "false"),// default is true
+  SHOW_QOD_WIDGET: (localStorage.getItem("main.SHOW_QOD_WIDGET") !== "false"),// default is true
   USE_AUTOTIO: (localStorage.getItem("main.USE_AUTOTIO") !== "false"),// default is true
   PROPOSE: localStorage.getItem("main.PROPOSE") || 'Propose',
   REPLACE_NAMES: localStorage.getItem("main.REPLACE_NAMES") === "true", // default is false
@@ -236,7 +237,7 @@ $(".small-site-logo").each(function(i, el){
     $(el).attr("src", main.FAVICON);
   }
 });
-$('[rel="shortcut icon"][href^="//cdn.sstatic.net/Sites/codegolf/img/favicon.ico"]').attr("href", "//i.stack.imgur.com/oHkfe.png")
+$('[rel="shortcut icon"][href^="//cdn.sstatic.net/Sites/codegolf/img/favicon.ico"]').attr("href", "//i.stack.imgur.com/oHkfe.png");
 
 // apply goat mode
 if(main.GOAT_MODE) {
@@ -440,7 +441,9 @@ if (site === "main" || site === "meta") {
     style404();
   }
 
-  addQuestionOfTheDay();
+  if (main.SHOW_QOD_WIDGET)
+    addQuestionOfTheDay();
+ 
   showVoteCounts();
 }
 
@@ -501,13 +504,18 @@ function addSettingsPane() {
      '                   </div></div>'+
      '                   <div class="row">'+
      '                       <div class="col-12">'+
+     '                           <input class="OPT_Bool" data-var="main.SHOW_QOD_WIDGET" id="useqod" type="checkbox">'+
+     '                           <label for="useqod">Show the Challange Of The Day&trade; widget</label>'+
+     '                   </div></div>'+
+     '                   <div class="row">'+
+     '                       <div class="col-12">'+
      '                           <input class="OPT_Bool" data-var="main.USE_AUTOTIO" id="usetio" type="checkbox">'+
      '                           <label for="usetio">Use Auto-TryItOnline™ execution</label>'+
      '                   </div></div>'+
      '                   <div class="row">'+
      '                       <div class="col-12">'+
-     '                           <input class="OPT_Bool" data-var="main.REPLACE_NAMES" id="usetio" type="checkbox">'+
-     '                           <label for="usetio">Replace common usernames <span style="color: #aaa;/*! font-size: 0.6em; *//*! position: center; */">(WIP)</span></label>'+
+     '                           <input class="OPT_Bool" data-var="main.REPLACE_NAMES" id="repnames" type="checkbox">'+
+     '                           <label for="repnames">Replace common usernames <span style="color: #aaa;/*! font-size: 0.6em; *//*! position: center; */">(WIP)</span></label>'+
      '                   </div></div>'+
      '                   <div class="row">'+
      '                       <div class="col-12">'+
@@ -754,7 +762,7 @@ function showLeaderboard() {
                 var header = ((copyvalue.match(/<(h\d|strong)>(.+?)<\/\1>/) || [])[2] || "")
                 i.body = i.body.replace(/^(?!<p><strong>|<h\d>)(.(?!<p><strong>|<h\d>))*/, "").replace(/<(strike|s|del)>.*<\/\1>/g, "").replace(/<a [^>]+>(.*)<\/a>/g, "$1").replace(/\(\s*(\d+)/g, ", $1").replace(/\s*-\s+|:\s*/, ", ");
                 var j = +(
-                    /no[nt].?competing|invalid|cracked/i.test(header) ? NaN :
+                    /no[nt].?competi(?:ng|tive)|invalid|cracked/i.test(header) ? NaN :
                     (header.match(/.+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/) || [])[1] ||
                     (header.match(/[^,\d]+,\s+(-?\d+(?:\.\d+)?)\s*(?:\n|$)/) || [])[1] ||
                     (i.body.match(/(?:<h\d>|<p><strong>).+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/) || [])[1] ||
@@ -1002,6 +1010,8 @@ function getOtherTags() {
     tags = new Array(numberOfTags);
     for (var i = 0; i < tags.length; i++) {
        tags[i] = QOD_ALTERNATING_TAGS[Math.floor(Math.random()*QOD_ALTERNATING_TAGS.length)];
+       if (main.QOD_ALWAYS_SHOWN_TAGS.concat(tags).indexOf(tags[i]) !== -1) { // we failed and need a new tag that wasn't done yet
+         i--; }
     }
     localStorage.setItem(dataName, JSON.stringify(tags));
   }
@@ -1034,22 +1044,37 @@ function resetData() {
    }
    console.log('data to rm', toRemove);
    
-   for (var i = 0; i < toRemove.length; i++) {
-      localStorage.removeItem(toRemove[i]);
+   for (var j = 0; j < toRemove.length; j++) {
+      localStorage.removeItem(toRemove[j]);
    }
    
    localStorage.setItem('lastDateRefreshedQOD', JSON.stringify(new Date().getDate()));
 }
 
 
-/* Get all questions that are taged, are >1yr old, and have a score >7 */
+/* Get all questions that are taged, are >1yr old, have a score >7, and are not alrady in the QOD widget */
 function getValidQuestions(tag, onDone) {
   var url = 'https://api.stackexchange.com/2.2/search/advanced?order=desc&key=DwnkTjZvdT0qLs*o8rNDWw((&min=7&todate=1420070400&sort=votes&closed=False&tagged='+tag+'&site=codegolf';
   httpGetAsync(url, function (ret) {
-    onDone(JSON.parse(ret)['items']);
+     var items = JSON.parse(ret)['items'];
+     var currentUrls = currentUrls();
+     items = items.filter(x => currentUrls.indexOf(x['link']) !== -1)
+     onDone(item);
   });
 }
 
+function currentUrls() {
+   var storageSuffix = '-tag-question';
+   var urls = [];
+   
+   for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (k.indexOf(storageSuffix) !== -1) {
+          urls = urls.concat(JSON.parse(localStorage.getItem(k))['url']);
+       }
+   }
+   return urls;
+}
 
 /* Check storage for the question, or grab a new one. callback argument is {url: ..., title: ...} */
 function getQuestion(tag, callback) {
