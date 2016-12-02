@@ -1011,8 +1011,8 @@ function getOtherTags() {
     tags = new Array(numberOfTags);
     for (var i = 0; i < tags.length; i++) {
        tags[i] = QOD_ALTERNATING_TAGS[Math.floor(Math.random()*QOD_ALTERNATING_TAGS.length)];
-       if (main.QOD_ALWAYS_SHOWN_TAGS.concat(tags).indexOf(tags[i]) !== -1) { // we failed and need a new tag that wasn't done yet
-         i--; }
+       /* if (main.QOD_ALWAYS_SHOWN_TAGS.concat(tags).indexOf(tags[i]) !== -1) { // we failed and need a new tag that wasn't done yet
+         i--; } */
     }
     localStorage.setItem(dataName, JSON.stringify(tags));
   }
@@ -1059,8 +1059,8 @@ function getValidQuestions(tag, onDone) {
   httpGetAsync(url, function (ret) {
      var items = JSON.parse(ret)['items'];
      var currentUrls = currentUrls();
-     items = items.filter(x => currentUrls.indexOf(x['link']) !== -1)
-     onDone(item);
+     items = items.filter(x => currentUrls.indexOf(x['link']) === -1)
+     onDone(items);
   });
 }
 
