@@ -762,7 +762,7 @@ function showLeaderboard() {
                 var header = ((copyvalue.match(/<(h\d|strong)>(.+?)<\/\1>/) || [])[2] || "")
                 i.body = i.body.replace(/^(?!<p><strong>|<h\d>)(.(?!<p><strong>|<h\d>))*/, "").replace(/<(strike|s|del)>.*<\/\1>/g, "").replace(/<a [^>]+>(.*)<\/a>/g, "$1").replace(/\(\s*(\d+)/g, ", $1").replace(/\s*-\s+|:\s*/, ", ");
                 var j = +(
-                    /no[nt].?competing|invalid/i.test(header) ? NaN :
+                    /no[nt].?competi(?:ng|tive)|invalid|cracked/i.test(header) ? NaN :
                     (header.match(/.+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/) || [])[1] ||
                     (header.match(/[^,\d]+,\s+(-?\d+(?:\.\d+)?)\s*(?:\n|$)/) || [])[1] ||
                     (i.body.match(/(?:<h\d>|<p><strong>).+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/) || [])[1] ||
@@ -906,7 +906,7 @@ function bytes(code, lang) { // Takes in a length of text and piece of header te
   var ISO_8859_1_langs = /^(Japt|TeaScript|Retina|Pyth|Reng)\b/i;
   var ISO_8859_7_langs = /^(Jolf)\b/;
   var UTF_16_langs = /^(Ziim|Funciton)\b/i;
-  var custom_langs = /^(GS2|Seriously|Unicorn|Jelly|(Dyalog )?APL)\b/i;
+  var custom_langs = /^(GS2|Seriously|Actually|Unicorn|Jelly|(Dyalog )?APL)\b/i;
   var ISO_8859_1 = /^[\x00-\xFF]*$/;
   var ISO_8859_7 = /^[\u0000-\u00A0\u2018\u2019\u00A3\u20AC\u20AF\u00A6-\u00A9\u037A\u00AB-\u00AD\u2015\u00B0-\u00B3\u0384-\u0386\u00B7\u0388-\u038A\u00BB\u038C\u00BD\u038E-\u03CE]*$/; // Taken from http://stackoverflow.com/a/34800836/4449486
   lang = lang || "";
