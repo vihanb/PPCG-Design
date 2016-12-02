@@ -760,6 +760,7 @@ function showLeaderboard() {
                 i.body = i.body.replace(/[\u2010-\u2015\u2212]/g, "-");
                 var copyvalue = i.body.slice().replace(/<(strike|s|del)>.*?<\/\1>/g, "");
                 var header = ((copyvalue.match(/<(h\d|strong)>(.+?)<\/\1>/) || [])[2] || "")
+			.replace(/<(\\a|a .*?)>/g,"");
                 i.body = i.body.replace(/^(?!<p><strong>|<h\d>)(.(?!<p><strong>|<h\d>))*/, "").replace(/<(strike|s|del)>.*<\/\1>/g, "").replace(/<a [^>]+>(.*)<\/a>/g, "$1").replace(/\(\s*(\d+)/g, ", $1").replace(/\s*-\s+|:\s*/, ", ");
                 var j = +(
                     /no[nt].?competi(?:ng|tive)|invalid|cracked/i.test(header) ? NaN :
