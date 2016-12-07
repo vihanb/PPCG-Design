@@ -52,7 +52,7 @@ var QOD_ALTERNATING_TAGS = ["string", "popularity-contest", "ascii-art", "number
                  "base-conversion"];
 
 
-if(($.cookie("RUN_IN_CHAT") !== "true") && site === "chat") return;
+if(($.cookie("RUN_IN_CHAT") !== "true") && site === "chat") throw "Not executing script";
 
 
 // Fonts
