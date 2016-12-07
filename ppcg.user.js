@@ -1059,7 +1059,7 @@ function getValidQuestions(tag, onDone) {
   httpGetAsync(url, function (ret) {
      var items = JSON.parse(ret)['items'];
      var currentUrls = currentUrls();
-     items = items.filter(x => currentUrls.indexOf(x['link']) === -1)
+     items = items.filter(function(x) { return currentUrls.indexOf(x['link']) === -1})
      onDone(items);
   });
 }
