@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.9.10
+// @version     3.9.11
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://chat.stackexchange.com/*
@@ -1058,13 +1058,13 @@ function getValidQuestions(tag, onDone) {
   var url = 'https://api.stackexchange.com/2.2/search/advanced?order=desc&key=DwnkTjZvdT0qLs*o8rNDWw((&min=7&todate=1420070400&sort=votes&closed=False&tagged='+tag+'&site=codegolf';
   httpGetAsync(url, function (ret) {
      var items = JSON.parse(ret)['items'];
-     var currentUrls = currentUrls();
+     var currentUrls = getCurrentUrls();
      items = items.filter(function(x) { return currentUrls.indexOf(x['link']) === -1})
      onDone(items);
   });
 }
 
-function currentUrls() {
+function getCurrentUrls() {
    var storageSuffix = '-tag-question';
    var urls = [];
    
