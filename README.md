@@ -18,6 +18,7 @@ For Firefox users, [Greasemonkey](https://github.com/greasemonkey/greasemonkey) 
 
 ### Parts
 
- - `sprites.svg` contains *all* the icons, etc. If you're using Adobe Illustrator, make sure ("responsive") is turned off before saving
  - `ppcg.user.js` is the userscript.
- - `ppcg.alt.user.js` is the same userscript but with the old design.
+ - `assets/sprites.svg` contains *all* the icons, etc. If you're using Adobe Illustrator, make sure ("responsive") is turned off before saving
+ - `assets/logo` contains the SVG files for the main and meta logos.
+ 
