@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.9.11
+// @version     3.10.0
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://chat.stackexchange.com/*
@@ -757,11 +757,10 @@ function showLeaderboard() {
         var answers = [];
         loadAnswers(function(json) {
             answers = json.map(function(i, l, a) {
-                i.body = i.body.replace(/[\u2010-\u2015\u2212]/g, "-");
-                var copyvalue = i.body.slice().replace(/<(strike|s|del)>.*?<\/\1>/g, "");
+                i.body = i.body.replace(/[\u2010-\u2015\u2212]/g, "-").replace(/^(?!<p><strong>|<h\d>)(.(?!<p><strong>|<h\d>))*/, "").replace(/<(strike|s|del)>.*?<\/\1>/g, "").replace(/<a [^>]+>(.*)<\/a>/g, "$1").replace(/\(\s*(\d+)/g, ", $1").replace(/\s*-\s+|:\s*/, ", ").replace(/(\d+)\s*\+\s*(\d+)/g, function (_, x, y) { return +x + +y; });
+                var copyvalue = i.body;
                 var header = ((copyvalue.match(/<(h\d|strong)>(.+?)<\/\1>/) || [])[2] || "")
 			.replace(/<(\\a|a .*?)>/g,"");
-                i.body = i.body.replace(/^(?!<p><strong>|<h\d>)(.(?!<p><strong>|<h\d>))*/, "").replace(/<(strike|s|del)>.*<\/\1>/g, "").replace(/<a [^>]+>(.*)<\/a>/g, "$1").replace(/\(\s*(\d+)/g, ", $1").replace(/\s*-\s+|:\s*/, ", ").replace(/(\d+)\s*\+\s*(\d+)/g, function (_, x, y) { return +x + +y; });
                 var j = +(
                     /no[nt].?competi(?:ng|tive)|invalid|cracked/i.test(header) ? NaN :
                     (header.match(/.+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/) || [])[1] ||
