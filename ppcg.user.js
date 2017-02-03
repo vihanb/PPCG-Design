@@ -392,7 +392,7 @@ if (site === "main" || site === "meta") {
   if (site == "main") {
       showLeaderboard();
       // either editing or asking a question
-      if ((/users\/edit/.test(document.location.href) || /questions\/ask/.test(document.location.href))) {
+      if (/questions\/ask/.test(document.location.href)) {
          $('#wmd-preview').after('<div>Before you post, take some time to read through the <a href="http://meta.codegolf.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>');
       }
    }
