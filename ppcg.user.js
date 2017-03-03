@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.10.0
+// @version     3.10.1
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://chat.stackexchange.com/*
@@ -763,10 +763,10 @@ function showLeaderboard() {
 			.replace(/<(\\a|a .*?)>/g,"");
                 var j = +(
                     /no[nt].?competi(?:ng|tive)|invalid|cracked/i.test(header) ? NaN :
-                    (header.match(/.+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/) || [])[1] ||
-                    (header.match(/[^,\d]+,\s+(-?\d+(?:\.\d+)?)\s*(?:\n|$)/) || [])[1] ||
-                    (i.body.match(/(?:<h\d>|<p><strong>).+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/) || [])[1] ||
-                    (i.body.match(/^\s*(?:<h\d>|<p><strong>).*?(-?\d+(?:\.\d+)?)\D*?<\/(?:h\d|strong)>/) || [])[1]
+                    (header.match(/.+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/i) || [])[1] ||
+                    (header.match(/[^,\d]+,\s+(-?\d+(?:\.\d+)?)\s*(?:\n|$)/i) || [])[1] ||
+                    (i.body.match(/(?:<h\d>|<p><strong>).+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/i) || [])[1] ||
+                    (i.body.match(/^\s*(?:<h\d>|<p><strong>).*?(-?\d+(?:\.\d+)?)\D*?<\/(?:h\d|strong)>/i) || [])[1]
                 );
                 i.body = i.body.replace(RegExp(",?\\s*" + j + ".*"), "");
                 // Taken (and modified) from http://codegolf.stackexchange.com/a/69936/40695
