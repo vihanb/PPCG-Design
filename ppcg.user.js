@@ -387,7 +387,7 @@ if (site === "main" || site === "meta") {
   addSettingsPane();
     
 
-  showProposeChallangeButton();
+  showProposeChallengeButton();
 
   if (site == "main") {
       showLeaderboard();
@@ -505,7 +505,7 @@ function addSettingsPane() {
      '                   <div class="row">'+
      '                       <div class="col-12">'+
      '                           <input class="OPT_Bool" data-var="main.SHOW_QOD_WIDGET" id="useqod" type="checkbox">'+
-     '                           <label for="useqod">Show the Challange Of The Day&trade; widget</label>'+
+     '                           <label for="useqod">Show the Challenge Of The Day&trade; widget</label>'+
      '                   </div></div>'+
      '                   <div class="row">'+
      '                       <div class="col-12">'+
@@ -526,7 +526,7 @@ function addSettingsPane() {
      '           <div class="inner-container inner-container-flex">'+
      '               <div class="title-box">'+
      '                   <div class="title">'+
-     '                       Challange of the day'+
+     '                       Challenge of the day'+
      '               </div></div>'+
      '               <div class="content">'+
      '                   <div class="row">'+
@@ -636,7 +636,7 @@ function style404() {
    $('#mainbar-full > .rightcol > img').attr('src', siteProperties.PAGE404);
 }
 
-function showProposeChallangeButton() {
+function showProposeChallengeButton() {
   $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox">'+ main.PROPOSE + ' Challenge</a></li>');
   document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
 }
