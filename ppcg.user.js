@@ -1,9 +1,10 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.10.1
+// @version     3.10.2
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
+// @match       *://codegolf.meta.stackexchange.com/*
 // @match       *://chat.stackexchange.com/*
 // @author      PPCG Community
 // @grant       none
@@ -136,7 +137,7 @@ var meta = {
   DISP_ICON: "//i.stack.imgur.com/dY4TQ.png",
   SPRITE_SHEET: "//cdn.rawgit.com/vihanb/PPCG-Design/master/assets/sprites.svg",
 
-  SEARCH_TEXT: "Search meta.codegolf.SE",
+  SEARCH_TEXT: "Search codegolf.meta.SE",
 
   // Set to empty string for no background image
   BACKGROUND_IMAGE: "//i.stack.imgur.com/4535h.png",
@@ -380,7 +381,7 @@ if (site === "main" || site === "meta") {
   $("#search input").attr("placeholder", siteProperties.SEARCH_TEXT);
   $("#search input").queue("expand", function(){});
   $("#nav-askquestion").text(site === "main" ? "Post Challenge" : "Ask Question");
-  $(".bulletin-title:contains('Featured on Meta')").html('<a href="//meta.codegolf.stackexchange.com" class="bulletin-title" style="color: inherit !important"> Meta </a>');
+  $(".bulletin-title:contains('Featured on Meta')").html('<a href="//codegolf.meta.stackexchange.com" class="bulletin-title" style="color: inherit !important"> Meta </a>');
 
 
 
@@ -393,7 +394,7 @@ if (site === "main" || site === "meta") {
       showLeaderboard();
       // either editing or asking a question
       if (/questions\/ask/.test(document.location.href)) {
-         $('#wmd-preview').after('<div>Before you post, take some time to read through the <a href="http://meta.codegolf.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>');
+         $('#wmd-preview').after('<div>Before you post, take some time to read through the <a href="http://codegolf.meta.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>');
       }
    }
   
@@ -614,7 +615,7 @@ function addSettingsPane() {
 
 
 function showSandboxMsg() {
-     $('#wmd-preview').after('<div>Try reading through <a href="http://meta.codegolf.stackexchange.com/q/8047">the things to avoid when writing challenges</a> before you post.</div>');
+     $('#wmd-preview').after('<div>Try reading through <a href="http://codegolf.meta.stackexchange.com/q/8047">the things to avoid when writing challenges</a> before you post.</div>');
 }
 
 function showByteCounts() {
@@ -637,7 +638,7 @@ function style404() {
 }
 
 function showProposeChallengeButton() {
-  $("div.nav.askquestion ul").append('<li><a href="http://meta.codegolf.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox">'+ main.PROPOSE + ' Challenge</a></li>');
+  $("div.nav.askquestion ul").append('<li><a href="http://codegolf.meta.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox">'+ main.PROPOSE + ' Challenge</a></li>');
   document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
 }
 
