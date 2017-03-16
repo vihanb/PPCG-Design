@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.10.2
+// @version     3.10.3
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -19,10 +19,10 @@
 //////////////////////                        //////////////////////////
 ////////////////////////////////////////////////////////////////////////
 
-var site = window.location.hostname.slice(0, 4); // main, meta, or chat
-if(site === 'code') { // from codegolf.stackexchange.com
-  site = 'main';
-}
+var site = window.location.hostname; // main, meta, or chat
+if (/meta/.test(site)) site = 'meta';
+else if (/chat/.test(site)) site = 'chat';
+else site = 'main';
 
 // ["Propose", "Porpoise"], // >:D
 var reps = [
