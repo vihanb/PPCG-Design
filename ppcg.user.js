@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.10.4
+// @version     3.10.5
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -9,6 +9,7 @@
 // @author      PPCG Community
 // @grant       GM_getValue
 // @grant       GM_setValue
+// @require     https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js
 // @updateURL   https://rawgit.com/vihanb/PPCG-Design/master/ppcg.user.js
 // ==/UserScript==
 ////////////////////////////////////////////////////////////////////////
