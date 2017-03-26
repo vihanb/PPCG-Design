@@ -58,6 +58,11 @@ var QOD_ALTERNATING_TAGS = ['string', 'popularity-contest', 'ascii-art', 'number
   'base-conversion'
 ];
 
+// Chat runs by default
+if (GM_getValue('main.RUN_IN_CHAT') === undefined) {
+  GM_setValue('main.RUN_IN_CHAT', true);
+}
+
 if (site === 'chat' && (GM_getValue('main.RUN_IN_CHAT') !== true)) throw 'Not executing script';
 
 // Fonts
