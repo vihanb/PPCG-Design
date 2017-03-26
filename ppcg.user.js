@@ -382,6 +382,7 @@ if (site === 'main' || site === 'meta') {
   showProposeChallengeButton();
 
   if (site == 'main') {
+    $('nav-questions').innerHTML = 'Challenges';
     showLeaderboard();
     // either editing or asking a question
     if (/questions\/ask/.test(document.location.href)) {
