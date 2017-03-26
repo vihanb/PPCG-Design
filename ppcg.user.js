@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.10.5
+// @version     3.10.6
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -9,6 +9,7 @@
 // @author      PPCG Community
 // @grant       GM_getValue
 // @grant       GM_setValue
+// @grant       GM_listValues
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js
 // @updateURL   https://rawgit.com/vihanb/PPCG-Design/master/ppcg.user.js
 // ==/UserScript==
@@ -40,6 +41,12 @@ var reps = [
   //['Code Review', 'the evil code reviewers'] ihaichu - EasterlyIrk on behalf of CR.
 ];
 
+var rReps = new RegExp(reps.map(function (arr) {
+  return arr[0].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+}).join(''), 'g');
+
+var repMap = new Map(reps);
+
 /* These are the alternating tag choices for the QOD widget */
 var QOD_ALTERNATING_TAGS = ['string', 'popularity-contest', 'ascii-art', 'number',
   'kolmogorov-complexity', 'graphical-output', 'king-of-the-hill', 'fastest-code',
@@ -51,7 +58,7 @@ var QOD_ALTERNATING_TAGS = ['string', 'popularity-contest', 'ascii-art', 'number
   'base-conversion'
 ];
 
-if (site === 'chat' && (GM_getValue('RUN_IN_CHAT') !== true)) throw 'Not executing script';
+if (site === 'chat' && (GM_getValue('main.RUN_IN_CHAT') !== true)) throw 'Not executing script';
 
 // Fonts
 var HEADER_FONT = 'Lato, "Open Sans", Arial, sans-serif'; // Header text
@@ -78,15 +85,16 @@ var main = {
   BG_START: 'white',
   BG_REV: '#329300',
 
-  GOAT_MODE: (localStorage.getItem('main.GOAT_MODE') === 'true'), // default false
-  BACKGROUND_LIGHT: (localStorage.getItem('main.BACKGROUND_LIGHT') === 'true'), // Lighter shade of the background, CHANGE THROUGH OPTIONS
-  MODE_DARK: (localStorage.getItem('main.MODE_DARK') === 'true'),
-  USE_LEADERBOARD: (localStorage.getItem('main.USE_LEADERBOARD') !== 'false'), // default is true
-  SHOW_QOD_WIDGET: (localStorage.getItem('main.SHOW_QOD_WIDGET') !== 'false'), // default is true
-  USE_AUTOTIO: (localStorage.getItem('main.USE_AUTOTIO') !== 'false'), // default is true
-  PROPOSE: localStorage.getItem('main.PROPOSE') || 'Propose',
-  REPLACE_NAMES: localStorage.getItem('main.REPLACE_NAMES') === 'true', // default is false
-  SHOW_BYTE_COUNTS: localStorage.getItem('main.SHOW_BYTE_COUNTS') !== 'false', // default is true
+  GOAT_MODE: (GM_getValue('main.GOAT_MODE') === true), // default false
+  BACKGROUND_LIGHT: (GM_getValue('main.BACKGROUND_LIGHT') === true), // Lighter shade of the background, CHANGE THROUGH OPTIONS
+  MODE_DARK: (GM_getValue('main.MODE_DARK') === true),
+  RUN_IN_CHAT: (GM_getValue('main.RUN_IN_CHAT') !== false),
+  USE_LEADERBOARD: (GM_getValue('main.USE_LEADERBOARD') !== false), // default is true
+  SHOW_QOD_WIDGET: (GM_getValue('main.SHOW_QOD_WIDGET') !== false), // default is true
+  USE_AUTOTIO: (GM_getValue('main.USE_AUTOTIO') !== false), // default is true
+  PROPOSE: GM_getValue('main.PROPOSE') || 'Propose',
+  REPLACE_NAMES: GM_getValue('main.REPLACE_NAMES') === true, // default is false
+  SHOW_BYTE_COUNTS: GM_getValue('main.SHOW_BYTE_COUNTS') !== false, // default is true
 
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: '#FAFAFA',
@@ -104,6 +112,17 @@ var main = {
   TEXT_COLOR: 'black',
   CODE_COLOR: 'black',
   CODE_BACKGROUND: '#EEE',
+  TOPBAR: 'rgba(12, 13, 14, .86)',
+  LABEL_KEY: '#9199A1',
+  LABEL_KEY_B: '#3B4045',
+  MODULE_H4: '#3B4045',
+  HYPERLINK: '#4E82C2',
+  HYPERLINK_VISITED: '#18529A',
+  POST_HYPERLINK: '#4E82C2',
+  POST_HYPERLINK_VISITED: '#18529A',
+  QUESTION_STATUS: '#FFF7E5',
+  OWNER: '#E1ECF9',
+  USER_INFO: '#848D95',
 
   TAG_COLOR: '#D4F493',
   TAG_HOVER: '#329300',
@@ -120,8 +139,8 @@ var main = {
   BOUNTY_INDICATOR: '#6DAB71',
 
   // QOD Settings
-  QOD_NUMBER_OF_QS_SHOWN: JSON.parse(localStorage.getItem('QOD_NUMBER_OF_QS_SHOWN')) || 5,
-  QOD_ALWAYS_SHOWN_TAGS: JSON.parse(localStorage.getItem('QOD_ALWAYS_SHOWN_TAGS')) || ['code-golf', 'code-challenge', 'math']
+  QOD_NUMBER_OF_QS_SHOWN: GM_getValue('QOD_NUMBER_OF_QS_SHOWN') || 5,
+  QOD_ALWAYS_SHOWN_TAGS: JSON.parse(GM_getValue('QOD_ALWAYS_SHOWN_TAGS') || 0) || ['code-golf', 'code-challenge', 'math']
 };
 
 /** ~~~~~~~~~~~~~~~~ META SITE CUSTOMIZABLE PROPERTIES ~~~~~~~~~~~~~~~~ **/
@@ -156,6 +175,17 @@ var meta = {
   TEXT_COLOR: 'black',
   CODE_COLOR: 'black',
   CODE_BACKGROUND: '#EEE',
+  TOPBAR: 'rgba(12, 13, 14, .86)',
+  LABEL_KEY: '#9199A1',
+  LABEL_KEY_B: '#3B4045',
+  MODULE_H4: '#3B4045',
+  HYPERLINK: '#4E82C2',
+  HYPERLINK_VISITED: '#18529A',
+  POST_HYPERLINK: '#4E82C2',
+  POST_HYPERLINK_VISITED: '#18529A',
+  QUESTION_STATUS: '#FFF7E5',
+  OWNER: '#E1ECF9',
+  USER_INFO: '#848D95',
 
   // Specify nothing to make these default color
   BOUNTY_COLOR: 'rgb(72,125,75)',
@@ -177,8 +207,19 @@ var darktheme = {
   RIGHTBAR_BG: '#B0D4AB',
   RIGHTBAR_BORDER: 'none',
   TEXT_COLOR: '#D6ECCB',
-  CODE_COLOR: '#264730',
-  CODE_BACKGROUND: '#BDB'
+  CODE_COLOR: '#BDB',
+  CODE_BACKGROUND: '#264730',
+  TOPBAR: 'rgba(45, 64, 46, .86)',
+  LABEL_KEY: '#8FAF8E',
+  LABEL_KEY_B: '#B7D4A8',
+  MODULE_H4: '#B7D4A8',
+  HYPERLINK: '#6EC171',
+  HYPERLINK_VISITED: '#6EC171',
+  POST_HYPERLINK: '#6EC171',
+  POST_HYPERLINK_VISITED: '#6EC171',
+  QUESTION_STATUS: '#6B7D5A',
+  OWNER: '#609C86',
+  USER_INFO: '#B8C4CE'
 };
 
 var metadark = {
@@ -194,8 +235,19 @@ var metadark = {
   RIGHTBAR_BG: '#B0D4AB',
   RIGHTBAR_BORDER: 'none',
   TEXT_COLOR: '#DDD',
-  CODE_COLOR: '#222',
-  CODE_BACKGROUND: '#CCC'
+  CODE_COLOR: '#CCC',
+  CODE_BACKGROUND: '#222',
+  TOPBAR: 'rgba(12, 13, 14, .86)',
+  LABEL_KEY: '#9199A1',
+  LABEL_KEY_B: '#C1C1C1',
+  MODULE_H4: '#9199A1',
+  HYPERLINK: '#4E82C2',
+  HYPERLINK_VISITED: '#99B4D6',
+  POST_HYPERLINK: '#4E82C2',
+  POST_HYPERLINK_VISITED: '#18529A',
+  QUESTION_STATUS: '#FFF7E5',
+  OWNER: '#E1ECF9',
+  USER_INFO: '#848D95'
 };
 
 var lightbg = {
@@ -213,11 +265,11 @@ var BGHEIGHT = 0; // this + 130
 var PARSE_CODEBLOCKS = main.SHOW_BYTE_COUNTS; // set to false to not parse code block lengths
 var PARSE_HEXDUMPS = main.SHOW_BYTE_COUNTS; // set to false to not parse hexdump lengths
 
-if (localStorage.getItem('main.MODE_DARK') == 'true') {
+if (GM_getValue('main.MODE_DARK') === true) {
   main = $.extend(main, darktheme);
   meta = $.extend(meta, metadark);
 }
-if (localStorage.getItem('main.BACKGROUND_LIGHT') == 'true') {
+if (GM_getValue('main.BACKGROUND_LIGHT') === true) {
   main = $.extend(main, lightbg);
   document.body.style.backgroundRepeat = "repeat";
 }
@@ -227,7 +279,7 @@ if (localStorage.getItem('main.BACKGROUND_LIGHT') == 'true') {
 // add favicon 
 document.head.innerHTML += '<style>.favicon-codegolf{background-position: initial !important; background-image: url("' + main.FAVICON + '"); background-size: 100% 100% !important;}' +
   '.favicon-codegolfmeta{background-position: initial !important; background-image: url("' + meta.FAVICON + '"); background-size: 100% 100% !important;}</style>';
-$('.small-site-logo').each(function(i, el) {
+$('.small-site-logo').each(function (i, el) {
   if ($(el).attr('title') === 'Programming Puzzles & Code Golf') {
     $(el).attr('src', main.FAVICON);
   }
@@ -266,13 +318,13 @@ var match = $('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').at
 if (match.length > 0) {
   $('#input-area').css('background', 'url(' + 'http://i.stack.imgur.com/oqoGQ.png' + ')');
   $('#input-area').css('background-size', '600px 400px');
-  if (localStorage.getItem('main.MODE_DARK') == 'true') $('#input-area').css('background', 'url(' + darktheme.BACKGROUND_IMAGE + ')');
-  if (localStorage.getItem('main.BACKGROUND_LIGHT') == 'true') $('#input-area').css('background', 'url(' + lightbg.BACKGROUND_IMAGE + ')');
+  if (GM_getValue('main.MODE_DARK') == 'true') $('#input-area').css('background', 'url(' + darktheme.BACKGROUND_IMAGE + ')');
+  if (GM_getValue('main.BACKGROUND_LIGHT') == 'true') $('#input-area').css('background', 'url(' + lightbg.BACKGROUND_IMAGE + ')');
   document.head.innerHTML +=
     ('<style>' +
       'a.post-tag{border-radius: 0;text-align:center;font-family:' + MONOSPACE_FONT + ';font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border:none; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; border-bottom: 2px solid $$TAG_SHADOW_COLOR}' +
       'a.post-tag:hover{border-bottom-color: $$TAG_HOVER_SHADOW_COLOR;background: $$TAG_HOVER; color: white}' +
-      '</style>').replace(/\$\$(\w+)/g, function(_, m) {
+      '</style>').replace(/\$\$(\w+)/g, function (_, m) {
       return main[m];
     });
 }
@@ -294,12 +346,12 @@ if (site === 'chat') {
   $('#input-area').css('background', 'url(' + main.BACKGROUND_IMAGE + ')');
 
   /*  $('body').append('<img id="CHATBOX" style="z-index: 1000; display:none; position: fixed;">');
-  $(document).on('mouseenter', 'li[id^="summary_"], li[id^="summary_"] *', function() {
+  $(document).on('mouseenter', 'li[id^="summary_"], li[id^="summary_"] *', function () {
     $('#CHATBOX').show();
     var src = $(this).find('a[href*=".png"],a[href*=".jpeg"],a[href*=".jpg"],a[href*=".gif"],a[href*=".svg"]').attr('href');
     var pos = $(this).get(0).getBoundingClientRect();
     var i = new Image(src);
-    i.onload = function() {
+    i.onload = function () {
       $('#CHATBOX').attr({
         'src': src,
       });
@@ -309,7 +361,7 @@ if (site === 'chat') {
     });
     }
   });
-  $(document).on('mouseleave', 'li[id^="summary_"]', function() {
+  $(document).on('mouseleave', 'li[id^="summary_"]', function () {
     $('#CHATBOX').hide();
   });//*/ // Doesn't work :(
 
@@ -373,7 +425,7 @@ if (site === 'main' || site === 'meta') {
   }
 
   $('#search input').attr('placeholder', siteProperties.SEARCH_TEXT);
-  $('#search input').queue('expand', function() {});
+  $('#search input').queue('expand', function () {});
   $('#nav-askquestion').text(site === 'main' ? 'Post Challenge' : 'Ask Question');
   $('.bulletin-title:contains("Featured on Meta")').html('<a href="//codegolf.meta.stackexchange.com" class="bulletin-title" style="color: inherit !important"> Meta </a>');
 
@@ -415,8 +467,8 @@ if (site === 'main' || site === 'meta') {
   $('.started a:not(.started-link)').css('color', '#487D4B');
 
   // does this really need to be in setTimeout?
-  window.addEventListener('load', function() {
-    setTimeout(function() {
+  window.addEventListener('load', function () {
+    setTimeout(function () {
       document.getElementById('footer').setAttribute('style', 'background: transparent url("' + siteProperties.BACKGROUND_IMAGE + '") repeat fixed; background-size: 50%;');
     }, 300);
   });
@@ -473,7 +525,7 @@ function addSettingsPane() {
     '                   </div></div>' +
     '                   <div class="row">' +
     '                       <div class="col-12">' +
-    '                           <input class="OPT_Bool" id="chat_on" type="checkbox">' +
+    '                           <input class="OPT_Bool"  data-var="main.RUN_IN_CHAT" id="chat_on" type="checkbox">' +
     '                           <label for="chat_on">Use modified theme in chat</label>' +
     '           </div></div></div></div>' +
     '           <div class="inner-container inner-container-flex">' +
@@ -551,38 +603,34 @@ function addSettingsPane() {
     '       <button onclick="location.reload()" style="float: right;margin-top: 1em;">Apply Changes</button>' +
     '</div></div>');
 
-  $('#chat_on')[0].onclick = function() {
-    GM_setValue('RUN_IN_CHAT', true);
-  };
-
   $('#proposechoice').val(main.PROPOSE);
-  $('#proposechoice').change(function() {
+  $('#proposechoice').change(function () {
     var str = $(this).find('option:selected').val();
-    localStorage.setItem('main.PROPOSE', str);
+    GM_setValue('main.PROPOSE', str);
   });
   $('#qod-item-cnt').val('qs-' + main.QOD_NUMBER_OF_QS_SHOWN);
-  $('#qod-item-cnt').change(function() {
-    var str = +$(this).find('option:selected').val().slice(3);
-    localStorage.setItem('QOD_NUMBER_OF_QS_SHOWN', JSON.stringify(str));
+  $('#qod-item-cnt').change(function () {
+    var n = +$(this).find('option:selected').val().slice(3);
+    GM_setValue('QOD_NUMBER_OF_QS_SHOWN', +n);
     resetData();
   });
   $('#qod-always-shown-tags').val(main.QOD_ALWAYS_SHOWN_TAGS.join());
-  $('#qod-always-shown-tags').keypress(function() {
+  $('#qod-always-shown-tags').keypress(function () {
     var str = $('#qod-always-shown-tags').val().split(',');
     console.log('putting', str, 'old', main.QOD_ALWAYS_SHOWN_TAGS);
-    localStorage.setItem('QOD_ALWAYS_SHOWN_TAGS', JSON.stringify(str));
+    GM_setValue('QOD_ALWAYS_SHOWN_TAGS', JSON.stringify(str));
     resetData();
   });
 
-  $('#USER_Opt, #USER_Backblur').click(function() {
+  $('#USER_Opt, #USER_Backblur').click(function () {
     $('#USER_OptMenu').fadeToggle(50);
   });
-  $('.OPT_Bool').prop('checked', function() {
+  $('.OPT_Bool').prop('checked', function () {
     console.log('checking', $(this).data('var'), eval($(this).data('var')));
     return eval($(this).data('var'));
   });
-  $('.OPT_Bool').change(function() {
-    localStorage.setItem($(this).data('var'), $(this).is(':checked'));
+  $('.OPT_Bool').change(function () {
+    GM_setValue($(this).data('var'), $(this).is(':checked'));
   });
   $('<a>')
     .addClass('topbar-icon yes-hover')
@@ -606,10 +654,10 @@ function showSandboxMsg() {
 }
 
 function showByteCounts() {
-  $('.answer').each(function() {
+  $('.answer').each(function () {
     // Find the first header or strong element (some old posts use **this** for header) and set header to its text
     var header = $(this).find('h1, h2, h3, strong').first().text();
-    $(this).find('pre code').each(function() {
+    $(this).find('pre code').each(function () {
       var text = $(this).text().trim().replace('\r\n', '\n');
       $(this).parent().before('<div style="padding-bottom:4px;font-size:11px;font-family:' + TEXT_FONT + '">' + bytes(text, header) + ', ' + formatChars(text) + '</div>');
     });
@@ -634,7 +682,7 @@ function showVoteCounts() {
   try {
     void
 
-    function(t) {
+    function (t) {
       var e = t.head || t.getElementsByTagName('head')[0] || t.documentElement,
         o = t.createElement('style'),
         n = '/*Added through UserScript*/.vote-count-post{cursor:pointer;}.vote-count-post[title]{cursor:default;}.vote-count-separator{height:0;*margin-left:0;}';
@@ -643,16 +691,16 @@ function showVoteCounts() {
       else
         o.appendChild(t.createTextNode(n));
       var s = t.createElement('script');
-      s['textContent' in s ? 'textContent' : 'text'] = '(' + function() {
+      s['textContent' in s ? 'textContent' : 'text'] = '(' + function () {
         var t = location.protocol + '//api.stackexchange.com/2.0/posts/',
           e = '?filter=!)q3b*aB43Xc&key=DwnkTjZvdT0qLs*o8rNDWw((&site=' + location.hostname,
           o = 1,
           n = StackExchange.helpers,
           s = $.fn.click;
-        $.fn.click = function() {
+        $.fn.click = function () {
           return this.hasClass('vote-count-post') && !o ? this : s.apply(this, arguments);
         };
-        var r = function(s) {
+        var r = function (s) {
           var r, a = $(this),
             i = this.title;
           if (!(/up \/ /.test(i) || /View/.test(i) && o)) {
@@ -664,18 +712,18 @@ function showVoteCounts() {
               type: 'GET',
               url: t + c + e + '&callback=?',
               dataType: 'json',
-              success: function(t) {
+              success: function (t) {
                 t = t.items[0];
                 var e = t.up_vote_count,
                   o = t.down_vote_count;
                 e = e ? '+' + e : 0;
                 o = o ? '-' + o : 0;
-                $('.error-notification').fadeOut('fast', function() {
+                $('.error-notification').fadeOut('fast', function () {
                   $(this).remove();
                 });
                 a.css('cursor', 'default').attr('title', e + ' up / ' + o + ' down').html('<div style="color:green">' + e + '</div><div class="vote-count-separator"></div><div style="color:maroon">' + o + '</div>');
               },
-              error: function(t) {
+              error: function (t) {
                 n.removeSpinner();
                 n.showErrorPopup(a.parent(), t.responseText && t.responseText.length < 100 ? t.responseText : 'An error occurred during vote count fetch');
               }
@@ -697,7 +745,7 @@ function showVoteCounts() {
 }
 
 function breakoutTIOLinks() {
-  $('.answer').each(function() {
+  $('.answer').each(function () {
     var tiolinks = $(this).find('a[href*="tryitonline.net"]');
     if (tiolinks[0]) {
       // They are tryitonline links
@@ -705,9 +753,9 @@ function breakoutTIOLinks() {
       var run = function run($this) {
         var parts = {};
         if ($this.attr('href').split('#')[1]) {
-          var _parts = $this.attr('href').split('#')[1].split('&').map(function(i) {
+          var _parts = $this.attr('href').split('#')[1].split('&').map(function (i) {
             return [i.split('=')[0], i.split('=')[1]];
-          }).forEach(function(l) {
+          }).forEach(function (l) {
             parts[l[0]] = l[1];
           });
 
@@ -724,7 +772,7 @@ function breakoutTIOLinks() {
               var output = '';
               r.open('POST', url + '/cgi-bin/backend');
               running = true;
-              r.onreadystatechange = function() {
+              r.onreadystatechange = function () {
                 if (running && r.responseText.length > 32) {
                   uuid = r.responseText.substr(0, 32);
                 }
@@ -758,9 +806,9 @@ function showLeaderboard() {
   // Leaderboard
   if (main.USE_LEADERBOARD && $('.post-taglist .post-tag[href$="code-golf"]')[0] && !$('.post-taglist .post-tag[href$="tips"]')[0] && $('.answer')[1]) { // Tagged code-golf and has more than 1 answers
     var answers = [];
-    loadAnswers(function(json) {
-      answers = json.map(function(i, l, a) {
-        i.body = i.body.replace(/[\u2010-\u2015\u2212]/g, '-').replace(/^(?!<p><strong>|<h\d>)(.(?!<p><strong>|<h\d>))*/, '').replace(/<(strike|s|del)>.*?<\/\1>/g, '').replace(/<a [^>]+>(.*)<\/a>/g, '$1').replace(/\(\s*(\d+)/g, ', $1').replace(/\s*-\s+|:\s*/, ', ').replace(/(\d+)\s*\+\s*(\d+)/g, function(_, x, y) {
+    loadAnswers(function (json) {
+      answers = json.map(function (i, l, a) {
+        i.body = i.body.replace(/[\u2010-\u2015\u2212]/g, '-').replace(/^(?!<p><strong>|<h\d>)(.(?!<p><strong>|<h\d>))*/, '').replace(/<(strike|s|del)>.*?<\/\1>/g, '').replace(/<a [^>]+>(.*)<\/a>/g, '$1').replace(/\(\s*(\d+)/g, ', $1').replace(/\s*-\s+|:\s*/, ', ').replace(/(\d+)\s*\+\s*(\d+)/g, function (_, x, y) {
           return +x + (+y);
         });
         var copyvalue = i.body;
@@ -779,12 +827,12 @@ function showLeaderboard() {
         return [j, i, copyvalue, e];
       });
       var lv = 0;
-      answers = answers.filter(function(a) {
+      answers = answers.filter(function (a) {
         return !isNaN(a[0]);
-      }).sort(function(a, b) {
+      }).sort(function (a, b) {
         return a[0] - b[0];
       });
-      var generatedanswertable = answers.map(function(l, i, a) {
+      var generatedanswertable = answers.map(function (l, i, a) {
         if ((a[i - 1] || [NaN])[0] !== l[0]) lv = (i || 0) + 1;
         return '<tr><td>' + lv + '</td><td><a href="' + l[1].owner.link + '">' + l[1].owner.display_name + '</a></td><td>' + (l[3] /*(l[2].match(/(?:<h\d>|<p><strong>)(.+?)[,  -]\s*(?:(?:\d*\.\d+|\d+)(?:\s*%)?(?:\s*[+*\/\-]\s*(?:\d*\.\d+|\d+)(?:\s*%)?)+\s*=\s*)?(?:-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/)||[])[1]||(l[2].match(/\s*(?:<h\d>|<p><strong>)(\s*<a [^ >]+.+?<\/a>|(?:[#A-Za-z_\s\.\u00FF-\uFFFF!?]|(?:(?=\d+[^\d\n]+\d+\D*(?:<\/|$|\n))\d)|(?:(?=-\s?[A-Za-z_\u00FF-\uFFFF!?]).)|(?:(?=.+(,)),))+)/)||[0,'Lang N/A'])[1]*/ ).trim() + '</td><td>' + l[0] + ' bytes</td><td><a href="' + l[1].link + '">Link</a></td></tr>';
       });
@@ -792,9 +840,9 @@ function showLeaderboard() {
       $('#answers').prepend('<div style="border: 1px solid #e0e0e0; border-left: none; border-right: none; margin: 15px 0px; padding: 15px;"> <b>The current winner</b> is <a href="' + answers[0][1].owner.link + '">' + answers[0][1].owner.display_name + '&apos;s</a> ' + answers[0][3] + ' <a href="' + answers[0][1].link + '">answer</a> at ' + answers[0][0] + ' bytes ' + (tryitonlineattempt ? ' &#8213 <a href="' + tryitonlineattempt + '">TryItOnline&trade;</a>!' : '') + '</div>');
       $('.question .post-text').append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>' +
         '<div id="USER_BOARD" style="display:none"><table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Author</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>' + generatedanswertable.join('\n') + '</tbody></table> </div>');
-      $('#USER_BOARD_TEXT').click(function() {
-        $('#USER_BOARD').slideToggle(50, function() {
-          $('#USER_BOARD_TEXT').text(function() {
+      $('#USER_BOARD_TEXT').click(function () {
+        $('#USER_BOARD').slideToggle(50, function () {
+          $('#USER_BOARD_TEXT').text(function () {
             return $('#USER_BOARD').is(':visible') ? 'Hide Answer Leadboard ▼' : 'Show Answer Leadboard ▶';
           });
         });
@@ -812,7 +860,19 @@ function applyCss() {
   $('#mainbar').css('padding', '15px');
   document.head.innerHTML +=
     ('<style>@import url(' + FONT_URL + ');' +
+      'body{color: $$TEXT_COLOR}' +
       'code,pre{color:$$CODE_COLOR;background-color:$$CODE_BACKGROUND}' +
+      '.topbar{background:$$TOPBAR}' +
+      '.label-key{color:$$LABEL_KEY}' +
+      '.label-key b,.label-key strong{color:$$LABEL_KEY_B}' +
+      '.module h4{color:$$MODULE_H4}' +
+      '.owner{background:$$OWNER}' +
+      '.user-info{background:$$USER_INFO}' +
+      '.question-status{background:$$QUESTION_STATUS}' +
+      '.question-hyperlink,.answer-hyperlink,#hot-network-questions ul a{color:$$HYPERLINK}' +
+      '.question-hyperlink:visited,.answer-hyperlink:visited,#hot-network-questions ul a:visited{color:$$HYPERLINK_VISITED}' +
+      '.post-text a,.comment-text a:not(.comment-user){color:$$POST_HYPERLINK}' +
+      '.post-text a:visited,.comment-text a:not(.comment-user):visited{color:$$POST_HYPERLINK_VISITED}' +
       '.envelope-on,.envelope-off,.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.star-on,.star-off,.comment-up-off,.comment-up-on,.comment-flag,.edited-yes,.feed-icon,.vote-accepted-off,.vote-accepted-on,.vote-accepted-bounty,.badge-earned-check,.delete-tag,.grippie,.expander-arrow-hide,.expander-arrow-show,.expander-arrow-small-hide,.expander-arrow-small-show,.anonymous-gravatar,.badge1,.badge2,.badge3,.gp-share,.fb-share,.twitter-share,#notify-containerspan.notify-close,.migrated.to,.migrated.from{background-image:url(\'$$SPRITE_SHEET\');background-size: initial;}' +
       '.youarehere{color:$$CURR_TAB_COLOR !important;border-bottom:2px solid $$CURR_TAB_COLOR !important;}' +
       '#sidebar #beta-stats, #sidebar #promo-box{background:$$RIGHTBAR_BG;border:$$RIGHTBAR_BORDER}' +
@@ -870,18 +930,35 @@ function applyCss() {
       'color:$$VISITED_LINK_COLOR}' +
       'a:hover {' +
       'color:$$HOVER_LINK_COLOR}' +
-      '</style>').replace(/\$\$(\w+)/g, function(_, x) {
+      '</style>').replace(/\$\$(\w+)/g, function (_, x) {
       console.log('got to', x);
       return eval(site + '.' + x);
     });
 }
 
 function replaceNames() {
-  reps.forEach(function(r) {
-    try {
-      document.body.innerHTML = document.body.innerHTML.replace(RegExp(r[0], 'gi'), r[1]);
-    } catch (e) {}
+  //from https://j11y.io/javascript/replacing-text-in-the-dom-its-not-that-simple/
+  $('p').each(function (){
+      traverseChildNodes(this);
   });
+   
+  function traverseChildNodes(node) {
+    var next;
+    if (node.nodeType === 1) {
+      if ((node = node.firstChild)) {
+          do {
+              next = node.nextSibling;
+              traverseChildNodes(node);
+          } while((node = next));
+      }
+    } else if (node.nodeType === 3) {
+      if (rReps.test(node.data)) {
+        node.data = node.data.replace(rReps, function (match) {
+          return repMap[match];
+        });
+      }
+    }
+  }
 }
 
 function qS(x) {
@@ -889,7 +966,7 @@ function qS(x) {
 }
 
 function unicodes(x) {
-  return (x.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\n|./g) || []).map(function(c) {
+  return (x.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\n|./g) || []).map(function (c) {
     return c[1] ? (c.charCodeAt(0) & 1023) * 1024 + (c.charCodeAt(1) & 1023) + 65536 : c.charCodeAt(0);
   });
 }
@@ -917,7 +994,7 @@ function bytes(code, lang) { // Takes in a length of text and piece of header te
   lang = lang || '';
   if (PARSE_HEXDUMPS) {
     var a = '';
-    code.replace(/[\da-f]{6,8}:? ((?:[\da-f][\da-f] ?){10,})[^\n]*\n?/gi, function(_, z) {
+    code.replace(/[\da-f]{6,8}:? ((?:[\da-f][\da-f] ?){10,})[^\n]*\n?/gi, function (_, z) {
       a += z.replace(/\s/g, '');
     });
     if (a) return formatBytes(a.length / 2, 'hex');
@@ -927,9 +1004,9 @@ function bytes(code, lang) { // Takes in a length of text and piece of header te
   if ((/iso.?8859.7/i.test(lang) || ISO_8859_7_langs.test(lang)) && ISO_8859_7.test(code)) return formatBytes(chars(code), 'ISO-8859-7');
   if (/utf.?16/i.test(lang) || UTF_16_langs.test(lang)) return formatBytes(code.length * 2, 'UTF-16');
   if (custom_langs.test(lang)) return formatBytes(chars(code), lang.match(custom_langs)[0]);
-  return formatBytes(unicodes(code).map(function(c) {
+  return formatBytes(unicodes(code).map(function (c) {
     return c >> 16 ? 4 : c >> 11 ? 3 : c >> 7 ? 2 : 1;
-  }).reduce(function(a, b) {
+  }).reduce(function (a, b) {
     return a + b;
   }, 0), 'UTF-8');
 }
@@ -983,7 +1060,7 @@ function addQuestionOfTheDay() {
 
   if (favTags) {
     favTags.after(questionOfTheDayHtml);
-    (main.QOD_ALWAYS_SHOWN_TAGS.concat(getOtherTags())).forEach(function(tag) {
+    (main.QOD_ALWAYS_SHOWN_TAGS.concat(getOtherTags())).forEach(function (tag) {
       addTag(tag);
     });
   }
@@ -992,7 +1069,7 @@ function addQuestionOfTheDay() {
 
 /* Add a tag to the question of the day widget */
 function addTag(tag) {
-  getQuestion(tag, function(a) {
+  getQuestion(tag, function (a) {
     $('#question-of-the-day-content').append(
       '<div class="qod-item"><span>' +
       '<a href="/questions/tagged/' + tag + '" class="post-tag user-tag" title="show questions tagged ' + tag + '" rel="tag">' + tag +
@@ -1005,7 +1082,7 @@ function getOtherTags() {
   var dataName = 'other-tags-today';
   var numberOfTags = main.QOD_NUMBER_OF_QS_SHOWN - main.QOD_ALWAYS_SHOWN_TAGS.length;
 
-  var tags = localStorage.getItem(dataName);
+  var tags = GM_getValue(dataName);
   if (tags) {
     tags = JSON.parse(tags);
   } else {
@@ -1015,7 +1092,7 @@ function getOtherTags() {
       /* if (main.QOD_ALWAYS_SHOWN_TAGS.concat(tags).indexOf(tags[i]) !== -1) { // we failed and need a new tag that wasn't done yet
         i--; } */
     }
-    localStorage.setItem(dataName, JSON.stringify(tags));
+    GM_setValue(dataName, JSON.stringify(tags));
   }
 
   return tags;
@@ -1024,12 +1101,12 @@ function getOtherTags() {
 // check to see if we need to refresh the question list
 function isTimeToGetNewQs() {
   var key = 'lastDateRefreshedQOD';
-  var lastUpdate = JSON.parse(localStorage.getItem(key));
+  var lastUpdate = GM_getValue(key) || 0;
 
   if (lastUpdate !== null && lastUpdate !== undefined) {
     return lastUpdate !== new Date().getDate();
   } else {
-    localStorage.setItem(key, JSON.stringify(new Date().getDate()));
+    GM_setValue(key, new Date().getDate());
     return false;
   }
 }
@@ -1039,26 +1116,25 @@ function resetData() {
   for (var i = 0; i < localStorage.length; i++) {
 
     var k = localStorage.key(i);
-    if (k.indexOf('tag') !== -1 && k.indexOf('QOD') === -1) {
+    if (k.indexOf('tag') !== -1 && k.indexOf('QOD') === -1)
       toRemove = toRemove.concat(k);
-    }
   }
-  console.log('data to rm', toRemove);
+  console.log('data to remove', toRemove);
 
   for (var j = 0; j < toRemove.length; j++) {
     localStorage.removeItem(toRemove[j]);
   }
 
-  localStorage.setItem('lastDateRefreshedQOD', JSON.stringify(new Date().getDate()));
+  GM_setValue('lastDateRefreshedQOD', JSON.stringify(new Date().getDate()));
 }
 
 /* Get all questions that are taged, are >1yr old, have a score >7, and are not alrady in the QOD widget */
 function getValidQuestions(tag, onDone) {
-  var url = 'https://api.stackexchange.com/2.2/search/advanced?order=desc&key=DwnkTjZvdT0qLs*o8rNDWw((&min=7&todate=1420070400&sort=votes&closed=False&tagged="+tag+"&site=codegolf';
-  httpGetAsync(url, function(ret) {
+  var url = 'https://api.stackexchange.com/2.2/search/advanced?order=desc&key=DwnkTjZvdT0qLs*o8rNDWw((&min=7&todate=1420070400&sort=votes&closed=False&tagged=' + tag + '&site=codegolf';
+  httpGetAsync(url, function (ret) {
     var items = JSON.parse(ret).items;
     var currentUrls = getCurrentUrls();
-    items = items.filter(function(x) {
+    items = items.filter(function (x) {
       return currentUrls.indexOf(x.link) === -1;
     });
     onDone(items);
@@ -1068,11 +1144,12 @@ function getValidQuestions(tag, onDone) {
 function getCurrentUrls() {
   var storageSuffix = '-tag-question';
   var urls = [];
+  var vals = GM_listValues();
 
-  for (var i = 0; i < localStorage.length; i++) {
-    var k = localStorage.key(i);
+  for (var i = 0; i < vals.length; i++) {
+    var k = vals[i];
     if (k.indexOf(storageSuffix) !== -1) {
-      urls = urls.concat(JSON.parse(localStorage.getItem(k)).url);
+      urls = urls.concat(JSON.parse(GM_getValue(k) || '{}').url);
     }
   }
   return urls;
@@ -1081,20 +1158,20 @@ function getCurrentUrls() {
 /* Check storage for the question, or grab a new one. callback argument is {url: ..., title: ...} */
 function getQuestion(tag, callback) {
   var storageSuffix = '-tag-question';
-  var item = localStorage.getItem(tag + storageSuffix);
+  var item = GM_getValue(tag + storageSuffix);
 
   if (item) {
     item = JSON.parse(item);
     callback(item);
   } else {
-    getValidQuestions(tag, function(ret) {
+    getValidQuestions(tag, function (ret) {
       var q = ret[Math.floor(Math.random() * ret.length)];
       var urlTitleMap = {
         'url': q.link,
         'title': q.title
       };
 
-      localStorage.setItem(tag + storageSuffix, JSON.stringify(urlTitleMap));
+      GM_setValue(tag + storageSuffix, JSON.stringify(urlTitleMap));
       callback(urlTitleMap);
     });
   }
@@ -1104,7 +1181,7 @@ function getQuestion(tag, callback) {
 function httpGetAsync(theUrl, callback) {
   // http://stackoverflow.com/a/4033310/4683264
   var xmlHttp = new XMLHttpRequest();
-  xmlHttp.onreadystatechange = function() {
+  xmlHttp.onreadystatechange = function () {
     if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
       callback(xmlHttp.responseText);
     }
