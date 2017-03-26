@@ -122,7 +122,7 @@ var main = {
   POST_HYPERLINK_VISITED: '#18529A',
   QUESTION_STATUS: '#FFF7E5',
   OWNER: '#E1ECF9',
-  USER_INFO: '#848D95',
+
 
   TAG_COLOR: '#D4F493',
   TAG_HOVER: '#329300',
@@ -185,7 +185,6 @@ var meta = {
   POST_HYPERLINK_VISITED: '#18529A',
   QUESTION_STATUS: '#FFF7E5',
   OWNER: '#E1ECF9',
-  USER_INFO: '#848D95',
 
   // Specify nothing to make these default color
   BOUNTY_COLOR: 'rgb(72,125,75)',
