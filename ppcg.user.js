@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.11.1
+// @version     3.11.0
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -338,60 +338,6 @@ if (match.length > 0) {
 ////////////////////////////////////////////////////////////
 
 if (site === 'chat') {
-  $('body').css('background', 'white');
-  $('#sound').css({
-    'background': 'url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Speaker_Icon.svg/200px-Speaker_Icon.svg.png)',
-    'background-size': '16px 16px'
-  });
-  $('#roomname').css('font-family', 'Lato');
-  $('#roomname').css('font-weight', '800');
-  $('#searchbox').css('padding-left', '4px !important');
-  $('#footer-logo a').text('Programming Puzzles & Code Golf').css('color', '#2A2');
-  $('#input-area').css('background', 'url(' + main.BACKGROUND_IMAGE + ')');
-
-  /*  $('body').append('<img id="CHATBOX" style="z-index: 1000; display:none; position: fixed;">');
-  $(document).on('mouseenter', 'li[id^="summary_"], li[id^="summary_"] *', function () {
-    $('#CHATBOX').show();
-    var src = $(this).find('a[href*=".png"],a[href*=".jpeg"],a[href*=".jpg"],a[href*=".gif"],a[href*=".svg"]').attr('href');
-    var pos = $(this).get(0).getBoundingClientRect();
-    var i = new Image(src);
-    i.onload = function () {
-      $('#CHATBOX').attr({
-        'src': src,
-      });
-      $('#CHATBOX').css({
-      'left': pos.left - i.width + 'px',
-      'top': pos.top - i.height + 'px'
-    });
-    }
-  });
-  $(document).on('mouseleave', 'li[id^="summary_"]', function () {
-    $('#CHATBOX').hide();
-  });//*/ // Doesn't work :(
-
-  document.head.innerHTML += '<style>' +
-    '@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic|Open+Sans:400,400italic,700,700italic&subset=latin,greek);' +
-    'body { font-family: "Open Sans"; font-size: 12px; }' +
-
-    '.button { cursor: pointer; background: #96db62; border: none; border-bottom: 1px solid rgb(106, 194, 65) }' +
-    '.button:hover { background: #51cc47; border-bottom-color: #449656; }' +
-
-    '.favorite-room-vote { background: url(http://i.stack.imgur.com/DhUx0.png); background-size: 16px 16px }' +
-    '.favorite-room-vote.favorite-room { background: url(http://i.stack.imgur.com/lbBdl.png); background-size: 16px 16px }' +
-
-    '.message:hover { border: 1px solid #e3e3e3 !important }' +
-
-    '.message:hover .action-link, .message:hover .action-link .img.menu { background-color: #F3F3F3 !important }' +
-    '.message:hover .action-link .img.menu { background-image: url(http://i.stack.imgur.com/3gBKh.png) !important; background-size: 16px 16px; background-position: 0px -1px !important; }' +
-
-    '.vote-count-container.stars .img { background-image: url(http://i.stack.imgur.com/DhUx0.png) !important; background-size: 10px 10px; background-position: initial !important; }' +
-    '.vote-count-container.stars.user-star .img { background-image: url(http://i.stack.imgur.com/lbBdl.png) !important; }' +
-
-////////////////////////////////////////////////////////////
-//////////////////    CHAT STYLES     //////////////////////
-////////////////////////////////////////////////////////////
-
-if (site === 'chat' && document.getElementById("footer-logo").getElementsByTagName("a")[0].href === "http://codegolf.stackexchange.com/") {
   $('body').css('background', 'white');
   $('#sound').css({
     'background': 'url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Speaker_Icon.svg/200px-Speaker_Icon.svg.png)',
