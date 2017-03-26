@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.11.0
+// @version     3.11.1
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -22,6 +22,12 @@ var site = window.location.hostname; // main, meta, or chat
 if (/meta/.test(site)) site = 'meta';
 else if (/chat/.test(site)) site = 'chat';
 else site = 'main';
+
+$('[rel="shortcut icon"][href^="//cdn.sstatic.net/Sites/codegolf/img/favicon.ico"]').attr('href', 'https://i.stack.imgur.com/oHkfe.png');
+$('img[src^="//cdn.sstatic.net/Sites/codegolf/img/favicon.ico"]').attr('src', 'https://i.stack.imgur.com/oHkfe.png');
+
+if (site === 'chat' && !$('[rel="shortcut icon"]')[0].href.startsWith('https://i.stack.imgur.com/oHkfe.png'))
+  throw 'Site is chat site but not PPCG chat, aborting PPCG design userscript';
 
 // ['Propose', 'Porpoise'], // >:D
 var reps = [
@@ -57,11 +63,6 @@ var QOD_ALTERNATING_TAGS = ['string', 'popularity-contest', 'ascii-art', 'number
   'path-finding', 'puzzle-solver', 'underhanded', 'source-layout',
   'base-conversion'
 ];
-
-// Chat runs by default
-if (GM_getValue('main.RUN_IN_CHAT') === undefined) {
-  GM_setValue('main.RUN_IN_CHAT', true);
-}
 
 if (site === 'chat' && (GM_getValue('main.RUN_IN_CHAT') !== true)) throw 'Not executing script';
 
@@ -127,7 +128,7 @@ var main = {
   POST_HYPERLINK_VISITED: '#18529A',
   QUESTION_STATUS: '#FFF7E5',
   OWNER: '#E1ECF9',
-
+  USER_INFO: '#848D95',
 
   TAG_COLOR: '#D4F493',
   TAG_HOVER: '#329300',
@@ -190,6 +191,7 @@ var meta = {
   POST_HYPERLINK_VISITED: '#18529A',
   QUESTION_STATUS: '#FFF7E5',
   OWNER: '#E1ECF9',
+  USER_INFO: '#848D95',
 
   // Specify nothing to make these default color
   BOUNTY_COLOR: 'rgb(72,125,75)',
@@ -288,7 +290,6 @@ $('.small-site-logo').each(function (i, el) {
     $(el).attr('src', main.FAVICON);
   }
 });
-$('[rel="shortcut icon"][href^="//cdn.sstatic.net/Sites/codegolf/img/favicon.ico"]').attr('href', '//i.stack.imgur.com/oHkfe.png');
 
 // apply goat mode
 if (main.GOAT_MODE) {
@@ -872,7 +873,7 @@ function applyCss() {
       '.label-key b,.label-key strong{color:$$LABEL_KEY_B}' +
       '.module h4{color:$$MODULE_H4}' +
       '.owner{background:$$OWNER}' +
-      '.user-info{background:$$USER_INFO}' +
+      '.user-info{color:$$USER_INFO}' +
       '.question-status{background:$$QUESTION_STATUS}' +
       '.question-hyperlink,.answer-hyperlink,#hot-network-questions ul a{color:$$HYPERLINK}' +
       '.question-hyperlink:visited,.answer-hyperlink:visited,#hot-network-questions ul a:visited{color:$$HYPERLINK_VISITED}' +
