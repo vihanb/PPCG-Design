@@ -649,7 +649,7 @@ function addSettingsPane() {
     })
     .attr({
       id: 'toggleSite',
-      href: (site === 'meta' ? '//' : '//meta.') + 'codegolf.stackexchange.com',
+      href: '//codegolf' + (site === 'meta' ? '' : '.meta') + '.stackexchange.com',
       title: 'Switch to ' + (site === 'meta' ? 'main' : 'meta')
     })
     .appendTo('.network-items');
