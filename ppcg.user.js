@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.11.2
+// @version     3.11.3
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -85,7 +85,7 @@ var main = {
 
   // Set to empty string for no background image
   BACKGROUND_IMAGE: '//i.stack.imgur.com/4Y7TE.png',
-  PAGE404: 'http://i.stack.imgur.com/ToEtE.png',
+  PAGE404: '//i.stack.imgur.com/ToEtE.png',
   BG_COL: '#175D2E',
   BG_COL_HOVER: 'white',
   BG_START: 'white',
@@ -295,22 +295,22 @@ $('.small-site-logo').each(function (i, el) {
 if (main.GOAT_MODE) {
   $('head').append($('<style/>', {
     html: '.vote-up-off {' +
-      '  background-image: url(http://cdn.rawgit.com/somebody1234/Misc-Files/master/upgoat-off.svg) !important;' +
+      '  background-image: url(https://cdn.rawgit.com/somebody1234/Misc-Files/master/upgoat-off.svg) !important;' +
       '  background-size: 100% !important;' +
       '  background-position: 0px 0px;' +
       '}' +
       '.vote-down-off {' +
-      '  background-image: url(http://cdn.rawgit.com/somebody1234/Misc-Files/master/downgoat-off.svg) !important;' +
+      '  background-image: url(https://cdn.rawgit.com/somebody1234/Misc-Files/master/downgoat-off.svg) !important;' +
       '  background-size: 100% !important;' +
       '  background-position: 0px 0px;' +
       '}' +
       '.vote-up-on {' +
-      '  background-image: url(http://cdn.rawgit.com/somebody1234/Misc-Files/master/upgoat.svg) !important;' +
+      '  background-image: url(https://cdn.rawgit.com/somebody1234/Misc-Files/master/upgoat.svg) !important;' +
       '  background-size: 100% !important;' +
       '  background-position: 0px 0px;' +
       '}' +
       '.vote-down-on {' +
-      '  background-image: url(http://cdn.rawgit.com/somebody1234/Misc-Files/master/downgoat.svg) !important;' +
+      '  background-image: url(https://cdn.rawgit.com/somebody1234/Misc-Files/master/downgoat.svg) !important;' +
       '  background-size: 100% !important;' +
       '  background-position: 0px 0px;' +
       '}'
@@ -321,7 +321,7 @@ if (main.GOAT_MODE) {
 
 var match = $('link[href="//cdn.sstatic.net/codegolf/img/favicon.ico?v=cf"]').attr('href', main.FAVICON);
 if (match.length > 0) {
-  $('#input-area').css('background', 'url(' + 'http://i.stack.imgur.com/oqoGQ.png' + ')');
+  $('#input-area').css('background', 'url(' + 'https://i.stack.imgur.com/oqoGQ.png' + ')');
   $('#input-area').css('background-size', '600px 400px');
   if (GM_getValue('main.MODE_DARK') == 'true') $('#input-area').css('background', 'url(' + darktheme.BACKGROUND_IMAGE + ')');
   if (GM_getValue('main.BACKGROUND_LIGHT') == 'true') $('#input-area').css('background', 'url(' + lightbg.BACKGROUND_IMAGE + ')');
@@ -377,16 +377,16 @@ if (site === 'chat') {
     '.button { cursor: pointer; background: #96db62; border: none; border-bottom: 1px solid rgb(106, 194, 65) }' +
     '.button:hover { background: #51cc47; border-bottom-color: #449656; }' +
 
-    '.favorite-room-vote { background: url(http://i.stack.imgur.com/DhUx0.png); background-size: 16px 16px }' +
-    '.favorite-room-vote.favorite-room { background: url(http://i.stack.imgur.com/lbBdl.png); background-size: 16px 16px }' +
+    '.favorite-room-vote { background: url(https://i.stack.imgur.com/DhUx0.png); background-size: 16px 16px }' +
+    '.favorite-room-vote.favorite-room { background: url(https://i.stack.imgur.com/lbBdl.png); background-size: 16px 16px }' +
 
     '.message:hover { border: 1px solid #e3e3e3 !important }' +
 
     '.message:hover .action-link, .message:hover .action-link .img.menu { background-color: #F3F3F3 !important }' +
-    '.message:hover .action-link .img.menu { background-image: url(http://i.stack.imgur.com/3gBKh.png) !important; background-size: 16px 16px; background-position: 0px -1px !important; }' +
+    '.message:hover .action-link .img.menu { background-image: url(https://i.stack.imgur.com/3gBKh.png) !important; background-size: 16px 16px; background-position: 0px -1px !important; }' +
 
-    '.vote-count-container.stars .img { background-image: url(http://i.stack.imgur.com/DhUx0.png) !important; background-size: 10px 10px; background-position: initial !important; }' +
-    '.vote-count-container.stars.user-star .img { background-image: url(http://i.stack.imgur.com/lbBdl.png) !important; }' +
+    '.vote-count-container.stars .img { background-image: url(https://i.stack.imgur.com/DhUx0.png) !important; background-size: 10px 10px; background-position: initial !important; }' +
+    '.vote-count-container.stars.user-star .img { background-image: url(https://i.stack.imgur.com/lbBdl.png) !important; }' +
 
     '.monologue { margin-bottom: 0; padding-top: 0; }' +
     '.monologue:first-child .messages { border-top: 1px solid #F2F2F2 }' +
@@ -443,7 +443,7 @@ if (site === 'main' || site === 'meta') {
     showLeaderboard();
     // either editing or asking a question
     if (/questions\/ask/.test(document.location.href)) {
-      $('#wmd-preview').after('<div>Before you post, take some time to read through the <a href="http://codegolf.meta.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>');
+      $('#wmd-preview').after('<div>Before you post, take some time to read through the <a href="https://codegolf.meta.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default" target="_blank">forbidden loopholes</a> if you haven\'t done so already.</div>');
     }
   }
 
@@ -656,7 +656,7 @@ function addSettingsPane() {
 }
 
 function showSandboxMsg() {
-  $('#wmd-preview').after('<div>Try reading through <a href="http://codegolf.meta.stackexchange.com/q/8047">the things to avoid when writing challenges</a> before you post.</div>');
+  $('#wmd-preview').after('<div>Try reading through <a href="https://codegolf.meta.stackexchange.com/q/8047">the things to avoid when writing challenges</a> before you post.</div>');
 }
 
 function showByteCounts() {
@@ -679,8 +679,8 @@ function style404() {
 }
 
 function showProposeChallengeButton() {
-  $('div.nav.askquestion ul').append('<li><a href="http://codegolf.meta.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox">' + main.PROPOSE + ' Challenge</a></li>');
-  document.head.innerHTML += '<script src="http://cdn.sstatic.net/Js/wmd.en.js"></script>';
+  $('div.nav.askquestion ul').append('<li><a href="https://codegolf.meta.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox">' + main.PROPOSE + ' Challenge</a></li>');
+  document.head.innerHTML += '<script src="https://cdn.sstatic.net/Js/wmd.en.js"></script>';
 }
 
 function showVoteCounts() {
@@ -712,7 +712,7 @@ function showVoteCounts() {
           if (!(/up \/ /.test(i) || /View/.test(i) && o)) {
             o = 0;
             var c = a.siblings('input[type="hidden"]').val();
-            if (c || (r = a.closest('[data-questionid],[data-answerid]'), c = r.attr('data-answerid') || r.attr('data-questionid')), c || (r = a.closest('.suggested-edit'), c = $.trim(r.find('.post-id').text())), c || (r = a.closest('.question-summary'), c = /\d+/.exec(r.attr('id')), c = c && c[0]), !c) return void console.error('Post ID not found! Please report this at http://stackapps.com/q/3082/9699');
+            if (c || (r = a.closest('[data-questionid],[data-answerid]'), c = r.attr('data-answerid') || r.attr('data-questionid')), c || (r = a.closest('.suggested-edit'), c = $.trim(r.find('.post-id').text())), c || (r = a.closest('.question-summary'), c = /\d+/.exec(r.attr('id')), c = c && c[0]), !c) return void console.error('Post ID not found! Please report this at https://stackapps.com/q/3082/9699');
             n.addSpinner(a);
             $.ajax({
               type: 'GET',
@@ -828,7 +828,7 @@ function showLeaderboard() {
           (i.body.match(/^\s*(?:<h\d>|<p><strong>).*?(-?\d+(?:\.\d+)?)\D*?<\/(?:h\d|strong)>/i) || [])[1]
         );
         i.body = i.body.replace(RegExp(',?\\s*' + j + '.*'), '');
-        // Taken (and modified) from http://codegolf.stackexchange.com/a/69936/40695
+        // Taken (and modified) from https://codegolf.stackexchange.com/a/69936/40695
         var e = ((copyvalue.match(/<(h\d|strong)>(.+?)<\/\1>/) || [])[2] || 'Unknown Language').replace(/<.*?>/g, '').replace(/^([A-Za-z]+)\s+\d+$/, '$1').replace(/([\–\|\/\-:\—,]\s*\d+\s*(b[l]?y[te]{2}s?|Lab  ?View|char[a-z]*|codels?)\s*)+/g, '').replace(/(,| [-&(–—5]| [0-7]\d)(?! W|...\)).*/g, '').replace(/2 |:/g, '').replace(/(Ver(sion)?.?\s*)\d{2,}w\d{2,}a/g, '');
         return [j, i, copyvalue, e];
       });
@@ -996,7 +996,7 @@ function bytes(code, lang) { // Takes in a length of text and piece of header te
   var UTF_16_langs = /^(Ziim|Funciton)\b/i;
   var custom_langs = /^(GS2|Seriously|Actually|Unicorn|Jelly|(Dyalog )?APL)\b/i;
   var ISO_8859_1 = /^[\x00-\xFF]*$/;
-  var ISO_8859_7 = /^[\u0000-\u00A0\u2018\u2019\u00A3\u20AC\u20AF\u00A6-\u00A9\u037A\u00AB-\u00AD\u2015\u00B0-\u00B3\u0384-\u0386\u00B7\u0388-\u038A\u00BB\u038C\u00BD\u038E-\u03CE]*$/; // Taken from http://stackoverflow.com/a/34800836/4449486
+  var ISO_8859_7 = /^[\u0000-\u00A0\u2018\u2019\u00A3\u20AC\u20AF\u00A6-\u00A9\u037A\u00AB-\u00AD\u2015\u00B0-\u00B3\u0384-\u0386\u00B7\u0388-\u038A\u00BB\u038C\u00BD\u038E-\u03CE]*$/; // Taken from https://stackoverflow.com/a/34800836/4449486
   lang = lang || '';
   if (PARSE_HEXDUMPS) {
     var a = '';
@@ -1185,7 +1185,7 @@ function getQuestion(tag, callback) {
 
 /* General purpose function, get a http request async */
 function httpGetAsync(theUrl, callback) {
-  // http://stackoverflow.com/a/4033310/4683264
+  // https://stackoverflow.com/a/4033310/4683264
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.onreadystatechange = function () {
     if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
