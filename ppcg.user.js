@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.11.3
+// @version     3.11.4
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -916,7 +916,7 @@ function applyCss() {
       'a.post-tag{border-radius: 0;text-align:center;font-family:' + MONOSPACE_FONT + ';font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border:none; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; border-bottom: 2px solid $$TAG_SHADOW_COLOR}' +
       'a.post-tag:hover{border-bottom-color: $$TAG_HOVER_SHADOW_COLOR;background: $$TAG_HOVER; color: white}' +
       'div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}' +
-      '#newlogo{top:-15px;position:relative;}#newlogo td{padding-right:15px;}#hlogo a{width:600px;}' +
+      '#newlogo{top:-15px;position:relative;}#newlogo td{padding-right:15px;}#newlogo td:nth-child(2){vertical-align:middle;}#hlogo a{width:600px;}' +
       '.top-footer-links a {text-shadow: 1px 1px white;}' +
       '#footer a { text-shadow: none; color: #78ee74 !important }' +
       '#footer a:visited { color: #78ff74 !important }' +
