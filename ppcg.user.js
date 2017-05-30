@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.11.4
+// @version     3.11.5
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -664,7 +664,7 @@ function showByteCounts() {
     // Find the first header or strong element (some old posts use **this** for header) and set header to its text
     var header = $(this).find('h1, h2, h3, strong').first().text();
     $(this).find('pre code').each(function () {
-      var text = $(this).text().trim().replace('\r\n', '\n');
+      var text = $(this).text().replace('\r\n', '\n');
       $(this).parent().before('<div style="padding-bottom:4px;font-size:11px;font-family:' + TEXT_FONT + '">' + bytes(text, header) + ', ' + formatChars(text) + '</div>');
     });
   });
@@ -994,13 +994,13 @@ function bytes(code, lang) { // Takes in a length of text and piece of header te
   var ISO_8859_1_langs = /^(Japt|TeaScript|Retina|Pyth|Reng)\b/i;
   var ISO_8859_7_langs = /^(Jolf)\b/;
   var UTF_16_langs = /^(Ziim|Funciton)\b/i;
-  var custom_langs = /^(GS2|Seriously|Actually|Unicorn|Jelly|(Dyalog )?APL)\b/i;
+  var custom_langs = /^(GS2|Seriously|Actually|Unicorn|Jelly|05AB1E|(Dyalog )?APL)\b/i;
   var ISO_8859_1 = /^[\x00-\xFF]*$/;
   var ISO_8859_7 = /^[\u0000-\u00A0\u2018\u2019\u00A3\u20AC\u20AF\u00A6-\u00A9\u037A\u00AB-\u00AD\u2015\u00B0-\u00B3\u0384-\u0386\u00B7\u0388-\u038A\u00BB\u038C\u00BD\u038E-\u03CE]*$/; // Taken from https://stackoverflow.com/a/34800836/4449486
   lang = lang || '';
-  if (PARSE_HEXDUMPS) {
+  if (PARSE_HEXDUMPS && /^[[\da-f]{4,8}:? [\da-f]+ |^[\da-f]+ [\da-f\s]+$/.test(code)) {
     var a = '';
-    code.replace(/[\da-f]{6,8}:? ((?:[\da-f][\da-f] ?){10,})[^\n]*\n?/gi, function (_, z) {
+    code.replace(/(?:[\da-f]{2,}:|[\da-f]{6,}) ((?:[\da-f ][\da-f ] ?){10,})[^\n]*\n?/gi, function (_, z) {
       a += z.replace(/\s/g, '');
     });
     if (a) return formatBytes(a.length / 2, 'hex');
