@@ -664,7 +664,7 @@ function showByteCounts() {
     // Find the first header or strong element (some old posts use **this** for header) and set header to its text
     var header = $(this).find('h1, h2, h3, strong').first().text();
     $(this).find('pre code').each(function () {
-      var text = $(this).text().replace('\r\n', '\n');
+      var text = $(this).text().replace('\r\n', '\n').replace(/\n$/, '');
       $(this).parent().before('<div style="padding-bottom:4px;font-size:11px;font-family:' + TEXT_FONT + '">' + bytes(text, header) + ', ' + formatChars(text) + '</div>');
     });
   });
