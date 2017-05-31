@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.11.6
+// @version     3.11.7
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -947,7 +947,7 @@ function replaceNames() {
   $('p').each(function (){
       traverseChildNodes(this);
   });
-   
+
   function traverseChildNodes(node) {
     var next;
     if (node.nodeType === 1) {
@@ -1006,6 +1006,7 @@ function bytes(code, lang) { // Takes in a length of text and piece of header te
     if (a) return formatBytes(a.length / 2, 'hex');
     if (/^[\da-f\s-]+$/i.test(code.replace(/\n/g, ''))) return formatBytes(code.replace(/[\s-]/g, '').length / 2, 'hex');
   }
+  if (/whitespace/i.test(lang)) return formatBytes((code.match(/\s|\\?[snt]/gi) || []).length, 'whitespace');
   if ((/iso.?8859.1/i.test(lang) || ISO_8859_1_langs.test(lang)) && ISO_8859_1.test(code)) return formatBytes(chars(code), 'ISO-8859-1');
   if ((/iso.?8859.7/i.test(lang) || ISO_8859_7_langs.test(lang)) && ISO_8859_7.test(code)) return formatBytes(chars(code), 'ISO-8859-7');
   if (/utf.?16/i.test(lang) || UTF_16_langs.test(lang)) return formatBytes(code.length * 2, 'UTF-16');
