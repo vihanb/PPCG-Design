@@ -814,14 +814,16 @@ function showLeaderboard() {
     var answers = [];
     loadAnswers(function (json) {
       answers = json.map(function (i, l, a) {
-        i.body = i.body.replace(/[\u2010-\u2015\u2212]/g, '-').replace(/^(?!<p><strong>|<h\d>)(.(?!<p><strong>|<h\d>))*/, '').replace(/<(strike|s|del)>.*?<\/\1>/g, '').replace(/<a [^>]+>(.*)<\/a>/g, '$1').replace(/\(\s*(\d+)/g, ', $1').replace(/\s*-\s+|:\s*/, ', ').replace(/(\d+)\s*\+\s*(\d+)/g, function (_, x, y) {
+        i.body = i.body.replace(/[\u2010-\u2015\u2212]/g, '-').replace(/^(?!<p><strong>|<h\d>)(.(?!<p><strong>|<h\d>))*/, '').replace(/<(strike|s|del)>.*?<\/\1>/g, '').replace(/<a [^>]+>(.*)<\/a>/g, '$1').replace(/\(\s*(\d+).*?\)/g, ', $1').replace(/\s*-\s+|:\s*/, ', ').replace(/(\d+)\s*\+\s*(\d+)/g, function (_, x, y) {
           return +x + (+y);
         });
         var copyvalue = i.body;
         var header = ((copyvalue.match(/<(h\d|strong)>(.+?)<\/\1>/) || [])[2] || '')
-          .replace(/<(\\a|a .*?)>/g, '');
+          .replace(/<([\\\/]a|a .*?)>/g, '')
+          .replace(/\(?.+?flags?\)?/, '')
+          .replace(/\s+/g, ' ');
         var j = +(
-          /no[nt].?competi(?:ng|tive)|invalid|cracked/i.test(header) ? NaN :
+          /no[nt].?competi(?:ng|tive)|invalid|cracked|post.?dates/i.test(header) ? NaN :
           (header.match(/.+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/i) || [])[1] ||
           (header.match(/[^,\d]+,\s+(-?\d+(?:\.\d+)?)\s*(?:\n|$)/i) || [])[1] ||
           (i.body.match(/(?:<h\d>|<p><strong>).+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/i) || [])[1] ||
@@ -829,7 +831,14 @@ function showLeaderboard() {
         );
         i.body = i.body.replace(RegExp(',?\\s*' + j + '.*'), '');
         // Taken (and modified) from https://codegolf.stackexchange.com/a/69936/40695
-        var e = ((copyvalue.match(/<(h\d|strong)>(.+?)<\/\1>/) || [])[2] || 'Unknown Language').replace(/<.*?>/g, '').replace(/^([A-Za-z]+)\s+\d+$/, '$1').replace(/([\–\|\/\-:\—,]\s*\d+\s*(b[l]?y[te]{2}s?|Lab  ?View|char[a-z]*|codels?)\s*)+/g, '').replace(/(,| [-&(–—5]| [0-7]\d)(?! W|...\)).*/g, '').replace(/2 |:/g, '').replace(/(Ver(sion)?.?\s*)\d{2,}w\d{2,}a/g, '');
+        var e = (header || 'Unknown Language')
+          .replace(/<.*?>/g, '')
+          .replace(/ in .+$/g, '')
+          .replace(/([\–\|\/\-:\—,]?\s*\d+\s*(b[l]?y[te]{2}s?|Lab  ?View|char[a-z]*|codels?)\s*)+/g, '')
+          .replace(/^([A-Za-z]+)\s*(?:,?\s*\d{2,}\s*|,\s*)$/, '$1')
+          .replace(/(,| [-&(–—5]| [0-7]\d)(?! W|...\)).*/g, '')
+          .replace(/2 |:/g, '')
+          .replace(/(Ver(sion)?.?\s*)\d{2,}w\d{2,}a/g, '');
         return [j, i, copyvalue, e];
       });
       var lv = 0;
