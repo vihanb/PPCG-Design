@@ -683,7 +683,7 @@ function style404() {
 function showProposeChallengeButton() {
   $('div.nav.askquestion ul').append('<li><a href="https://codegolf.meta.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox">' + main.PROPOSE + ' Challenge</a></li>');
   var script = document.createElement('script');
-  script.stAttribute('src', 'https://cdn.sstatic.net/Js/wmd.en.js');
+  script.setAttribute('src', 'https://cdn.sstatic.net/Js/wmd.en.js');
   document.head.appendChild(script);
 }
 
