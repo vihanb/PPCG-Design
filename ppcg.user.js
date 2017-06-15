@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.11.8
+// @version     3.11.9
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -28,6 +28,12 @@ $('img[src^="//cdn.sstatic.net/Sites/codegolf/img/favicon.ico"]').attr('src', 'h
 
 if (site === 'chat' && !$('[rel="shortcut icon"]')[0].href.startsWith('https://i.stack.imgur.com/oHkfe.png'))
   throw 'Site is chat site but not PPCG chat, aborting PPCG design userscript';
+
+function style (html) {
+  var style = document.createElement('style');
+  style.innerHTML = html;
+  document.head.appendChild(style);
+}
 
 // ['Propose', 'Porpoise'], // >:D
 var reps = [
@@ -283,8 +289,8 @@ if (GM_getValue('main.BACKGROUND_LIGHT') === true) {
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
 
 // add favicon 
-document.head.innerHTML += '<style>.favicon-codegolf{background-position: initial !important; background-image: url("' + main.FAVICON + '"); background-size: 100% 100% !important;}' +
-  '.favicon-codegolfmeta{background-position: initial !important; background-image: url("' + meta.FAVICON + '"); background-size: 100% 100% !important;}</style>';
+style('.favicon-codegolf{background-position: initial !important; background-image: url("' + main.FAVICON + '"); background-size: 100% 100% !important;}' +
+  '.favicon-codegolfmeta{background-position: initial !important; background-image: url("' + meta.FAVICON + '"); background-size: 100% 100% !important;}');
 $('.small-site-logo').each(function (i, el) {
   if ($(el).attr('title') === 'Programming Puzzles & Code Golf') {
     $(el).attr('src', main.FAVICON);
@@ -325,13 +331,10 @@ if (match.length > 0) {
   $('#input-area').css('background-size', '600px 400px');
   if (GM_getValue('main.MODE_DARK') == 'true') $('#input-area').css('background', 'url(' + darktheme.BACKGROUND_IMAGE + ')');
   if (GM_getValue('main.BACKGROUND_LIGHT') == 'true') $('#input-area').css('background', 'url(' + lightbg.BACKGROUND_IMAGE + ')');
-  document.head.innerHTML +=
-    ('<style>' +
-      'a.post-tag{border-radius: 0;text-align:center;font-family:' + MONOSPACE_FONT + ';font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border:none; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; border-bottom: 2px solid $$TAG_SHADOW_COLOR}' +
-      'a.post-tag:hover{border-bottom-color: $$TAG_HOVER_SHADOW_COLOR;background: $$TAG_HOVER; color: white}' +
-      '</style>').replace(/\$\$(\w+)/g, function (_, m) {
-      return main[m];
-    });
+  style(('a.post-tag{border-radius: 0;text-align:center;font-family:' + MONOSPACE_FONT + ';font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border:none; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; border-bottom: 2px solid $$TAG_SHADOW_COLOR}' +
+    'a.post-tag:hover{border-bottom-color: $$TAG_HOVER_SHADOW_COLOR;background: $$TAG_HOVER; color: white}').replace(/\$\$(\w+)/g, function (_, m) {
+    return main[m];
+  }));
 }
 
 ////////////////////////////////////////////////////////////
@@ -370,8 +373,7 @@ if (site === 'chat') {
     $('#CHATBOX').hide();
   });//*/ // Doesn't work :(
 
-  document.head.innerHTML += '<style>' +
-    '@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic|Open+Sans:400,400italic,700,700italic&subset=latin,greek);' +
+  style('@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic|Open+Sans:400,400italic,700,700italic&subset=latin,greek);' +
     'body { font-family: "Open Sans"; font-size: 12px; }' +
 
     '.button { cursor: pointer; background: #96db62; border: none; border-bottom: 1px solid rgb(106, 194, 65) }' +
@@ -406,8 +408,8 @@ if (site === 'chat') {
     'input[type=text]:focus, #input:focus, #chat-body input#searchbox:focus { outline: none; box-shadow: 0px 0px 4px #3AE; border: 1px solid #70d2ff; }' +
     '#input:hover { box-shadow: 0px 0px 6px #50c8ff; }' +
 
-    'span.mention { padding: 0px 3px; background: #D2FFCC !important }' +
-    '</style>';
+    'span.mention { padding: 0px 3px; background: #D2FFCC !important }'
+  );
 }
 
 //////////////////////////////////////////////////////////
@@ -680,7 +682,9 @@ function style404() {
 
 function showProposeChallengeButton() {
   $('div.nav.askquestion ul').append('<li><a href="https://codegolf.meta.stackexchange.com/questions/2140/sandbox-for-proposed-challenges#show-editor-button" id="nav-asksandbox" title="Propose a question in the sandbox">' + main.PROPOSE + ' Challenge</a></li>');
-  document.head.innerHTML += '<script src="https://cdn.sstatic.net/Js/wmd.en.js"></script>';
+  var script = document.createElement('script');
+  script.stAttribute('src', 'https://cdn.sstatic.net/Js/wmd.en.js');
+  document.head.appendChild(script);
 }
 
 function showVoteCounts() {
@@ -873,8 +877,7 @@ function applyCss() {
   console.log('applying the css', siteProperties);
   // style
   $('#mainbar').css('padding', '15px');
-  document.head.innerHTML +=
-    ('<style>@import url(' + FONT_URL + ');' +
+  style(('@import url(' + FONT_URL + ');' +
       'body{color: $$TEXT_COLOR}' +
       'code,pre{color:$$CODE_COLOR;background-color:$$CODE_BACKGROUND}' +
       '.topbar{background:$$TOPBAR}' +
@@ -944,11 +947,10 @@ function applyCss() {
       'a:visited {' +
       'color:$$VISITED_LINK_COLOR}' +
       'a:hover {' +
-      'color:$$HOVER_LINK_COLOR}' +
-      '</style>').replace(/\$\$(\w+)/g, function (_, x) {
+      'color:$$HOVER_LINK_COLOR}').replace(/\$\$(\w+)/g, function (_, x) {
       console.log('got to', x);
       return eval(site + '.' + x);
-    });
+    }));
 }
 
 function replaceNames() {
