@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.12.11
+// @version     3.12.12
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -369,7 +369,7 @@ if (site === 'chat') {
 
   if (main.PREFER_LIGHT_FONT) {
 	  style(
-		  'div.message { font-weight: 400; -webkit-font-smoothing: antialiased }' +
+		  'div.message { font-weight: 300 }' +
 		  'div.message a { font-weight: 600 }'
 	  );
   }
@@ -908,9 +908,21 @@ function showLeaderboard() {
 function applyCss() {
 
   console.log('applying the css', siteProperties);
+	
+  if (main.PREFER_LIGHT_FONT) {
+	  style(
+		  'html, body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif; }' +
+		  '.post-text h1, .post-text h2, .post-text h3, .post-text h4, .post-text h5, .post-text h6 { color: black; }' +
+		  '#mainbar { color: rgba(19, 29, 40, 0.87) }' +
+		  '#mainbar { font-weight: 300 }' +
+		  '#mainbar a { font-weight: 400; color: #5d95d9 }'
+	  );
+  }
+	
   // style
   $('#mainbar').css('padding', '15px');
-  style(('@import url(' + FONT_URL + ');' +
+  style((
+	  (main.PREFER_LIGHT_FONT ? "" : '@import url(' + FONT_URL + ');') +
       'body{color: $$TEXT_COLOR}' +
       'code,pre{color:$$CODE_COLOR;background-color:$$CODE_BACKGROUND}' +
       '.topbar{background:$$TOPBAR}' +
@@ -937,7 +949,7 @@ function applyCss() {
       '.qod-item > *:not(.post-tag) { font-weight: normal; font-size: 12px; white-space: normal; padding-left: 5px; }' +
       '.qod-item:not(:first-child) { margin-top: 5px; }' +
       '.LEADERBOARD {border-collapse: collapse} .LEADERBOARD td { padding: 6px 8px } .LEADERBOARD tr:nth-child(even) { background-color: #F1F1F1 } .LEADERBOARD thead { border-bottom: 1px solid #DDD }' +
-      'html,body{font-family:' + TEXT_FONT + '}' +
+      (main.PREFER_LIGHT_FONT ? "" : 'html,body{font-family:' + TEXT_FONT + '}') +
       'a.badge { color: white !important }' +
       '#content{margin-top: 7px;}' +
       '#footer #footer-sites a, #footer th {color: #BFBFBF;}' +
