@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.11.10
+// @version     3.12.10
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -347,42 +347,43 @@ if (site === 'chat') {
     'background': 'url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Speaker_Icon.svg/200px-Speaker_Icon.svg.png)',
     'background-size': '16px 16px'
   });
-  $('#roomname').css('font-family', 'Lato');
-  $('#roomname').css('font-weight', '800');
+  $('#roomname').css('font-family', '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif');
+  $('#roomname').css('font-weight', '400');
   $('#searchbox').css('padding-left', '4px !important');
   $('#footer-logo a').text('Programming Puzzles & Code Golf').css('color', '#2A2');
   $('#input-area').css('background', 'url(' + main.BACKGROUND_IMAGE + ')');
 
-  /*  $('body').append('<img id="CHATBOX" style="z-index: 1000; display:none; position: fixed;">');
-  $(document).on('mouseenter', 'li[id^="summary_"], li[id^="summary_"] *', function () {
-    $('#CHATBOX').show();
-    var src = $(this).find('a[href*=".png"],a[href*=".jpeg"],a[href*=".jpg"],a[href*=".gif"],a[href*=".svg"]').attr('href');
-    var pos = $(this).get(0).getBoundingClientRect();
-    var i = new Image(src);
-    i.onload = function () {
-      $('#CHATBOX').attr({
-        'src': src,
-      });
-      $('#CHATBOX').css({
-      'left': pos.left - i.width + 'px',
-      'top': pos.top - i.height + 'px'
-    });
-    }
-  });
-  $(document).on('mouseleave', 'li[id^="summary_"]', function () {
-    $('#CHATBOX').hide();
-  });//*/ // Doesn't work :(
+  $("#chat").prepend($('<div/>').css({
+	  'position': 'absolute',
+	  'left': '16%',
+	  'top': '0',
+	  'bottom': '120px',
+	  'width': '1px',
+	  'background': '#EEE',
+	  'z-index': '0'
+  }));
 
   style('@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic|Open+Sans:400,400italic,700,700italic&subset=latin,greek);' +
-    'body { font-family: "Open Sans"; font-size: 12px; }' +
+    'body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif; font-size: 13px; }' +
 
+	'#roomtitle { margin: 10px 0; margin-bottom: 5px; }' +
+	'#roomdesc { font-size: 0.9em; }' +
+
+	'#sidebar #info #sidebar-menu, #present-users, ul#my-rooms { border-bottom: none }' +
+		
     '.button { cursor: pointer; background: #96db62; border: none; border-bottom: 1px solid rgb(106, 194, 65) }' +
     '.button:hover { background: #51cc47; border-bottom-color: #449656; }' +
 
     '.favorite-room-vote { background: url(https://i.stack.imgur.com/DhUx0.png); background-size: 16px 16px }' +
     '.favorite-room-vote.favorite-room { background: url(https://i.stack.imgur.com/lbBdl.png); background-size: 16px 16px }' +
 
-    '.message:hover { border: 1px solid #e3e3e3 !important }' +
+	'.user-container img { border-radius: 2px }' +
+		
+	'.username.owner, .monologue .tiny-signature .username { margin-top: 0; font-size: 0.9em; line-height: 1.6em; overflow: visible; height: auto; }' +
+		
+	'.message { color: rgba(0, 0, 0, 0.7); border: none; }' +
+	
+    '.message:hover { border: 1px solid #F3F3F3 !important }' +
 
     '.message:hover .action-link, .message:hover .action-link .img.menu { background-color: #F3F3F3 !important }' +
     '.message:hover .action-link .img.menu { background-image: url(https://i.stack.imgur.com/3gBKh.png) !important; background-size: 16px 16px; background-position: 0px -1px !important; }' +
@@ -391,13 +392,22 @@ if (site === 'chat') {
     '.vote-count-container.stars.user-star .img { background-image: url(https://i.stack.imgur.com/lbBdl.png) !important; }' +
 
     '.monologue { margin-bottom: 0; padding-top: 0; }' +
+	'.monologue .signature { width: 15%; margin-top: 8px; margin-bottom: 8px; }' +
     '.monologue:first-child .messages { border-top: 1px solid #F2F2F2 }' +
-    '.messages { background-color: #fff; padding: 8px 8px 8px 0px; border-radius: 0; border-top: none }' +
+    '.messages, .mine .messages { background-color: #FFF; padding: 8px 8px 8px 0px; border-radius: 0; border: none }' +
+	'.mine .messages { background-color: rgba(210, 245, 255, 0.50); }' +
+	
+	'.messages { width: 82%; }' +
+		
+	'.system-message-container { margin: 1em 0; }' +
+		
+	'.system-message { position: relative; z-index: 1; }' +
+	'.system-message:after { content: \'\'; position: absolute; z-index: -1; top: 0; bottom: 0; left: 8px; right: 0px; border-radius: 6px; background: #f8f8f8; }' +
 
     '.catchup-marker { border: none !important; margin-top: 10px }' +
     '.catchup-marker .messages { border-top: 1px solid #F2F2F2; }' +
 
-    '.popup { border-radius: 2px; border: none; box-shadow: 0 0 8px #9C9C9C }' +
+    '.popup { border-radius: 2px; border: none; box-shadow: 0 0 8px #DDD }' +
     '.popup .small-site-logo { right: initial; top: 38px }' +
 
     '#footer-legal a { color: #366fb3 !important }' +
@@ -408,7 +418,7 @@ if (site === 'chat') {
     'input[type=text]:focus, #input:focus, #chat-body input#searchbox:focus { outline: none; box-shadow: 0px 0px 4px #3AE; border: 1px solid #70d2ff; }' +
     '#input:hover { box-shadow: 0px 0px 6px #50c8ff; }' +
 
-    'span.mention { padding: 0px 3px; background: #D2FFCC !important }'
+    'span.mention { padding: 3px 6px; border-radius: 5px; background: #D2FFCC !important }'
   );
 }
 
@@ -1207,3 +1217,4 @@ function httpGetAsync(theUrl, callback) {
   xmlHttp.open('GET', theUrl, true); // true for asynchronous
   xmlHttp.send(null);
 }
+
