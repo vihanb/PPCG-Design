@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.12.10
+// @version     3.12.11
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -26,8 +26,7 @@ else site = 'main';
 $('[rel="shortcut icon"][href^="//cdn.sstatic.net/Sites/codegolf/img/favicon.ico"]').attr('href', 'https://i.stack.imgur.com/oHkfe.png');
 $('img[src^="//cdn.sstatic.net/Sites/codegolf/img/favicon.ico"]').attr('src', 'https://i.stack.imgur.com/oHkfe.png');
 
-if (site === 'chat' && !$('[rel="shortcut icon"]')[0].href.startsWith('https://i.stack.imgur.com/oHkfe.png'))
-  throw 'Site is chat site but not PPCG chat, aborting PPCG design userscript';
+var isNotPPCGChat = (site === 'chat' && !$('[rel="shortcut icon"]')[0].href.startsWith('https://i.stack.imgur.com/oHkfe.png'));
 
 function style (html) {
   var style = document.createElement('style');
@@ -101,6 +100,7 @@ var main = {
   BACKGROUND_LIGHT: (GM_getValue('main.BACKGROUND_LIGHT') === true), // Lighter shade of the background, CHANGE THROUGH OPTIONS
   MODE_DARK: (GM_getValue('main.MODE_DARK') === true),
   RUN_IN_CHAT: (GM_getValue('main.RUN_IN_CHAT') !== false),
+  PREFER_LIGHT_FONT: (GM_getValue('main.PREFER_LIGHT_FONT') === true),
   USE_LEADERBOARD: (GM_getValue('main.USE_LEADERBOARD') !== false), // default is true
   SHOW_QOD_WIDGET: (GM_getValue('main.SHOW_QOD_WIDGET') !== false), // default is true
   USE_AUTOTIO: (GM_getValue('main.USE_AUTOTIO') !== false), // default is true
@@ -350,8 +350,12 @@ if (site === 'chat') {
   $('#roomname').css('font-family', '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif');
   $('#roomname').css('font-weight', '400');
   $('#searchbox').css('padding-left', '4px !important');
-  $('#footer-logo a').text('Programming Puzzles & Code Golf').css('color', '#2A2');
-  $('#input-area').css('background', 'url(' + main.BACKGROUND_IMAGE + ')');
+  
+  if (!isNotPPCGChat) {
+	  // PPCG-chat specific styling
+	  $('#footer-logo a').text('Programming Puzzles & Code Golf').css('color', '#2A2');
+	  $('#input-area').css('background', 'url(' + main.BACKGROUND_IMAGE + ')');
+  }
 
   $("#chat").prepend($('<div/>').css({
 	  'position': 'absolute',
@@ -363,6 +367,13 @@ if (site === 'chat') {
 	  'z-index': '0'
   }));
 
+  if (main.PREFER_LIGHT_FONT) {
+	  style(
+		  'div.message { font-weight: 400; -webkit-font-smoothing: antialiased }' +
+		  'div.message a { font-weight: 600 }'
+	  );
+  }
+	
   style('@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic|Open+Sans:400,400italic,700,700italic&subset=latin,greek);' +
     'body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif; font-size: 13px; }' +
 
@@ -381,10 +392,15 @@ if (site === 'chat') {
 		
 	'.username.owner, .monologue .tiny-signature .username { margin-top: 0; font-size: 0.9em; line-height: 1.6em; overflow: visible; height: auto; }' +
 		
+	'.quote { border-left: 3px solid rgba(0, 0, 0, 0.2); padding-left: 8px; margin-left: 6px; }' +
+	'div.message code { padding: 2px 5px; border-radius: 3px; background: rgba(0, 0, 0, 0.06); }' +
+		
+	'#tabcomplete li { padding: 5px; border-radius: 5px; border: none }' +
+		
+	'div.message.reply-parent { background-color: #EEE; }' +
+		
 	'.message { color: rgba(0, 0, 0, 0.7); border: none; }' +
-	
     '.message:hover { border: 1px solid #F3F3F3 !important }' +
-
     '.message:hover .action-link, .message:hover .action-link .img.menu { background-color: #F3F3F3 !important }' +
     '.message:hover .action-link .img.menu { background-image: url(https://i.stack.imgur.com/3gBKh.png) !important; background-size: 16px 16px; background-position: 0px -1px !important; }' +
 
@@ -396,6 +412,8 @@ if (site === 'chat') {
     '.monologue:first-child .messages { border-top: 1px solid #F2F2F2 }' +
     '.messages, .mine .messages { background-color: #FFF; padding: 8px 8px 8px 0px; border-radius: 0; border: none }' +
 	'.mine .messages { background-color: rgba(210, 245, 255, 0.50); }' +
+		
+	'.catchup-marker .messages { border: none }' +
 	
 	'.messages { width: 82%; }' +
 		
@@ -540,6 +558,11 @@ function addSettingsPane() {
     '                           <input class="OPT_Bool" data-var="main.MODE_DARK" id="dark_theme_on" type="checkbox">' +
     '                           <label for="dark_theme_on">Use Dark Theme <span style="color: #aaa;/*! font-size: 0.6em; *//*! position: center; */">(WIP)</span>' +
     '                           </label>' +
+    '                   </div></div>' +
+	      '             <div class="row">' +
+    '                       <div class="col-12">' +
+    '                           <input class="OPT_Bool" data-var="main.PREFER_LIGHT_FONT" id="prefer_light_fonts" type="checkbox">' +
+    '                           <label for="prefer_light_fonts">Prefer Light Fonts</label>' +
     '                   </div></div>' +
     '                   <div class="row">' +
     '                       <div class="col-12">' +
