@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.12.12
+// @version     3.12.13
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -388,8 +388,12 @@ if (site === 'chat') {
     '.favorite-room-vote { background: url(https://i.stack.imgur.com/DhUx0.png); background-size: 16px 16px }' +
     '.favorite-room-vote.favorite-room { background: url(https://i.stack.imgur.com/lbBdl.png); background-size: 16px 16px }' +
 
-	'.user-container img { border-radius: 2px }' +
+	'.ob-post-tag { background: rgba(255, 255, 255, 0.8) !important; padding: 4px 8px !important; border-radius: 4px !important; border: none !important; box-shadow: 0 0 1px #AAA !important; color: inherit !important }' +
+	'.ob-post-tag:hover { background: rgba(255, 255, 255, 0.6) !important }' +
 		
+	'a:hover { color: #448be0; text-decoration: none }' +
+		
+	'.user-container img { border-radius: 2px }' +		
 	'.username.owner, .monologue .tiny-signature .username { margin-top: 0; font-size: 0.9em; line-height: 1.6em; overflow: visible; height: auto; }' +
 		
 	'.quote { border-left: 3px solid rgba(0, 0, 0, 0.2); padding-left: 8px; margin-left: 6px; }' +
