@@ -866,7 +866,7 @@ function showLeaderboard() {
           .replace(/\(?.+?flags?\)?/, '')
           .replace(/\s+/g, ' ');
         var j = +(
-          /no[nt].?competi(?:ng|tive)|invalid|cracked|post.?dates/i.test(header) ? NaN :
+          /invalid|cracked/i.test(header) ? NaN :
           (header.match(/.+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/i) || [])[1] ||
           (header.match(/[^,\d]+,\s+(-?\d+(?:\.\d+)?)\s*(?:\n|$)/i) || [])[1] ||
           (i.body.match(/(?:<h\d>|<p><strong>).+?(-?\b\d+(?:\.\d+)?)\s*(?:bytes?|chars?|char[ea]ct[ea]?rs?)/i) || [])[1] ||
