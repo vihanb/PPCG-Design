@@ -301,22 +301,22 @@ $('.small-site-logo').each(function (i, el) {
 if (main.GOAT_MODE) {
   $('head').append($('<style/>', {
     html: '.vote-up-off {' +
-      '  background-image: url(https://cdn.rawgit.com/somebody1234/Misc-Files/master/upgoat-off.svg) !important;' +
+      '  background-image: url(https://cdn.rawgit.com/vihanb/PPCG-Design/master/assets/upgoat-off.svg) !important;' +
       '  background-size: 100% !important;' +
       '  background-position: 0px 0px;' +
       '}' +
       '.vote-down-off {' +
-      '  background-image: url(https://cdn.rawgit.com/somebody1234/Misc-Files/master/downgoat-off.svg) !important;' +
+      '  background-image: url(https://cdn.rawgit.com/vihanb/PPCG-Design/master/assets/downgoat-off.svg) !important;' +
       '  background-size: 100% !important;' +
       '  background-position: 0px 0px;' +
       '}' +
       '.vote-up-on {' +
-      '  background-image: url(https://cdn.rawgit.com/somebody1234/Misc-Files/master/upgoat.svg) !important;' +
+      '  background-image: url(https://cdn.rawgit.com/vihanb/PPCG-Design/master/assets/upgoat.svg) !important;' +
       '  background-size: 100% !important;' +
       '  background-position: 0px 0px;' +
       '}' +
       '.vote-down-on {' +
-      '  background-image: url(https://cdn.rawgit.com/somebody1234/Misc-Files/master/downgoat.svg) !important;' +
+      '  background-image: url(https://cdn.rawgit.com/vihanb/PPCG-Design/master/assets/downgoat.svg) !important;' +
       '  background-size: 100% !important;' +
       '  background-position: 0px 0px;' +
       '}'
