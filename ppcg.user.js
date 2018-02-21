@@ -535,7 +535,7 @@ if (site === 'main' || site === 'meta') {
 
 function addSettingsPane() {
   // Options Menu
-  $('.top-bar .secondary-nav ol.-list').append('<li class="-item"><a id="USER_Opt" class="-link" style="z-index:1;width: 36px; background-image: url(' + main.SPRITE_SHEET + '); background-position: 0px 0px;"></a></li>');
+  $('.top-bar .secondary-nav ol.-list').filter(':last').append('<li class="-item"><a id="USER_Opt" class="-link" style="z-index:1;width: 36px; background-image: url(' + main.SPRITE_SHEET + '); background-position: 0px 0px;"></a></li>');
 
   $('body').prepend(
     '<div id="USER_OptMenu" style="width: inherit; height: inherit; display: none;">' +
