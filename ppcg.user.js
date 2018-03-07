@@ -10,6 +10,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM_listValues
+// @grant       GM_deleteValue
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js
 // @updateURL   https://rawgit.com/vihanb/PPCG-Design/master/ppcg.user.js
 // ==/UserScript==
@@ -1117,9 +1118,8 @@ function addQuestionOfTheDay() {
   console.log('adding question of the day');
   var questionOfTheDayHtml = '<div class="module" id="question-of-the-day"><h4 id="h-inferred-tags">Challenges of the Day</h4><div id="question-of-the-day-content"></div></div>';
 
-  if (isTimeToGetNewQs()) {
+  if (isTimeToGetNewQs())
     resetData();
-  }
 
   // below the blog posts
   var favTags = $('div.module:nth-child(2)');
@@ -1172,6 +1172,8 @@ function isTimeToGetNewQs() {
   var key = 'lastDateRefreshedQOD';
   var lastUpdate = GM_getValue(key) || 0;
 
+  console.log("last QOD Update", lastUpdate, "; today", new Date().getDate());
+
   if (lastUpdate !== null && lastUpdate !== undefined) {
     return lastUpdate !== new Date().getDate();
   } else {
@@ -1181,17 +1183,24 @@ function isTimeToGetNewQs() {
 }
 
 function resetData() {
-  var toRemove = ['other-tags-today'];
-  for (var i = 0; i < localStorage.length; i++) {
+  var toRemove = ['other-tags-today', 'lastDateRefreshedQOD'];
 
-    var k = localStorage.key(i);
-    if (k.indexOf('tag') !== -1 && k.indexOf('QOD') === -1)
+  pref_tags = GM_listValues();
+    console.log (pref_tags);
+  for (var i = 0; i < pref_tags.length; i++) {
+
+    var k = pref_tags[i];
+      // QOD storage goes something like this. Local storage is a list of all things, and things that have either
+      // "tag" or "QOD"  are settings for this widget. Ones that contain "tag" are data about a specific question
+      // to be included in the widget. Each widget is its own tag, and its storage in LS is by tag name.
+      // e.g. "code-golf-tag-question" -> "title:Tips For Golfing in JS;url:..."
+    if (k.indexOf('tag') !== -1)
       toRemove = toRemove.concat(k);
   }
   console.log('data to remove', toRemove);
 
   for (var j = 0; j < toRemove.length; j++) {
-    localStorage.removeItem(toRemove[j]);
+    GM_deleteValue(toRemove[j]);
   }
 
   GM_setValue('lastDateRefreshedQOD', JSON.stringify(new Date().getDate()));
