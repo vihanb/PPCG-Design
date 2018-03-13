@@ -1175,7 +1175,7 @@ function isTimeToGetNewQs() {
   console.log("last QOD Update", lastUpdate, "; today", new Date().getDate());
 
   if (lastUpdate !== null && lastUpdate !== undefined) {
-    return lastUpdate !== new Date().getDate();
+    return lastUpdate != new Date().getDate();
   } else {
     GM_setValue(key, new Date().getDate());
     return false;
