@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.13.3
+// @version     3.14.0
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -536,7 +536,7 @@ if (site === 'main' || site === 'meta') {
 
 function addSettingsPane() {
   // Options Menu
-  $('.top-bar .secondary-nav ol.-list').filter(':last').append('<li class="-item"><a id="USER_Opt" class="-link" style="z-index:1;width: 36px; background-image: url(' + main.SPRITE_SHEET + '); background-position: 0px 0px;"></a></li>');
+  $('.top-bar ol.-secondary').filter(':last').append('<li class="-item"><a id="USER_Opt" class="-link" style="z-index:1; width: 36px; padding-top: 7px;"><span style="display: inline-block;height: 100%;width: 100%;background-image: url(//cdn.rawgit.com/vihanb/PPCG-Design/master/assets/sprites.svg); background-position: -8px 0px;"></span></a></li>');
 
   $('body').prepend(
     '<div id="USER_OptMenu" style="width: inherit; height: inherit; display: none;">' +
@@ -1267,4 +1267,5 @@ function httpGetAsync(theUrl, callback) {
   xmlHttp.open('GET', theUrl, true); // true for asynchronous
   xmlHttp.send(null);
 }
+
 
