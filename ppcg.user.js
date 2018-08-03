@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     4.0.5
+// @version     4.0.6
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -533,8 +533,8 @@ function addSettingsPane() {
 
   $('body').prepend(
     '<div id="USER_OptMenu" style="width: inherit; height: inherit; display: none;">' +
-    '    <div id="USER_Backblur" style="position:fixed;z-index:2;width:100%;height:100%;background:rgba(0,0,0,0.5)"></div>' +
-    '    <div style="position:fixed;z-index:3;width:40%;min-width:600px;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:' + optionbox.BACKGROUND_COLOR + ';padding:1em;" class="settings-page">' +
+    '    <div id="USER_Backblur" style="position:fixed;z-index:2000;width:100%;height:100%;background:rgba(0,0,0,0.5)"></div>' +
+    '    <div style="position:fixed;z-index:2001;width:40%;min-width:600px;top: 50%;left: 50%;transform: translateY(-50%) translateX(-50%);background:' + optionbox.BACKGROUND_COLOR + ';padding:1em;" class="settings-page">' +
     '       <h1>Userscript Options</h1>' +
     '       <div style="/*width:50%;height:100%;float:left;*/max-height: 70vh;overflow-y: scroll;/*! overflow-x: none; */">' +
     '           <div class="inner-container inner-container-flex">' +
