@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     4.0.6
+// @version     4.0.7
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -86,6 +86,7 @@ var MOD_FLAIR_HOVER = '#FFE32E';
 
 var main = {
   FAVICON: '//i.stack.imgur.com/oHkfe.png',
+  DISP_ICON: '//i.stack.imgur.com/oHkfe.png',
   SPRITE_SHEET: '//cdn.rawgit.com/vihanb/PPCG-Design/master/assets/sprites.svg',
   SEARCH_TEXT: 'Search codegolf.SE',
 
@@ -96,6 +97,8 @@ var main = {
   BG_COL_HOVER: 'white',
   BG_START: 'white',
   BG_REV: '#329300',
+
+  BUTTON_GRAD_COLOR: 'linear-gradient(to bottom right, #7befaf 10%, #25b666)',
 
   GOAT_MODE: (GM_getValue('main.GOAT_MODE') === true), // default false
   BACKGROUND_LIGHT: (GM_getValue('main.BACKGROUND_LIGHT') === true), // Lighter shade of the background, CHANGE THROUGH OPTIONS
@@ -172,6 +175,8 @@ var meta = {
   BG_COL_HOVER: '#474747',
   BG_START: 'rgba(255, 255, 255, 0.8)',
   BG_REV: 'white',
+
+  BUTTON_GRAD_COLOR: 'linear-gradient(to bottom right, #dcd9e3 10%, #9e9ea4)',
 
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: '#FAFAFA',
@@ -289,10 +294,6 @@ if (GM_getValue('main.BACKGROUND_LIGHT') === true) {
 
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
 
-// add favicon 
-style('.site-header .site-header--container { justify-content: start; } .site-header .site-header--link { margin-left: 16px !important }');
-$('.site-header--container').prepend('<img src="//i.stack.imgur.com/oHkfe.png" style="height: 4em;" />');
-
 
 // apply goat mode
 if (main.GOAT_MODE) {
@@ -347,7 +348,7 @@ if (site === 'chat') {
   $('#roomname').css('font-family', '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif');
   $('#roomname').css('font-weight', '400');
   $('#searchbox').css('padding-left', '4px !important');
-  
+
   if (!isNotPPCGChat) {
 	  // PPCG-chat specific styling
 	  $('#footer-logo a').text('Programming Puzzles & Code Golf').css('color', '#2A2');
@@ -370,7 +371,7 @@ if (site === 'chat') {
 		  'div.message a { font-weight: 600 }'
 	  );
   }
-	
+
   style('@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic|Open+Sans:400,400italic,700,700italic&subset=latin,greek);' +
     'body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif; font-size: 13px; }' +
 
@@ -378,9 +379,9 @@ if (site === 'chat') {
 	'#roomdesc { font-size: 0.9em; }' +
 
 	'#sidebar #info #sidebar-menu, #present-users, ul#my-rooms { border-bottom: none }' +
-		
+
 	'pre.prettyprint { border: none !important; padding: 1em 1.2em !important; background: #FAFAFA; border-radius: 8px; }' +
-		
+
     '.button { cursor: pointer; background: #96db62; border: none; border-bottom: 1px solid rgb(106, 194, 65) }' +
     '.button:hover { background: #51cc47; border-bottom-color: #449656; }' +
 
@@ -389,19 +390,19 @@ if (site === 'chat') {
 
 	'.ob-post-tag { background: rgba(255, 255, 255, 0.8) !important; padding: 4px 8px !important; border-radius: 4px !important; border: none !important; box-shadow: 0 0 1px #AAA !important; color: inherit !important }' +
 	'.ob-post-tag:hover { background: rgba(255, 255, 255, 0.6) !important }' +
-		
+
 	'a:hover { color: #448be0; text-decoration: none }' +
-		
-	'.user-container img { border-radius: 2px }' +		
+
+	'.user-container img { border-radius: 2px }' +
 	'.username.owner, .monologue .tiny-signature .username { margin-top: 0; font-size: 0.9em; line-height: 1.6em; overflow: visible; height: auto; }' +
-		
+
 	'.quote { border-left: 3px solid rgba(0, 0, 0, 0.2); padding-left: 8px; margin-left: 6px; }' +
 	'div.message code { padding: 2px 5px; border-radius: 3px; background: rgba(0, 0, 0, 0.06); }' +
-		
+
 	'#tabcomplete li { padding: 5px; border-radius: 5px; border: none }' +
-		
+
 	'div.message.reply-parent, div.message.reply-child { background-color: #EEE; }' +
-		
+
 	'.message { color: rgba(0, 0, 0, 0.7); border: none; }' +
     '.message:hover { border: 1px solid #F3F3F3 !important }' +
     '.message:hover .action-link, .message:hover .action-link .img.menu { background-color: #F3F3F3 !important }' +
@@ -415,13 +416,13 @@ if (site === 'chat') {
     '.monologue:first-child .messages { border-top: 1px solid #F2F2F2 }' +
     '.messages, .mine .messages { background-color: #FFF; padding: 8px 8px 8px 0px; border-radius: 0; border: none }' +
 	'.mine .messages { background-color: rgba(210, 245, 255, 0.50); }' +
-		
+
 	'.catchup-marker .messages { border: none !important }' +
-	
+
 	'.messages { width: 82%; }' +
-		
+
 	'.system-message-container { margin: 1em 0; }' +
-		
+
 	'.system-message { position: relative; z-index: 1; }' +
 	'.system-message:after { content: \'\'; position: absolute; z-index: -1; top: 0; bottom: 0; left: 8px; right: 0px; border-radius: 6px; background: #f8f8f8; }' +
 
@@ -481,8 +482,10 @@ if (site === 'main' || site === 'meta') {
   }
 
   if (site === 'meta') {
-    // show meta logo
-    qS('#hlogo > a').innerHTML = '<table id="newlogo"><tr><td><img src="' + meta.DISP_ICON + '" height=60></td><td>Programming Puzzles &amp; Code Golf <span class="meta-title" style="font-size: 14px; color: #CF7720">meta</span></td></tr></table>';
+    // Adjust positioning for meta
+    style(
+        '.site-header--link span { margin-left: 12px !important; font-family: ' + HEADER_FONT + '; font-weight: bold !important; opacity: 1 !important; color: rgba(255, 255, 255, 0.55) !important; }'
+    );
 
     if (window.location.href.indexOf('/2140/') > 0) showSandboxMsg();
   }
@@ -908,7 +911,7 @@ function showLeaderboard() {
 function applyCss() {
 
   console.log('applying the css', siteProperties);
-	
+
   if (main.PREFER_LIGHT_FONT) {
 	  style(
 		  'html, body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif; }' +
@@ -918,7 +921,10 @@ function applyCss() {
 		  '#mainbar a { font-weight: 400; color: #5d95d9 }'
 	  );
   }
-	
+
+  style('.site-header .site-header--container { justify-content: start; } .site-header .site-header--link { margin-left: 16px !important }');
+  $('.site-header--container').prepend('<img src="' + siteProperties.DISP_ICON + '" style="height: 4em;" />');
+
   // MAIN STYLES FOR PAGE
   $('#mainbar').css('padding', '15px');
   style((
@@ -994,7 +1000,7 @@ function applyCss() {
       '.tabs-filter .youarehere { background: transparent !important; border-top-color: #adb3b9 !important; border-right-color: #adb3b9 !important; border-left-color: #adb3b9 !important; }' +
       '.nav-links .youarehere a { border-right: none !important; letter-spacing: -.6px; }' +
 
-      '.s-btn.s-btn__primary { background-image: linear-gradient( 135deg, #81FBB8 10%, #28C76F 100%); box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.1); color: white; border: none; }' +
+      '.s-btn.s-btn__primary { background: ' + siteProperties.BUTTON_GRAD_COLOR + ' !important; box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.1); color: white; border: none; }' +
 
       // fix some links
       '#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover {' +
@@ -1274,6 +1280,7 @@ function httpGetAsync(theUrl, callback) {
   xmlHttp.open('GET', theUrl, true); // true for asynchronous
   xmlHttp.send(null);
 }
+
 
 
 
