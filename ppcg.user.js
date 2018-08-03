@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     4.0.3
+// @version     4.0.4
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -290,13 +290,9 @@ if (GM_getValue('main.BACKGROUND_LIGHT') === true) {
 /** ~~~~~~~~~~~~~~~~ END CSS PROPERTIES ~~~~~~~~~~~~~~~~ **/
 
 // add favicon 
-style('.favicon-codegolf{background-position: initial !important; background-image: url("' + main.FAVICON + '"); background-size: 100% 100% !important;}' +
-  '.favicon-codegolfmeta{background-position: initial !important; background-image: url("' + meta.FAVICON + '"); background-size: 100% 100% !important;}');
-$('.small-site-logo').each(function (i, el) {
-  if ($(el).attr('title') === 'Programming Puzzles & Code Golf') {
-    $(el).attr('src', main.FAVICON);
-  }
-});
+style('.site-header .site-header--container { justify-content: start; } .site-header .site-header--link { margin-left: 16px !important }');
+$('.site-header--container').prepend('<img src="//i.stack.imgur.com/oHkfe.png" style="height: 4em;" />');
+
 
 // apply goat mode
 if (main.GOAT_MODE) {
