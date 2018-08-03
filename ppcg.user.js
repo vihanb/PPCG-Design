@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     4.0.4
+// @version     4.0.5
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -924,6 +924,7 @@ function applyCss() {
   style((
 	  (main.PREFER_LIGHT_FONT ? "" : '@import url(' + FONT_URL + ');') +
       '.site-header { background-image: url($$BACKGROUND_IMAGE); background-size: 50%; height: 100px; display: flex; align-items: center; }' +
+      '.site-footer, .js-footer, #footer { background-image: url($$BACKGROUND_IMAGE); background-size: 50%; background-repeat: repeat; }' +
       'body{color: $$TEXT_COLOR}' +
       'code,pre{color:$$CODE_COLOR;background-color:$$CODE_BACKGROUND}' +
       '.topbar{background:$$TOPBAR}' +
@@ -990,7 +991,7 @@ function applyCss() {
       '#tabs > a { background: transparent }' +
       '#tabs > a.youarehere { border-top: none; border-left: none; border-right: none; }' +
       '#tabs > a.youarehere:before { background-color: transparent; }' +
-      '.tabs-filter .youarehere { background: transparent; border-color: #adb3b9; }' +
+      '.tabs-filter .youarehere { background: transparent !important; border-top-color: #adb3b9 !important; border-right-color: #adb3b9 !important; border-left-color: #adb3b9 !important; }' +
       '.nav-links .youarehere a { border-right: none !important; letter-spacing: -.6px; }' +
 
       '.s-btn.s-btn__primary { background-image: linear-gradient( 135deg, #81FBB8 10%, #28C76F 100%); box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.1); color: white; border: none; }' +
