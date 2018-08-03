@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     4.0.2
+// @version     4.0.3
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -943,6 +943,9 @@ function applyCss() {
       '.post-text a:visited,.comment-text a:not(.comment-user):visited{color:$$POST_HYPERLINK_VISITED}' +
       '.envelope-on,.envelope-off,.vote-up-off,.vote-up-on,.vote-down-off,.vote-down-on,.star-on,.star-off,.edited-yes,.feed-icon,.vote-accepted-off,.vote-accepted-on,.vote-accepted-bounty,.badge-earned-check,.delete-tag,.grippie,.expander-arrow-hide,.expander-arrow-show,.expander-arrow-small-hide,.expander-arrow-small-show,.anonymous-gravatar,.badge1,.badge2,.badge3,.gp-share,.fb-share,.twitter-share,#notify-containerspan.notify-close,.migrated.to,.migrated.from{background-image:url(\'$$SPRITE_SHEET\');background-size: initial;}' +
       '.vote-up-on, .vote-up-off, .vote-down-on, .vote-down-off, .star-off, .star-on { height: 40px; }' +
+      '.vote-up-on, .vote-up-off { background-position-y: -173px; }' +
+      '.vote-down-on, .vote-down-off { background-position-y: -224px; }' +
+      '.vote-up-on, .vote-down-on { filter: none; -webkit-filter: none; -moz-filter: none; -ms-filter: none; }' +
       '.youarehere{color:$$CURR_TAB_COLOR !important;border-bottom:2px solid $$CURR_TAB_COLOR !important;}' +
       '#sidebar #beta-stats, #sidebar #promo-box{background:$$RIGHTBAR_BG;border:$$RIGHTBAR_BORDER}' +
       (siteProperties.BOUNTY_COLOR ? '.bounty-indicator-tab{background:$$BOUNTY_BG_COLOR;color:$$BOUNTY_COLOR !important;}' : '') +
@@ -992,7 +995,7 @@ function applyCss() {
       '#tabs > a.youarehere { border-top: none; border-left: none; border-right: none; }' +
       '#tabs > a.youarehere:before { background-color: transparent; }' +
       '.tabs-filter .youarehere { background: transparent; border-color: #adb3b9; }' +
-      '.nav-links .youarehere a { border-right: none; letter-spacing: -.6px; }' +
+      '.nav-links .youarehere a { border-right: none !important; letter-spacing: -.6px; }' +
 
       '.s-btn.s-btn__primary { background-image: linear-gradient( 135deg, #81FBB8 10%, #28C76F 100%); box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.1); color: white; border: none; }' +
 
