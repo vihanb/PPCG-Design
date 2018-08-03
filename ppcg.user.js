@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     3.14.1
+// @version     4.0.0
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -503,9 +503,6 @@ if (site === 'main' || site === 'meta') {
 
   if (PARSE_CODEBLOCKS) showByteCounts();
 
-  // apply background image
-  $('body .container').prepend('<div style="position: absolute;width: inherit; z-index: 0; height: 130px; background: url(' + siteProperties.BACKGROUND_IMAGE + '); background-attachment: fixed; background-size: 50%;"></div>');
-
   $('.bounty-indicator, .bounty-award').css('background-color', main.BOUNTY_INDICATOR);
   $('.started a:not(.started-link)').css('color', '#487D4B');
 
@@ -926,10 +923,11 @@ function applyCss() {
 	  );
   }
 	
-  // style
+  // MAIN STYLES FOR PAGE
   $('#mainbar').css('padding', '15px');
   style((
 	  (main.PREFER_LIGHT_FONT ? "" : '@import url(' + FONT_URL + ');') +
+      '.site-header { background-image: url($$BACKGROUND_IMAGE); background-size: 50%; height: 100px; display: flex; align-items: center; }' +
       'body{color: $$TEXT_COLOR}' +
       'code,pre{color:$$CODE_COLOR;background-color:$$CODE_BACKGROUND}' +
       '.topbar{background:$$TOPBAR}' +
@@ -976,7 +974,7 @@ function applyCss() {
       '#hmenus{top: 50%;-ms-transform: translateY(-50%);-webkit-transform: translateY(-50%);-moz-transform: translateY(-50%);-o-transform: translateY(-50%);transform: translateY(-50%);}' +
       '#hmenus > div.nav.askquestion li:not(:first-child) > a { margin-top: 5px; }' +
       '#hmenus > div.nav:not(.mainnavs) a{border-radius: $$POST_QUESTION_RADIUS;background:$$POST_QUESTION_COLOR}' +
-      '#header{background:$$HEADER_BG_COLOR;}#header *, #hlogo a{color:$$HEADER_TEXT_COLOR;}' +
+      '.site-header .site-header--link {color:$$HEADER_TEXT_COLOR;}' +
       'a.post-tag{border-radius: 0;text-align:center;font-family:' + MONOSPACE_FONT + ';font-size:12px;white-space: nowrap;background-color:$$TAG_COLOR;border:none; -webkit-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -moz-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -ms-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; -o-transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; border-bottom: 2px solid $$TAG_SHADOW_COLOR}' +
       'a.post-tag:hover{border-bottom-color: $$TAG_HOVER_SHADOW_COLOR;background: $$TAG_HOVER; color: white}' +
       'div.module.newuser,div.module.community-bulletin,div.categories{background-color:$$BACKGROUND_COLOR;}' +
@@ -984,7 +982,7 @@ function applyCss() {
       '.top-footer-links a {text-shadow: 1px 1px white;}' +
       '#footer a { text-shadow: none; color: #78ee74 !important }' +
       '#footer a:visited { color: #78ff74 !important }' +
-      '#newlogo, #hlogo a{font-family:' + HEADER_FONT + ';}' +
+      '.site-header .site-header--link {font-family:' + HEADER_FONT + ';}' +
       '#question-of-the-day-content {padding: 5px;border: 3px solid #d4f493;}' +
       '#question-of-the-day h4 {font-weight: 700;}' +
       '#sidebar > .module {margin-left: 0;}' +
@@ -1267,5 +1265,6 @@ function httpGetAsync(theUrl, callback) {
   xmlHttp.open('GET', theUrl, true); // true for asynchronous
   xmlHttp.send(null);
 }
+
 
 
