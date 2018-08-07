@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     4.0.8
+// @version     4.0.9
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -98,7 +98,8 @@ var main = {
   BG_START: 'white',
   BG_REV: '#329300',
 
-  BUTTON_GRAD_COLOR: 'linear-gradient(to bottom right, #7befaf 10%, #25b666)',
+  CTA_BG: '#3C9331',
+  CTA_FG: 'white',
 
   GOAT_MODE: (GM_getValue('main.GOAT_MODE') === true), // default false
   BACKGROUND_LIGHT: (GM_getValue('main.BACKGROUND_LIGHT') === true), // Lighter shade of the background, CHANGE THROUGH OPTIONS
@@ -176,7 +177,8 @@ var meta = {
   BG_START: 'rgba(255, 255, 255, 0.8)',
   BG_REV: 'white',
 
-  BUTTON_GRAD_COLOR: 'linear-gradient(to bottom right, #dcd9e3 10%, #9e9ea4)',
+  CTA_BG: '#E4E6E8',
+  CTA_FG: 'black',
 
   // You can use RGB, hex, or color names
   BACKGROUND_COLOR: '#FAFAFA',
@@ -999,7 +1001,7 @@ function applyCss() {
       '.tabs-filter .youarehere { background: transparent !important; border-top-color: #adb3b9 !important; border-right-color: #adb3b9 !important; border-left-color: #adb3b9 !important; }' +
       '.nav-links .youarehere a { border-right: none !important; letter-spacing: -.6px; }' +
 
-      '.s-btn.s-btn__primary { background: ' + siteProperties.BUTTON_GRAD_COLOR + ' !important; box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.1); color: white; border: none; }' +
+      '.s-btn.s-btn__primary { background: $$CTA_BG !important; box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.1); color: $$CTA_FG; border: none; }' +
 
       // fix some links
       '#tabs a:hover, .tabs a:hover, .newnav .tabs-list-container .tabs-list .intellitab a:hover {' +
@@ -1279,6 +1281,7 @@ function httpGetAsync(theUrl, callback) {
   xmlHttp.open('GET', theUrl, true); // true for asynchronous
   xmlHttp.send(null);
 }
+
 
 
 
