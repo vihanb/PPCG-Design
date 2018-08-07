@@ -848,7 +848,7 @@ function breakoutTIOLinks() {
 }
 
 function showLeaderboard() {
-  qS('#hlogo > a').innerHTML = '<table id="newlogo"><tr><td><img src="' + main.FAVICON + '" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>';
+  $('#hlogo > a').innerHTML = '<table id="newlogo"><tr><td><img src="' + main.FAVICON + '" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>';
   // Leaderboard
   if (main.USE_LEADERBOARD && $('.post-taglist .post-tag[href$="code-golf"]')[0] && !$('.post-taglist .post-tag[href$="tips"]')[0] && $('.answer')[1]) { // Tagged code-golf and has more than 1 answers
     var answers = [];
