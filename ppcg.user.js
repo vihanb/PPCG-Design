@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     4.0.7
+// @version     4.0.8
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -848,7 +848,6 @@ function breakoutTIOLinks() {
 }
 
 function showLeaderboard() {
-  qS('#hlogo > a').innerHTML = '<table id="newlogo"><tr><td><img src="' + main.FAVICON + '" height=60></td><td>Programming Puzzles &amp; Code Golf</td></tr></table>';
   // Leaderboard
   if (main.USE_LEADERBOARD && $('.post-taglist .post-tag[href$="code-golf"]')[0] && !$('.post-taglist .post-tag[href$="tips"]')[0] && $('.answer')[1]) { // Tagged code-golf and has more than 1 answers
     var answers = [];
