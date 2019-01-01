@@ -12,7 +12,7 @@
 // @grant       GM_listValues
 // @grant       GM_deleteValue
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js
-// @updateURL   https://rawgit.com/vihanb/PPCG-Design/master/ppcg.user.js
+// @updateURL   https://github.com/vihanb/PPCG-Design/raw/master/ppcg.user.js
 // ==/UserScript==
 ////////////////////////////////////////////////////////////////////////
 //////////////////////                        //////////////////////////
