@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        PPCG Graduation Script
 // @namespace   https://github.com/vihanb/PPCG-Design
-// @version     4.0.9
+// @version     4.0.10
 // @description A script to self-graduate PPCG
 // @match       *://*.codegolf.stackexchange.com/*
 // @match       *://codegolf.meta.stackexchange.com/*
@@ -894,7 +894,7 @@ function showLeaderboard() {
       });
       var tryitonlineattempt = $(answers[0][2]).find('a[href*=".tryitonline.net"]').attr('href');
       $('#answers').prepend('<div style="border: 1px solid #e0e0e0; border-left: none; border-right: none; margin: 15px 0px; padding: 15px;"> <b>The current winner</b> is <a href="' + answers[0][1].owner.link + '">' + answers[0][1].owner.display_name + '&apos;s</a> ' + answers[0][3] + ' <a href="' + answers[0][1].link + '">answer</a> at ' + answers[0][0] + ' bytes ' + (tryitonlineattempt ? ' &#8213 <a href="' + tryitonlineattempt + '">TryItOnline&trade;</a>!' : '') + '</div>');
-      $('.question .post-text').append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>' +
+      $('.question .s-prose').append('<span><a id="USER_BOARD_TEXT">Show Answer Leadboard ▶</a></span>' +
         '<div id="USER_BOARD" style="display:none"><table class="LEADERBOARD"><thead><tr><td>Rank</td><td>Author</td><td>Language</td><td>Score</td><td>Link</td></tr></thead><tbody>' + generatedanswertable.join('\n') + '</tbody></table> </div>');
       $('#USER_BOARD_TEXT').click(function () {
         $('#USER_BOARD').slideToggle(50, function () {
